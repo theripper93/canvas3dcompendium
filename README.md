@@ -1,3 +1,9 @@
+## Tokens
+
+Tokens by https://www.shapeways.com/shops/dmworkshop
+Models converted and optimized by @Simulacrum on discord
+If you enjoy dmworkshop (mz4250) models consider supporting him on patreon https://www.patreon.com/mz4250
+
 ## Maps\Models Attributions
 
 Stairway to Nowhere, Temple by theripper93
