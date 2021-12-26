@@ -1,3 +1,7 @@
+## How to Install:
+
+Simply copy paste this (https://github.com/theripper93/canvas3dcompendium/releases/download/0.2.2/module.json) url into the install module window manifest URL filed inside foundry
+
 ## Tokens
 
 Tokens by https://www.shapeways.com/shops/dmworkshop
