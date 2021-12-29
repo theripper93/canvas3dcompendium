@@ -77,6 +77,9 @@ The Mass of the particle, this will affect how much gravity pulls down the parti
 ### `.miss()`
 If added to the effect will miss the target. You can also call `.miss(Boolean)` if you prefer.
 
+### `.rate(particles,seconds)`
+The Rate of the emitter, where particles is the amount of particles in the system and seconds is how often the system creates a particle. Default (12, 0.016)
+
 ### `.repeat(integer)`
 The number of times to repeat the effect
 
