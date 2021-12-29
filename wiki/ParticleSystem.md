@@ -19,7 +19,7 @@ new Particle3D(type)
 
 If not type is provided the default is `"p"`
 
-Now you can start chaining properties, similar to how Sequencer works.
+Now you can start chaining properties, similar to how Sequencer works. Every time you call a `.method()` on a `Particle3D` it will always return the `Particle3D` object, allowing for chaining. The only exception is the `.start()` method that will return the ID if the `Particle3D`
 First we must provide an origin and a destination.
 
 ```js
@@ -51,6 +51,10 @@ new Particle3D(type)
 
 These two methods are required on every effects, each one can take a single `Token` or an array of `Tokens` or a single `Position` or an array of them.
 A `Position` is defined by {x,y,z} where `z` is in elevation units.
+
+### `.start()`
+
+The `.start()` method takes no arguments and will simply start the effect. After using this method you should **NOT** interact with the `Particle3D` anymore. Use the returned `ID` instead if you wish to stop the effect.
 
 
 ## Adding Properties & Behaviours
