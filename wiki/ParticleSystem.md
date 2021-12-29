@@ -28,13 +28,13 @@ new Particle3D(type)
   .to(destination)
 ```
 
-Origin and destination can be ether a placeable object (for example a token) or a position eg. `{ x:0, y:0, z:0 }` where z is in elevation units. The destination can also be an array of multiple destinations.
+Origin and destination can be ether a placeable object (for example a token) or a position eg. `{ x:0, y:0, z:0 }` where z is in elevation units. They both can also be an array of multiple destinations.
 
 Let's set up our origin as the selected token and the destination as our targets
 
 ```js
 new Particle3D(type)
-  .from(_token)
+  .from(token)
   .to(Array.from(game.user.targets))
 ```
 
@@ -42,64 +42,20 @@ At this point we can `.start()` our Particle3D to play the effect and the defaul
 
 ```js
 new Particle3D(type)
-  .from(_token)
+  .from(token)
   .to(Array.from(game.user.targets))
 .start()
 ```
 
-We can now add properties to the effect in any order to alter it's appearance
+### `.from()` & `.to()`
 
-### `.arc(integer)`
-This property takes an integer and indicates how many times the projectile will curve before reaching it's destination. Default is 0
+These two methods are required on every effects, each one can take a single `Token` or an array of `Tokens` or a single `Position` or an array of them.
+A `Position` is defined by {x,y,z} where `z` is in elevation units.
 
-### `.color(start,end)`
-This will determine the starting and ending color of the effect, only start can be provided. start and end can also be arrays of colors (eg `.color([color1,color2],[color3,color4])`
-The colors can be in any format, HEX is recomended but you can use any CSS compatible color - even using `"red"` will work.
 
-### `.delay(milliseconds)`
-If `.repeat()` is set, this will be the delay between each repeat.
+## Adding Properties & Behaviours
 
-### `.duration(milliseconds)`
-Duration in milliseconds of the effect, valid only for "ray". Default is 2 seconds
-
-### `.emitterSize(number)`
-Size of the area of emission, the larger the number the more spread out the particles will be in their starting point. Default is 0.0001
-
-### `.gravity(number)`
-Gravity affecting the particles - 1 is Earth gravity.
-
-### `.life(min, max)`
-Range in seconds of the lifetime of a particle, bigger numbers will equal to longer trails. default (0.1,0.5). A single value is also accepted.
-
-### `.mass(number)`
-The Mass of the particle, this will affect how much gravity pulls down the particle. Default is 100.
-
-### `.miss()`
-If added to the effect will miss the target. You can also call `.miss(Boolean)` if you prefer.
-
-### `.name(string)`
-You can give a name to an effect, if you do so, you can call the `.stop()` method using this name and all effects with this name will be stopped.
-
-### `.onEnd(particle3D)`
-You can pass another particle3D or an array of particle3d to the `.onEnd` method, if you do so, these effects will be played when the main effect ends, you can nest this how many times you want but **DO NOT** call the `.start()` method on Particle3D inside the `.onEnd()` method. Does not trigger when the effect is terminated by `.stop()`
-
-### `.rate(particles,seconds)`
-The Rate of the emitter, where particles is the amount of particles in the system and seconds is how often the system creates a particle. Default (12, 0.016)
-
-### `.repeat(integer)`
-The number of times to repeat the effect
-
-### `.scale(min,max)`
-
-The minimum and maximum size of a single particle. Default is (0.1,0.2)
-
-### `.speed(number)`
-
-The speed of the projectile. Default is 10.
-
-### `.sprite(pathToFile)`
-
-The path to the image to be used as particle. Default is `"modules/levels-3d-preview/assets/particles/emberssmall.png"` you can find many particles in that same folder.
+Check the [Properties & Behaviours Documentation](https://duckduckgo.com)
 
 ## Stopping an Effect
 
@@ -109,7 +65,7 @@ Example - A Wall of fire that stops after 1 second:
 
 ```js
 const effectId = new Particle3D("r")
-  .from(_token)
+  .from(token)
   .to(Array.from(game.user.targets))
   .sprite("modules/levels-3d-preview/assets/particles/flame_01.png")
   .color("red","orange")
@@ -128,7 +84,7 @@ setTimeout(()=>{Particle3D.stop(effectId)}, 1000)
 
 ```js
 new Particle3D("p")
-  .from(_token)
+  .from(token)
   .to(Array.from(game.user.targets))
   .speed(10)
   .color("#0f4fff","#4dd5ff")
@@ -160,7 +116,7 @@ new Particle3D("p")
 
 ```js
 new Particle3D("p")
-  .from(_token)
+  .from(token)
   .to(Array.from(game.user.targets))
   .speed(8)
   .repeat(3)
@@ -175,7 +131,7 @@ new Particle3D("p")
 
 ```js
 new Particle3D("r")
-  .from(_token)
+  .from(token)
   .to(Array.from(game.user.targets))
   .sprite("modules/levels-3d-preview/assets/particles/spark_04.png")
   .color("blue","#2e4aff")
@@ -188,7 +144,7 @@ new Particle3D("r")
 
 ```js
 new Particle3D("r")
-  .from(_token)
+  .from(token)
   .to(Array.from(game.user.targets))
   .sprite("modules/levels-3d-preview/assets/particles/flame_01.png")
   .color("red","orange")
@@ -204,7 +160,7 @@ new Particle3D("r")
 
 ```js
 new Particle3D("p")
-  .from(_token)
+  .from(token)
   .to(Array.from(game.user.targets))
   .sprite("modules/levels-3d-preview/assets/particles/slash_03.png")
   .repeat(3)
