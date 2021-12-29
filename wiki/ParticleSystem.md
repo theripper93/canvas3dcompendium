@@ -95,7 +95,7 @@ The speed of the projectile. Default is 10.
 
 The path to the image to be used as particle. Default is `"modules/levels-3d-preview/assets/particles/emberssmall.png"` you can find many particles in that same folder.
 
-## Stoppin an Effect
+## Stopping an Effect
 
 When creating an effect, the effect will return it's id. You can use this Id later to stop the effect. You can also execute `Particle3D.stop("all")` to stop all effects.
 
