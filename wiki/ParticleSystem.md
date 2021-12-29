@@ -15,6 +15,7 @@ new Particle3D(type)
 |------------|--------------|-------------|
 | Projectile | "projectile" | "p"         |
 | Sprite     | "sprite"     | "s"         |
+| Ray        | "ray"        | "r"         |
 
 If not type is provided the default is `"p"`
 
@@ -114,33 +115,16 @@ new Particle3D("p")
 .start()
 ```
 
-### Ray of Sickness
-
-```js
-new Particle3D("p")
-  .from(_token)
-  .to(Array.from(game.user.targets))
-  .speed(30)
-  .repeat(20)
-  .delay(50)
-  .color("green","#2e4aff")
-  .scale(0.3)
-.start()
-```
-
 ### Shocking Grasp
 
 ```js
-new Particle3D("p")
+new Particle3D("r")
   .from(_token)
   .to(Array.from(game.user.targets))
   .sprite("modules/levels-3d-preview/assets/particles/spark_04.png")
-  .speed(30)
-  .repeat(20)
-  .delay(50)
-  .arc(4)
   .color("blue","#2e4aff")
-  .scale(0.2)
+  .scale(0.1)
+  .rate(100,0.0001)
 .start()
 ```
 
