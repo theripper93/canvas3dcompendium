@@ -1,4 +1,5 @@
 # Adding Properties & Behaviours
+[Back to main page](https://github.com/theripper93/canvas3dcompendium/blob/master/wiki/ParticleSystem.md)
 
 We can now add properties to the effect in any order to alter it's appearance
 
@@ -36,8 +37,8 @@ You can give a name to an effect, if you do so, you can call the `.stop()` metho
 ### `.onEnd(particle3D)`
 You can pass another particle3D or an array of particle3d to the `.onEnd` method, if you do so, these effects will be played when the main effect ends, you can nest this how many times you want but **DO NOT** call the `.start()` method on Particle3D inside the `.onEnd()` method. Does not trigger when the effect is terminated by `.stop()`
 
-### `.rate(particles,seconds)`
-The Rate of the emitter, where particles is the amount of particles in the system and seconds is how often the system creates a particle. Default (12, 0.016)
+### `.rate(particles,milliseconds)`
+The Rate of the emitter, where particles is the amount of particles in the system and milliseconds is how often the system creates a particle. Default (12, 16)
 
 ### `.repeat(integer)`
 The number of times to repeat the effect

@@ -71,7 +71,7 @@ const effectId = new Particle3D("r")
   .color("red","orange")
   .scale(0.3)
   .duration(Infinity)
-  .rate(100,0.0001)
+  .rate(100,1)
   .gravity(-5)
 .start()
 
@@ -136,7 +136,7 @@ new Particle3D("r")
   .sprite("modules/levels-3d-preview/assets/particles/spark_04.png")
   .color("blue","#2e4aff")
   .scale(0.1)
-  .rate(100,0.0001)
+  .rate(100,1)
 .start()
 ```
 
@@ -152,7 +152,7 @@ new Particle3D("r")
   .repeat(3)
   .duration(250)
   .delay(600)
-  .rate(100,0.0001)
+  .rate(100,1)
 .start()
 ```
 
