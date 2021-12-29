@@ -62,7 +62,7 @@ If `.repeat()` is set, this will be the delay between each repeat.
 ### `.duration(milliseconds)`
 Duration in milliseconds of the effect, valid only for "ray". Default is 2 seconds
 
-### `.emitterSize(integer)`
+### `.emitterSize(number)`
 Size of the area of emission, the larger the number the more spread out the particles will be in their starting point. Default is 0.0001
 
 ### `.gravity(number)`
