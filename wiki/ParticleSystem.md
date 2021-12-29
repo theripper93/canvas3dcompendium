@@ -77,8 +77,11 @@ The Mass of the particle, this will affect how much gravity pulls down the parti
 ### `.miss()`
 If added to the effect will miss the target. You can also call `.miss(Boolean)` if you prefer.
 
+### `.name(string)`
+You can give a name to an effect, if you do so, you can call the `.stop()` method using this name and all effects with this name will be stopped.
+
 ### `.onEnd(particle3D)`
-You can pass another particle3D or an array of particle3d to the `.onEnd` method, if you do so, these effects will be played when the main effect ends, you can nest this how many times you want but **DO NOT** call the `.start()` method on Particle3D inside the `.onEnd()` method
+You can pass another particle3D or an array of particle3d to the `.onEnd` method, if you do so, these effects will be played when the main effect ends, you can nest this how many times you want but **DO NOT** call the `.start()` method on Particle3D inside the `.onEnd()` method.
 
 ### `.rate(particles,seconds)`
 The Rate of the emitter, where particles is the amount of particles in the system and seconds is how often the system creates a particle. Default (12, 0.016)
