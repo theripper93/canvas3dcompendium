@@ -55,7 +55,7 @@ A `Position` is defined by {x,y,z} where `z` is in elevation units.
 
 ## Adding Properties & Behaviours
 
-Check the [Properties & Behaviours Documentation](https://duckduckgo.com)
+### Check the [Properties & Behaviours Documentation](https://github.com/theripper93/canvas3dcompendium/blob/master/wiki/ParticleSystemProps.md)
 
 ## Stopping an Effect
 
