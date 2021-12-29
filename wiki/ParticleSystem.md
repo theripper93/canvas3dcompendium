@@ -93,11 +93,11 @@ The number of times to repeat the effect
 
 The minimum and maximum size of a single particle. Default is (0.1,0.2)
 
-### `speed(number)`
+### `.speed(number)`
 
 The speed of the projectile. Default is 10.
 
-### `sprite(pathToFile)`
+### `.sprite(pathToFile)`
 
 The path to the image to be used as particle. Default is `"modules/levels-3d-preview/assets/particles/emberssmall.png"` you can find many particles in that same folder.
 
