@@ -77,6 +77,9 @@ The Mass of the particle, this will affect how much gravity pulls down the parti
 ### `.miss()`
 If added to the effect will miss the target. You can also call `.miss(Boolean)` if you prefer.
 
+### `.onEnd(particle3D)`
+You can pass another particle3D or an array of particle3d to the `.onEnd` method, if you do so, these effects will be played when the main effect ends, you can nest this how many times you want but **DO NOT** call the `.start()` method on Particle3D inside the `.onEnd()` method
+
 ### `.rate(particles,seconds)`
 The Rate of the emitter, where particles is the amount of particles in the system and seconds is how often the system creates a particle. Default (12, 0.016)
 
@@ -127,6 +130,26 @@ new Particle3D("p")
   .speed(10)
   .color("#0f4fff","#4dd5ff")
   .scale(0.12)
+.start()
+```
+
+### Bouncing Frostbolt (onEnd Example):
+
+```js
+new Particle3D("p")
+  .from(canvas.tokens.controlled)
+  .to(Array.from(game.user.targets))
+  .speed(10)
+  .color("#0f4fff","#4dd5ff")
+  .scale(0.12)
+  .onEnd(
+        new Particle3D("p")
+          .from(Array.from(game.user.targets))
+          .to(canvas.tokens.controlled)
+          .speed(10)
+          .color("#0f4fff","#4dd5ff")
+          .scale(0.12)
+  )
 .start()
 ```
 
