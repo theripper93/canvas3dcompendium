@@ -50,7 +50,7 @@ new Particle3D(type)
 We can now add properties to the effect in any order to alter it's appearance
 
 ### `.arc(integer)`
-This propertie takes an integer and indicates how many times the projectile will curve before reaching it's destination. Default is 0
+This property takes an integer and indicates how many times the projectile will curve before reaching it's destination. Default is 0
 
 ### `.color(start,end)`
 This will determine the starting and ending color of the effect, only start can be provided. start and end can also be arrays of colors (eg `.color([color1,color2],[color3,color4])`
