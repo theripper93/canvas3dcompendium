@@ -95,6 +95,27 @@ The speed of the projectile. Default is 10.
 
 The path to the image to be used as particle. Default is `"modules/levels-3d-preview/assets/particles/emberssmall.png"` you can find many particles in that same folder.
 
+## Stoppin an Effect
+
+When creating an effect, the effect will return it's id. You can use this Id later to stop the effect. You can also execute `Particle3D.stop("all")` to stop all effects.
+
+Example - A Wall of fire that stops after 1 second:
+
+```js
+const effectId = new Particle3D("r")
+  .from(_token)
+  .to(Array.from(game.user.targets))
+  .sprite("modules/levels-3d-preview/assets/particles/flame_01.png")
+  .color("red","orange")
+  .scale(0.3)
+  .duration(Infinity)
+  .rate(100,0.0001)
+  .gravity(-5)
+.start()
+
+setTimeout(()=>{Particle3D.stop(effectId)}, 1000)
+```
+
 ## Examples:
 
 ### Frostbolt:
