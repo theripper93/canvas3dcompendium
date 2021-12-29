@@ -45,3 +45,7 @@ new Particle3D(type)
   .to(Array.from(game.user.targets))
 .start()
 ```
+
+We can now add properties to the effect in any order to alter it's appearance
+
+### `.arc()`
