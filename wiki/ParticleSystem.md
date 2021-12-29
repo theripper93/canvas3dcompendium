@@ -48,4 +48,18 @@ new Particle3D(type)
 
 We can now add properties to the effect in any order to alter it's appearance
 
-### `.arc()`
+### `.arc(integer)`
+This propertie takes an integer and indicates how many times the projectile will curve before reaching it's destination. Default is 0
+
+### `.color(start,end)`
+This will determine the starting and ending color of the effect, only start can be provided. start and end can also be arrays of colors (eg `.color([color1,color2],[color3,color4])`
+The colors can be in any format, HEX is recomended but you can use any CSS compatible color - even using `"red"` will work.
+
+### `.delay(milliseconds)`
+If `.repeat()` is set, this will be the delay between each repeat.
+
+### `.emitterSize(integer)`
+Size of the area of emission, the larger the number the more spread out the particles will be in their starting point. Default is 0.0001
+
+### `.gravity(number)`
+Gravity affecting the particles - 1 is Earth gravity.
