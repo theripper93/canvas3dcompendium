@@ -63,3 +63,97 @@ Size of the area of emission, the larger the number the more spread out the part
 
 ### `.gravity(number)`
 Gravity affecting the particles - 1 is Earth gravity.
+
+### `.life(min, max)`
+Range in seconds of the lifetime of a particle, bigger numbers will equal to longer trails. default (0.1,0.5). A single value is also accepted.
+
+### `.mass(number)`
+The Mass of the particle, this will affect how much gravity pulls down the particle. Default is 100.
+
+### `.repeat(integer)`
+The number of times to repeat the effect
+
+### `.scale(min,max)`
+
+The minimum and maximum size of a single particle. Default is (0.1,0.2)
+
+### `speed(number)`
+
+The speed of the projectile. Default is 10.
+
+### `sprite(pathToFile)`
+
+The path to the image to be used as particle. Default is `"modules/levels-3d-preview/assets/particles/emberssmall.png"` you can find many particles in that same folder.
+
+## Examples:
+
+### Frostbolt:
+
+```js
+new Particle3D("p")
+  .from(_token)
+  .to(Array.from(game.user.targets))
+  .speed(10)
+  .color("#0f4fff","#4dd5ff")
+  .scale(0.12)
+.start()
+```
+
+### Magic Missile:
+
+```js
+new Particle3D("p")
+  .from(_token)
+  .to(Array.from(game.user.targets))
+  .speed(8)
+  .repeat(3)
+  .arc(1)
+  .delay(300)
+  .color("#ffffff","#2e4aff")
+  .scale(0.11)
+.start()
+```
+
+### Ray of Sickness
+
+```js
+new Particle3D("p")
+  .from(_token)
+  .to(Array.from(game.user.targets))
+  .speed(30)
+  .repeat(20)
+  .delay(50)
+  .color("green","#2e4aff")
+  .scale(0.3)
+.start()
+```
+
+### Shocking Grasp
+
+```js
+new Particle3D("p")
+  .from(_token)
+  .to(Array.from(game.user.targets))
+  .sprite("modules/levels-3d-preview/assets/particles/spark_04.png")
+  .speed(30)
+  .repeat(20)
+  .delay(50)
+  .arc(4)
+  .color("blue","#2e4aff")
+  .scale(0.2)
+.start()
+```
+
+### Dubstep Gun:
+
+```js
+new Particle3D("p")
+  .from(_token)
+  .to(Array.from(game.user.targets))
+  .sprite("modules/levels-3d-preview/assets/particles/slash_03.png")
+  .repeat(3)
+  .delay(200)
+  .speed(10)
+  .color(["red","blue"],["green","yellow"])
+.start()
+```
