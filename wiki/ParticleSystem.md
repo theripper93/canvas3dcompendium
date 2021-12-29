@@ -59,6 +59,9 @@ The colors can be in any format, HEX is recomended but you can use any CSS compa
 ### `.delay(milliseconds)`
 If `.repeat()` is set, this will be the delay between each repeat.
 
+### `.duration(milliseconds)`
+Duration in milliseconds of the effect, valid only for "ray". Default is 2 seconds
+
 ### `.emitterSize(integer)`
 Size of the area of emission, the larger the number the more spread out the particles will be in their starting point. Default is 0.0001
 
@@ -70,6 +73,9 @@ Range in seconds of the lifetime of a particle, bigger numbers will equal to lon
 
 ### `.mass(number)`
 The Mass of the particle, this will affect how much gravity pulls down the particle. Default is 100.
+
+### `.miss()`
+If added to the effect will miss the target. You can also call `.miss(Boolean)` if you prefer.
 
 ### `.repeat(integer)`
 The number of times to repeat the effect
@@ -124,6 +130,22 @@ new Particle3D("r")
   .sprite("modules/levels-3d-preview/assets/particles/spark_04.png")
   .color("blue","#2e4aff")
   .scale(0.1)
+  .rate(100,0.0001)
+.start()
+```
+
+### Scorching Ray
+
+```js
+new Particle3D("r")
+  .from(_token)
+  .to(Array.from(game.user.targets))
+  .sprite("modules/levels-3d-preview/assets/particles/flame_01.png")
+  .color("red","orange")
+  .scale(0.1)
+  .repeat(3)
+  .duration(250)
+  .delay(600)
   .rate(100,0.0001)
 .start()
 ```
