@@ -76,6 +76,7 @@ When creating an effect, the effect will return it's id. You can use this Id lat
 new Particle3D("p")
   .from(token)
   .to(Array.from(game.user.targets))
+  .sprite("modules/levels-3d-preview/assets/particles/star_09.png")
   .speed(10)
   .color("#0f4fff","#4dd5ff")
   .scale(0.12)
