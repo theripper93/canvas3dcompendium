@@ -16,6 +16,7 @@ new Particle3D(type)
 | Projectile | "projectile" | "p"         |
 | Sprite     | "sprite"     | "s"         |
 | Ray        | "ray"        | "r"         |
+| Explosion  | "explosion"  | "e"         |
 
 If not type is provided the default is `"p"`
 
@@ -52,6 +53,8 @@ new Particle3D(type)
 These two methods are required on every effects, each one can take a single `Token` or an array of `Tokens` or a single `Position` or an array of them.
 A `Position` is defined by {x,y,z} where `z` is in elevation units.
 
+Explosion effects are the exception as they do not require a `.from()`
+
 ### `.start()`
 
 The `.start()` method takes no arguments and will simply start the effect. After using this method you should **NOT** interact with the `Particle3D` anymore. Use the returned `ID` instead if you wish to stop the effect.
@@ -64,23 +67,6 @@ The `.start()` method takes no arguments and will simply start the effect. After
 ## Stopping an Effect
 
 When creating an effect, the effect will return it's id. You can use this Id later to stop the effect. You can also execute `Particle3D.stop("all")` to stop all effects.
-
-Example - A Wall of fire that stops after 1 second:
-
-```js
-const effectId = new Particle3D("r")
-  .from(token)
-  .to(Array.from(game.user.targets))
-  .sprite("modules/levels-3d-preview/assets/particles/flame_01.png")
-  .color("red","orange")
-  .scale(0.3)
-  .duration(Infinity)
-  .rate(100,1)
-  .gravity(-5)
-.start()
-
-setTimeout(()=>{Particle3D.stop(effectId)}, 1000)
-```
 
 ## Examples:
 
@@ -97,6 +83,8 @@ new Particle3D("p")
 ```
 
 ### Bouncing Frostbolt (onEnd Example):
+
+`Note: the .onEnd() parameter accepts another Particle3D, don't forget that you must not call .start() on the Particle3D inside the .onEnd() - The Particle3D insde the .onEnd() can have an .onEnd() as well, allowing for infinite chaining`
 
 ```js
 new Particle3D("p")
@@ -118,6 +106,8 @@ new Particle3D("p")
 
 ### Magic Missile:
 
+`Note: The .arc() parameter will make each projectile curve in a different direction!`
+
 ```js
 new Particle3D("p")
   .from(token)
@@ -132,6 +122,8 @@ new Particle3D("p")
 ```
 
 ### Shocking Grasp
+
+`Note: Ray Effects tend to require a larger amount of particles, don't forget to set .rate()!`
 
 ```js
 new Particle3D("r")
@@ -162,6 +154,8 @@ new Particle3D("r")
 
 ### Dubstep Gun:
 
+`Note: The .color() parameter can accept Arrays of colors.`
+
 ```js
 new Particle3D("p")
   .from(token)
@@ -176,9 +170,10 @@ new Particle3D("p")
 
 ### Fireball Explosion:
 
+`Note: Explosion effects do not need a .from(), this is the only exception.`
+
 ```js
 new Particle3D("e")
-  .from(Array.from(game.user.targets))
   .to(Array.from(game.user.targets))
   .sprite("modules/levels-3d-preview/assets/particles/dust.png")
   .speed(0)
@@ -189,4 +184,23 @@ new Particle3D("e")
   .rate(100,100)
   .emitterSize(0.2)
 .start()
+```
+
+### Wall of fire (stop example):
+
+`Note: Notice how the new Particle3D() is assigned to a variable, then a set timeout stops the effect after 1000 milliseconds. With the same logic you could store the Id and stop an effect on concentration end.`
+
+```js
+const effectId = new Particle3D("r")
+  .from(token)
+  .to(Array.from(game.user.targets))
+  .sprite("modules/levels-3d-preview/assets/particles/flame_01.png")
+  .color("red","orange")
+  .scale(0.3)
+  .duration(Infinity)
+  .rate(100,1)
+  .gravity(-5)
+.start()
+
+setTimeout(()=>{Particle3D.stop(effectId)}, 1000)
 ```
