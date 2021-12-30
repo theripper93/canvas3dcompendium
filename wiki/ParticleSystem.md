@@ -173,3 +173,20 @@ new Particle3D("p")
   .color(["red","blue"],["green","yellow"])
 .start()
 ```
+
+### Fireball Explosion:
+
+```js
+new Particle3D("e")
+  .from(Array.from(game.user.targets))
+  .to(Array.from(game.user.targets))
+  .sprite("modules/levels-3d-preview/assets/particles/dust.png")
+  .speed(0)
+  .color("red","orange")
+  .scale(0.3)
+  .gravity(2)
+  .life(0.7)
+  .rate(100,100)
+  .emitterSize(0.2)
+.start()
+```

@@ -14,10 +14,13 @@ The colors can be in any format, HEX is recomended but you can use any CSS compa
 If `.repeat()` is set, this will be the delay between each repeat.
 
 ### `.duration(milliseconds)`
-Duration in milliseconds of the effect, valid only for "ray". Default is 2 seconds
+Duration in milliseconds of the effect, valid only for "ray". Default is 300 milliseconds
 
 ### `.emitterSize(number)`
 Size of the area of emission, the larger the number the more spread out the particles will be in their starting point. Default is 0.0001
+
+### `.force(number)`
+If using an explosion, set the force of the explosion, default is 15
 
 ### `.gravity(number)`
 Gravity affecting the particles - 1 is Earth gravity.
