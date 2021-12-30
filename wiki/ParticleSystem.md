@@ -13,12 +13,12 @@ new Particle3D(type)
 
 | Effect     | type         | type(short) |
 |------------|--------------|-------------|
-| Projectile | "projectile" | "p"         |
-| Sprite     | "sprite"     | "s"         |
-| Ray        | "ray"        | "r"         |
-| Explosion  | "explosion"  | "e"         |
+| Projectile | "projectile" |     "p"     |
+| Sprite     | "sprite"     |     "s"     |
+| Ray        | "ray"        |     "r"     |
+| Explosion  | "explosion"  |     "e"     |
 
-If not type is provided the default is `"p"`
+If no type is provided the default is `"p"`
 
 Now you can start chaining properties, similar to how Sequencer works. Every time you call a `.method()` on a `Particle3D` it will always return the `Particle3D` object, allowing for chaining. The only exception is the `.start()` method that will return the ID if the `Particle3D`
 First we must provide an origin and a destination.
