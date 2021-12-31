@@ -3,6 +3,10 @@
 
 We can now add properties to the effect in any order to alter it's appearance
 
+### `.alpha(start,end)`
+
+This property requires start and end to be numbers between 0 and 1 - sets the starting and ending opacity of particles
+
 ### `.arc(integer)`
 
 This property takes an integer and indicates how many times the projectile will curve before reaching it's destination. Default is 0
