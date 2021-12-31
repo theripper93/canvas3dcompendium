@@ -2,9 +2,9 @@
 
 3D Canvas includes a particle system meant for spell effects, the system is highly customizable but also very simple to use for basic projectiles
 
-## Creating and effect
+## Creating an Effect
 
-To start creating your effect simply call
+First create a `Script Macro`, then to start creating your effect simply call
 
 ```js
 new Particle3D(type)
@@ -29,7 +29,12 @@ new Particle3D(type)
   .to(destination)
 ```
 
-Origin and destination can be ether a placeable object (for example a token) or a position eg. `{ x:0, y:0, z:0 }` where z is in elevation units. They both can also be an array of multiple destinations.
+### `.from()` & `.to()`
+
+These two methods are required on every effects, each one can take a single `Token` or an array of `Tokens` or a single `Position` or an array of them. Non `Token` placeables are also supported.
+A `Position` is defined by `{ x:0, y:0, z:0 }` where `z` is in elevation units.
+`Explosion` effects are the exception as they do not require a `.from()`
+
 
 Let's set up our origin as the selected token and the destination as our targets
 
@@ -48,16 +53,9 @@ new Particle3D(type)
 .start()
 ```
 
-### `.from()` & `.to()`
-
-These two methods are required on every effects, each one can take a single `Token` or an array of `Tokens` or a single `Position` or an array of them.
-A `Position` is defined by {x,y,z} where `z` is in elevation units.
-
-Explosion effects are the exception as they do not require a `.from()`
-
 ### `.start()`
 
-The `.start()` method takes no arguments and will simply start the effect. After using this method you should **NOT** interact with the `Particle3D` anymore. Use the returned `ID` instead if you wish to stop the effect.
+The `.start()` method takes no arguments and will simply start the effect. After using this method you should **NOT** interact with the `Particle3D` anymore. Use the returned ID instead if you wish to stop the effect, see the `Stopping an Effect` section below.
 If you wish you can call `.start(false)` to only play the effect locally.
 
 
@@ -68,6 +66,7 @@ If you wish you can call `.start(false)` to only play the effect locally.
 ## Stopping an Effect
 
 When creating an effect, the effect will return it's id. You can use this Id later to stop the effect. You can also execute `Particle3D.stop("all")` to stop all effects.
+If you used the `.name()` property on effect creation you can also `.stop(name)` to stop all effects with that name.
 
 ## Examples:
 

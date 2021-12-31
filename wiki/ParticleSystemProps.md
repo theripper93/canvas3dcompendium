@@ -13,7 +13,8 @@ This property takes an integer and indicates how many times the projectile will 
 
 ### `.color(start,end)`
 
-This will determine the starting and ending color of the effect, only start can be provided. start and end can also be arrays of colors (eg `.color([color1,color2],[color3,color4])`
+This will determine the starting and ending color of the effect, only start can be provided. start and end can also be arrays of colors (eg `.color([color1,color2],[color3,color4])`.
+If an array of colors is provided for start\end the system will pick one of those colors randomly as the starting\ending color - it will **NOT** create a multicolor gradient.
 The colors can be in any format, HEX is recomended but you can use any CSS compatible color - even using `"red"` will work.
 
 ### `.delay(milliseconds)`
@@ -29,11 +30,14 @@ Duration in milliseconds of the effect, valid only for "ray". Default is 300 mil
 Size of the area of emission, the larger the number the more spread out the particles will be in their starting point. Default is 0.0001
 
 ### `.force(number)`
-If using an explosion, set the force of the explosion, default is 15
+If using an explosion, set the force of the explosion, default is 15.
+This will determine the force with which the particles are propelled from the origin. Higher numbers will result in faster particles.
 
 ### `.gravity(number)`
 
 Gravity affecting the particles - 1 is Earth gravity.
+Higher numbers means particles will travel down faster depending on their mass.
+Negative gravity is also possible if you want particles to go up instead.
 
 ### `.life(min, max)`
 
@@ -45,7 +49,7 @@ The Mass of the particle, this will affect how much gravity pulls down the parti
 
 ### `.miss()`
 
-If added to the effect will miss the target. You can also call `.miss(Boolean)` if you prefer.
+If added to the effect, it will miss the target. You can also call `.miss(Boolean)` if you prefer.
 
 ### `.name(string)`
 
@@ -65,7 +69,7 @@ The number of times to repeat the effect
 
 ### `.scale(min,max)`
 
-The minimum and maximum size of a single particle. Default is (0.1,0.2)
+The minimum and maximum size in grid units of a single particle. Default is (0.1,0.2)
 
 ### `.speed(number)`
 
