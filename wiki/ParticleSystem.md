@@ -58,6 +58,7 @@ Explosion effects are the exception as they do not require a `.from()`
 ### `.start()`
 
 The `.start()` method takes no arguments and will simply start the effect. After using this method you should **NOT** interact with the `Particle3D` anymore. Use the returned `ID` instead if you wish to stop the effect.
+If you wish you can call `.start(false)` to only play the effect locally.
 
 
 ## Adding Properties & Behaviours
