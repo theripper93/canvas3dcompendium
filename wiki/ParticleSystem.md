@@ -204,3 +204,25 @@ const effectId = new Particle3D("r")
 
 setTimeout(()=>{Particle3D.stop(effectId)}, 1000)
 ```
+
+
+### Wall of fire (stop with name example):
+
+`Note: Once you assign a name you can stop the effect from a completely different macro.`
+
+```js
+const effectId = new Particle3D("r")
+  .from(token)
+  .to(Array.from(game.user.targets))
+  .name("Wall of Fire")
+  .sprite("modules/levels-3d-preview/assets/particles/flame_01.png")
+  .color("red","orange")
+  .scale(0.3)
+  .duration(Infinity)
+  .rate(100,1)
+  .gravity(-5)
+.start()
+
+//In a different macro later on - we stop the effect
+Particle3D.stop("Wall of Fire")
+```
