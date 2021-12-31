@@ -33,7 +33,7 @@ Gravity affecting the particles - 1 is Earth gravity.
 
 ### `.life(min, max)`
 
-Range in seconds of the lifetime of a particle, bigger numbers will equal to longer trails. default (0.1,0.5). A single value is also accepted.
+Range in milliseconds of the lifetime of a particle, bigger numbers will equal to longer trails. default (100,500). A single value is also accepted.
 
 ### `.mass(number)`
 
