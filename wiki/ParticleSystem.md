@@ -68,6 +68,11 @@ If you wish you can call `.start(false)` to only play the effect locally.
 When creating an effect, the effect will return it's id. You can use this Id later to stop the effect. You can also execute `Particle3D.stop("all")` to stop all effects.
 If you used the `.name()` property on effect creation you can also `.stop(name)` to stop all effects with that name.
 
+## Try it yourself!
+
+These are several examples showcasing the Particle3D system that are a good starting point for understanding the system and creating your own custom effects. Create new `Script Macros` in your game with the code blocks below to try them out in 3DCanvas and see the different effects. You can adjust the variables to see how those influence the effects. These macros are also all available to import directly in the `3D Canvas Particle Effects` macro compendium!
+Simply select a token, target some tokens and run the macros, you will see them in action!
+
 ## Examples:
 
 ### Frostbolt:
