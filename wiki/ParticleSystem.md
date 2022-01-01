@@ -180,14 +180,18 @@ new Particle3D("p")
 
 ```js
 new Particle3D("e")
+new Particle3D("e")
   .to(Array.from(game.user.targets))
   .sprite("modules/levels-3d-preview/assets/particles/dust.png")
+  .speed(0)
   .color("red","orange")
-  .scale(0.3)
+  .scale(0.3,0.3)
   .gravity(2)
   .life(700)
   .rate(100,100)
   .emitterSize(0.2)
+  .alpha(0.3,0)
+  .mass(400))
 .start()
 ```
 
