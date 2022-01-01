@@ -231,3 +231,21 @@ const effectId = new Particle3D("r")
 //In a different macro later on - we stop the effect
 Particle3D.stop("Wall of Fire")
 ```
+
+### Magic Missile (MIDI-QOL on use Macro)
+
+```js
+const lastArg = args[args.length-1]
+const casterToken = canvas.tokens.get(lastArg.tokenId)
+const targets = lastArg.hitTargets
+new Particle3D("p")
+  .from(casterToken)
+  .to(targets)
+  .speed(8)
+  .repeat(3)
+  .arc(1)
+  .delay(200)
+  .color("#ffffff","#2e4aff")
+  .scale(0.11)
+.start()
+```
