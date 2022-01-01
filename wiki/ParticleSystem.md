@@ -35,6 +35,8 @@ These two methods are required on every effects, each one can take a single `Tok
 A `Position` is defined by `{ x:0, y:0, z:0 }` where `z` is in elevation units.
 `Explosion` effects are the exception as they do not require a `.from()`
 
+**Note:** You can omit both `.from()` and `.to()` when creating an effect inside `.onEnd()`. In that case the `.to()` will be set as the target of that particular effect (usefull for exploding bolts for example)
+
 
 Let's set up our origin as the selected token and the destination as our targets
 
@@ -236,6 +238,35 @@ const effectId = new Particle3D("r")
 Particle3D.stop("Wall of Fire")
 ```
 
+### Spirit Bolt (Explosion Chaining example)
+
+`Note: The .to() is omitted from the .onEnd() explosion effect so that the explosion plays on the target hit.`
+
+```js
+new Particle3D("p")
+  .from(token)
+  .to(Array.from(game.user.targets))
+  .speed(25)
+  .arc(1)
+  .color("#c034eb","#5819b5")
+  .scale(0.2)
+  .onEnd(
+new Particle3D("e")
+  .sprite("modules/levels-3d-preview/assets/particles/dust.png")
+  .speed(0)
+  .color("#c034eb","#291547")
+  .scale(0.3,0.3)
+  .gravity(-5)
+  .life(1700)
+  .force(3)
+  .rate(50,1)
+  .emitterSize(0.01)
+  .alpha(0.1,0)
+  .mass(200)
+        )
+.start()
+```
+
 ### Magic Missile (MIDI-QOL on use Macro)
 
 ```js
@@ -253,3 +284,4 @@ new Particle3D("p")
   .scale(0.11)
 .start()
 ```
+
