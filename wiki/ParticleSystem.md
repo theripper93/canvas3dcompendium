@@ -191,7 +191,7 @@ new Particle3D("e")
   .rate(100,100)
   .emitterSize(0.2)
   .alpha(0.3,0)
-  .mass(400))
+  .mass(400)
 .start()
 ```
 
