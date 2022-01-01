@@ -59,6 +59,10 @@ You can give a name to an effect, if you do so, you can call the `.stop()` metho
 
 You can pass another particle3D or an array of particle3d to the `.onEnd` method, if you do so, these effects will be played when the main effect ends, you can nest this how many times you want but **DO NOT** call the `.start()` method on Particle3D inside the `.onEnd()` method. Does not trigger when the effect is terminated by `.stop()`
 
+### `.push(dx,dy,dz)`
+
+The pushing force affecting the particles, this is a method generally used internally for fixed emitters - it will create an effect on the particles as if a force was pushing them in a specific direction. Default is (0,0,0).
+
 ### `.rate(particles,milliseconds)`
 
 The Rate of the emitter, where particles is the amount of particles in the system and milliseconds is how often the system creates a particle. Default (12, 16)
