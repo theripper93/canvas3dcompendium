@@ -73,7 +73,7 @@ The number of times to repeat the effect
 
 ### `.scale(min,max)`
 
-The minimum and maximum size in  in grid squares of a single particle. Default is (0.1,0.2)
+The starting and ending size in  in grid squares of a single particle. Default is (0.8,0)
 
 ### `.speed(number)`
 
