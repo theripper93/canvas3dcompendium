@@ -27,7 +27,7 @@ Duration in milliseconds of the effect, valid only for "ray". Default is 300 mil
 
 ### `.emitterSize(number)`
 
-Size of the area of emission in grid squares (so 1 would be 1 grid square), the larger the number the more spread out the particles will be in their starting point. Default is 0.0001
+Radius of the area of emission in grid squares (so 1 would be 1 grid square), the larger the number the more spread out the particles will be in their starting point. Default is 0
 
 ### `.force(number)`
 If using an explosion, set the force of the explosion, default is 15.
