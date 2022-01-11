@@ -1,0 +1,15 @@
+weapons
+https://sketchfab.com/3d-models/nemesis-sniper-rifle-c68434f1190f48e1902be623971b4031
+https://sketchfab.com/3d-models/sci-fi-sniper-rifle-bf19b2ff1cf54f1a8038040c4aa5d913
+https://sketchfab.com/3d-models/shotgun-bec49e6f99e347cbb60e6390b2c4202c
+https://sketchfab.com/3d-models/shotgun-2f5b48d9904145a39c1c2fcc6e5579b7
+https://sketchfab.com/3d-models/quad-barrel-shotgun-a564c7b0d4194577baf49e6c5066635d
+https://sketchfab.com/3d-models/laser-gun-40d21fa900cc42ee9393e4459e1d4e60
+https://sketchfab.com/3d-models/sci-fi-gun-53b158b0d5a54b4491b09d1fb3058e29
+https://sketchfab.com/3d-models/sci-fi-submachine-gun-093253f2893d43d8baf696abcbd2331e
+https://sketchfab.com/3d-models/scifi-stun-sword-48de59072daf48baadcbd4ca3a58e5b9
+
+tables
+https://sketchfab.com/3d-models/desk-props-deluxe-room-table-personal-09bf5678a77044e4a4847c9a8a2a2f6d
+https://sketchfab.com/3d-models/sci-fi-table-8902d29ab7614d9aa54fe9afc10b7fee
+https://sketchfab.com/3d-models/button-fbx-c3353fc2922e40b893352c465f477f28

@@ -1,0 +1,523 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 5585,
+      "max": [
+        1.7502290010452271,
+        4.2645416259765625,
+        2.9203159809112549
+      ],
+      "min": [
+        -10.739235877990723,
+        -4.2645416259765625,
+        -1.7000000476837158
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 67020,
+      "componentType": 5126,
+      "count": 5585,
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 5585,
+      "max": [
+        1,
+        1.0000001192092896
+      ],
+      "min": [
+        0,
+        0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 9990,
+      "max": [
+        5584
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 134040,
+      "componentType": 5126,
+      "count": 1034,
+      "max": [
+        1.4774576425552368,
+        4.2291908264160156,
+        2.8704202175140381
+      ],
+      "min": [
+        -10.813179016113281,
+        -4.2291908264160156,
+        -1.7705894708633423
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 146448,
+      "componentType": 5126,
+      "count": 1034,
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 44680,
+      "componentType": 5126,
+      "count": 1034,
+      "max": [
+        0.87500005960464478,
+        1
+      ],
+      "min": [
+        0,
+        0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 39960,
+      "componentType": 5125,
+      "count": 1818,
+      "max": [
+        1033
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 158856,
+      "componentType": 5126,
+      "count": 3113,
+      "max": [
+        1.7502290010452271,
+        3.8721120357513428,
+        2.7713167667388916
+      ],
+      "min": [
+        -10.79011058807373,
+        -3.8721120357513428,
+        -0.2427678108215332
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 196212,
+      "componentType": 5126,
+      "count": 3113,
+      "max": [
+        1,
+        1,
+        1
+      ],
+      "min": [
+        -1,
+        -1,
+        -1
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 52952,
+      "componentType": 5126,
+      "count": 3113,
+      "max": [
+        1,
+        1.0000001192092896
+      ],
+      "min": [
+        0,
+        0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 47232,
+      "componentType": 5125,
+      "count": 6015,
+      "max": [
+        3112
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 233568,
+      "componentType": 5126,
+      "count": 44,
+      "max": [
+        -1.0016075372695923,
+        0.90000379085540771,
+        2.1542263031005859
+      ],
+      "min": [
+        -1.0025442838668823,
+        -0.90000379085540771,
+        1.055942177772522
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 234096,
+      "componentType": 5126,
+      "count": 44,
+      "max": [
+        1,
+        2.5009521777974442e-05,
+        4.0041534532520018e-08
+      ],
+      "min": [
+        0.99998289346694946,
+        -2.5009525415953249e-05,
+        -0.0058611338026821613
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 77856,
+      "componentType": 5126,
+      "count": 44,
+      "max": [
+        0.87498468160629272,
+        0.75000005960464478
+      ],
+      "min": [
+        0.87495207786560059,
+        0.625
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 71292,
+      "componentType": 5125,
+      "count": 84,
+      "max": [
+        43
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "MOJackal (https://sketchfab.com/MOJackal)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/scifi-stun-sword-48de59072daf48baadcbd4ca3a58e5b9",
+      "title": "Scifi Stun Sword"
+    },
+    "generator": "Sketchfab-10.33.2",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 71628,
+      "byteOffset": 0,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 78208,
+      "byteOffset": 71628,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 234624,
+      "byteOffset": 149836,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 384460,
+      "uri": "scene.bin"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "Metal",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.22025800000000001,
+          0.22025800000000001,
+          0.22025800000000001,
+          1
+        ],
+        "metallicFactor": 1,
+        "roughnessFactor": 0.15877862600000001
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0.029210099999999999,
+        0.20727000000000001,
+        0.81404200000000004
+      ],
+      "name": "Energy",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.12617999999999999,
+          0.61614400000000002,
+          0.84120300000000003,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.59847328239999997
+      }
+    },
+    {
+      "doubleSided": true,
+      "name": "Purple_accent",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.52046800000000004,
+          0.112676,
+          1,
+          1
+        ],
+        "metallicFactor": 1,
+        "roughnessFactor": 0.20763358779999999
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0.0538171,
+        0.080055299999999996,
+        0.11493399999999999
+      ],
+      "name": "Screen",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.56104399999999999,
+          0.77427299999999999,
+          0.77427299999999999,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0.83700394580000004
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "StunSword_Metal_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "StunSword_Energy_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 5,
+            "POSITION": 4,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "StunSword_Purple accent_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 9,
+            "POSITION": 8,
+            "TEXCOORD_0": 10
+          },
+          "indices": 11,
+          "material": 2,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "StunSword_Screen_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 13,
+            "POSITION": 12,
+            "TEXCOORD_0": 14
+          },
+          "indices": 15,
+          "material": 3,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "name": "RootNode (gltf orientation matrix)",
+      "rotation": [
+        -0.70710678118654746,
+        -0,
+        -0,
+        0.70710678118654757
+      ]
+    },
+    {
+      "children": [
+        2
+      ],
+      "name": "RootNode (model correction matrix)"
+    },
+    {
+      "children": [
+        3
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "name": "57adb1a2026a420dac79f6ca01c34eba.fbx"
+    },
+    {
+      "children": [
+        4
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "matrix": [
+        230,
+        0,
+        0,
+        0,
+        0,
+        -4.8876206925014779e-06,
+        -30.000001907348235,
+        0,
+        0,
+        49.999999999999339,
+        -8.1460339695915707e-06,
+        0,
+        390,
+        0,
+        0,
+        1
+      ],
+      "name": "StunSword"
+    },
+    {
+      "mesh": 0,
+      "name": "StunSword_Metal_0"
+    },
+    {
+      "mesh": 1,
+      "name": "StunSword_Energy_0"
+    },
+    {
+      "mesh": 2,
+      "name": "StunSword_Purple accent_0"
+    },
+    {
+      "mesh": 3,
+      "name": "StunSword_Screen_0"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "OSG_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}
+
