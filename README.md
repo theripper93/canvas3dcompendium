@@ -20,3 +20,7 @@ The Cave - "Cave" (https://skfb.ly/Mus8) by exima113 is licensed under Creative 
 The Reactor - "Sci-fi neon model" (https://skfb.ly/6YvXI) by ni_and_ka is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 Rocky Mountains - "level blockout" (https://skfb.ly/ooSOu) by DJMaesen is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 Dungeon Pack by KayKit
+
+## EXRs
+
+EXRs from https://polyhaven.com/
