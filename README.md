@@ -25,5 +25,5 @@ Dungeon Pack by KayKit
 
 EXRs from https://polyhaven.com/
 
-## 3D Weapons from Sketchfab
+## 3D Weapons
 Assets license at [LICENSE](LICENSE_ASSETS.md).
