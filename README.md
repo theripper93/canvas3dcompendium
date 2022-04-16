@@ -1,6 +1,8 @@
 ## How to Install:
 
-Simply copy paste this (https://github.com/theripper93/canvas3dcompendium/releases/download/0.2.2/module.json) url into the install module window manifest URL filed inside foundry
+Simply copy paste the Manifest URL into the install module window manifest URL filed inside foundry
+
+### Manifest URL: https://github.com/theripper93/canvas3dcompendium/releases/latest/download/module.json
 
 ## Tokens
 
