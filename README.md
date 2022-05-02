@@ -23,6 +23,10 @@ The Reactor - "Sci-fi neon model" (https://skfb.ly/6YvXI) by ni_and_ka is licens
 Rocky Mountains - "level blockout" (https://skfb.ly/ooSOu) by DJMaesen is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 Dungeon Pack by KayKit
 
+## 3D Tiles Attributions
+
+The 3d models for the tiles are from https://quaternius.com/index.html
+
 ## EXRs
 
 EXRs from https://polyhaven.com/
