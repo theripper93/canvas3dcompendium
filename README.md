@@ -1,6 +1,8 @@
 ## How to Install:
 
-Simply copy paste this (https://github.com/theripper93/canvas3dcompendium/releases/download/0.2.2/module.json) url into the install module window manifest URL filed inside foundry
+Simply copy paste the Manifest URL into the install module window manifest URL filed inside foundry
+
+### Manifest URL: https://github.com/theripper93/canvas3dcompendium/releases/latest/download/module.json
 
 ## Tokens
 
@@ -20,3 +22,10 @@ The Cave - "Cave" (https://skfb.ly/Mus8) by exima113 is licensed under Creative 
 The Reactor - "Sci-fi neon model" (https://skfb.ly/6YvXI) by ni_and_ka is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 Rocky Mountains - "level blockout" (https://skfb.ly/ooSOu) by DJMaesen is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 Dungeon Pack by KayKit
+
+## EXRs
+
+EXRs from https://polyhaven.com/
+
+## 3D Weapons
+Assets license at [LICENSE](LICENSE_ASSETS.md).
