@@ -101,3 +101,7 @@ The speed of the projectile. Default is 10.
 ### `.sprite(pathToFile)`
 
 The path to the image to be used as particle. Default is `"modules/levels-3d-preview/assets/particles/emberssmall.png"` you can find many particles in that same folder.
+
+### `.startAfter(milliseconds)`
+
+Delay the start of the effect by the specified milliseconds
