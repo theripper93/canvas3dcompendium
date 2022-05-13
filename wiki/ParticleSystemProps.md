@@ -78,8 +78,6 @@ Play a 3D Animation, the animation data is formatted as floows
 }
 ```
 
-The path to the image to be used as particle. Default is `"modules/levels-3d-preview/assets/particles/emberssmall.png"` you can find many particles in that same folder.
-
 ### `.push(dx,dy,dz)`
 
 The pushing force affecting the particles, this is a method generally used internally for fixed emitters - it will create an effect on the particles as if a force was pushing them in a specific direction. Default is (0,0,0).
