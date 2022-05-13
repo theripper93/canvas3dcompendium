@@ -59,6 +59,27 @@ You can give a name to an effect, if you do so, you can call the `.stop()` metho
 
 You can pass another particle3D or an array of particle3d to the `.onEnd` method, if you do so, these effects will be played when the main effect ends, you can nest this how many times you want but **DO NOT** call the `.start()` method on Particle3D inside the `.onEnd()` method. Does not trigger when the effect is terminated by `.stop()`
 
+### `.playAnimation(animationData)`
+
+Play a 3D Animation, the animation data is formatted as floows
+
+```js
+{
+  from: { // The from property specifies which animation should be played on the origin of the particle effect (usually the caster or attacker)
+    id: "twirl", // The id of the animation to play
+    start: true, //If the animation should be played on start of the effect
+    end: false, // If the animation should be played when the effect ends (like a projectile reaching it's target)
+  },
+  to: { // The from property specifies which animation should be played on the origin of the particle effect (usually the caster or attacker)
+    id: "shake",
+    start: true,
+    end: false,
+  },
+}
+```
+
+The path to the image to be used as particle. Default is `"modules/levels-3d-preview/assets/particles/emberssmall.png"` you can find many particles in that same folder.
+
 ### `.push(dx,dy,dz)`
 
 The pushing force affecting the particles, this is a method generally used internally for fixed emitters - it will create an effect on the particles as if a force was pushing them in a specific direction. Default is (0,0,0).
