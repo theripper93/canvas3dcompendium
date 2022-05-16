@@ -4,6 +4,10 @@ Simply copy paste the Manifest URL into the install module window manifest URL f
 
 ### Manifest URL: https://github.com/theripper93/canvas3dcompendium/releases/latest/download/module.json
 
+### Manual Install
+
+If you have issues with the manifest installs (there have been problems on forge) and you don't see all the assets, you can manually install through the zip file. https://github.com/theripper93/canvas3dcompendium/releases/latest/download/module.zip
+
 ## Tokens
 
 Tokens by https://www.shapeways.com/shops/dmworkshop
