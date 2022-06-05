@@ -1,7 +1,7 @@
 {
   "name": "canvas3dcompendium",
-  "title": "3D Canvas Map Compendium",
-  "description": "A collection of 3D Maps, ready to use",
+  "title": "3D Canvas Compendium",
+  "description": "A collection of 3D Tiles, ready to use for map building",
   "version": "0.2",
   "author": "theripper93",
   "authors": [
