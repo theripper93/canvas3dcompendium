@@ -18,6 +18,10 @@ If you enjoy dmworkshop (mz4250) models consider supporting him on patreon https
 
 The 3d models for the tiles are from https://quaternius.com/index.html and KayKit https://kaylousberg.com/game-assets
 
+## Materials
+
+Materials from http://ambientCG.com, licensed under the Creative Commons CC0 1.0 Universal License.
+
 ## EXRs
 
 EXRs from https://polyhaven.com/
