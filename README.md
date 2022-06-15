@@ -20,6 +20,8 @@ The 3d models for the tiles are from https://quaternius.com/index.html and KayKi
 
 Materials from http://ambientCG.com, licensed under the Creative Commons CC0 1.0 Universal License.
 
+Stylized Materials from c4dcenter (https://c4dcenter.com/simple-licensing/) , licensed under the Creative Commons CC0 1.0 Universal License.
+
 ## EXRs
 
 EXRs from https://polyhaven.com/
