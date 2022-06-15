@@ -4,9 +4,7 @@ Simply copy paste the Manifest URL into the install module window manifest URL f
 
 ### Manifest URL: https://github.com/theripper93/canvas3dcompendium/releases/latest/download/module.json
 
-### Manual Install
-
-If you have issues with the manifest installs (there have been problems on forge) and you don't see all the assets, you can manually install through the zip file. https://github.com/theripper93/canvas3dcompendium/releases/latest/download/module.zip
+### Forge Users: https://forge-vtt.com/bazaar/package/canvas3dcompendium
 
 ## Tokens
 
@@ -21,6 +19,8 @@ The 3d models for the tiles are from https://quaternius.com/index.html and KayKi
 ## Materials
 
 Materials from http://ambientCG.com, licensed under the Creative Commons CC0 1.0 Universal License.
+
+Stylized Materials from c4dcenter (https://c4dcenter.com/simple-licensing/) , licensed under the Creative Commons CC0 1.0 Universal License.
 
 ## EXRs
 
