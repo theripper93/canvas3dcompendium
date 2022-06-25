@@ -38,6 +38,7 @@ export class MaterialBrowser extends Application{
 
       activateListeners(html) {
         super.activateListeners(html);
+        this.element.find(".material-confirm").hide();
         this.element.on("keyup", "input", (e) => {
           const value = e.target.value;
           this.element.find("li").each((i,el) => {
@@ -48,6 +49,7 @@ export class MaterialBrowser extends Application{
         this.element.on("click", "li", (e) => {
           const material = $(e.currentTarget).data("output");
           this._input.val(material);
+          $(e.currentTarget).find(".material-confirm").fadeIn(300, () => {}).delay(1000).fadeOut(200, () => {});
         })
       }
 
