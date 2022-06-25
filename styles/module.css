@@ -3,7 +3,7 @@
     margin: 0;
     padding: 8px;
     margin-top: 0.5rem;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     display: grid;
     grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
