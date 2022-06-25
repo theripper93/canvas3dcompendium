@@ -1,0 +1,61 @@
+#material-browser ol{
+    list-style-type: none;
+    margin: 0;
+    padding: 8px;
+    margin-top: 0.5rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+    align-items: end;
+    grid-gap: 1em;
+    max-height: calc(100% - 2rem);
+}
+
+#material-browser ol li{
+    height: 100px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    aspect-ratio: 1;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 0 0 8px #00000052;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease-in-out;
+    margin: auto;
+    cursor: pointer;
+}
+
+#material-browser ol li:hover{
+    box-shadow: 0 0 8px var(--color-shadow-highlight);
+}
+
+#material-browser ol li i{
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    background-color: #000000b8;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 1.5rem;
+    padding: 0 0.3em;
+}
+
+#material-browser input{
+    color: var(--color-text-light-heading);
+}
+
+#material-browser #searchbox-wrapper{
+    position: fixed;
+    z-index: 100;
+    background-color: #0c0c0cc7;
+    backdrop-filter: blur(1px);
+    width: 100%;
+    padding: 8px;
+}
+
+#material-browser .window-content{
+    color: var(--color-text-light-heading);
+    background: url(/../ui/denim075.png) repeat;
+}

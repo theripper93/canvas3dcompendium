@@ -1,0 +1,10 @@
+<div style="max-height: 100%;overflow: hidden;">
+    <input type="text" placeholder="Search Materials...">
+    <ol>
+        {{#each materials}}
+            <li data-output="{{output}}" data-displayname="{{displayName}}" style="background-image: url({{preview}});">
+                <i>{{displayName}}</i>
+            </li>
+        {{/each}}
+    </ol>
+</div>
