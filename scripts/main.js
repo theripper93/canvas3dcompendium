@@ -14,7 +14,7 @@ async function injectMaterialBrowser(app,html){
   }
 
   const filepicker = html.find(`input[name="flags.levels-3d-preview.imageTexture"]`).closest(".form-group");
-  MaterialBrowser.create(filepicker);
+  MaterialBrowser.create(filepicker, app);
 }
 
 Hooks.on("renderWallConfig", async (app,html) => {
@@ -28,9 +28,9 @@ Hooks.on("renderWallConfig", async (app,html) => {
   }
 
   const filepicker = html.find(`input[name="flags.levels-3d-preview.wallTexture"]`).closest(".form-group");
-  MaterialBrowser.create(filepicker);
+  MaterialBrowser.create(filepicker, app);
   const filepicker2 = html.find(`input[name="flags.levels-3d-preview.wallSidesTexture"]`).closest(".form-group");
-  MaterialBrowser.create(filepicker2);
+  MaterialBrowser.create(filepicker2, app);
 })
 
 

@@ -1,7 +1,8 @@
 export class MaterialBrowser extends Application{
-    constructor(input) {
+    constructor(input, app) {
         super();
         this._input = $(input);
+        this._app = app;
       }
     
       static get defaultOptions() {
@@ -49,11 +50,13 @@ export class MaterialBrowser extends Application{
         this.element.on("click", "li", (e) => {
           const material = $(e.currentTarget).data("output");
           this._input.val(material);
+          if(game.settings.get("canvas3dcompendium", "autoApply")) this._app._onSubmit(e, {preventClose: true, preventRender: true});
+          if(game.settings.get("canvas3dcompendium", "autoClose")) this.close();
           $(e.currentTarget).find(".material-confirm").fadeIn(300, () => {}).delay(1000).fadeOut(200, () => {});
         })
       }
 
-      static create(filepicker){
+      static create(filepicker, app){
         const fpFG = filepicker.closest(".form-group").length ? filepicker.closest(".form-group") : filepicker;
         const button = $(`
         <button type="button" style="order: 99;" title="Open Material Browser">
@@ -65,7 +68,7 @@ export class MaterialBrowser extends Application{
         fpButton.before(button);
         button.on("click", (e) => {
           e.preventDefault();
-          new MaterialBrowser(input).render(true);
+          new MaterialBrowser(input, app).render(true);
         })
       }
 }
