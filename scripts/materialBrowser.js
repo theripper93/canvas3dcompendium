@@ -19,8 +19,12 @@ export class MaterialBrowser extends Application{
 
       async getData() {
         const data = super.getData();
-        const ambiendCG = await FilePicker.browse("user","modules/canvas3dcompendium/assets/Materials");
-        const c4dcenter = await FilePicker.browse("user","modules/canvas3dcompendium/assets/Materials/_Stylized");
+        let source = "user";
+        if (typeof(ForgeVTT) !== "undefined" && ForgeVTT.usingTheForge) {
+          source = "forge-bazaar"
+        }
+        const ambiendCG = await FilePicker.browse(source,"modules/canvas3dcompendium/assets/Materials");
+        const c4dcenter = await FilePicker.browse(source,"modules/canvas3dcompendium/assets/Materials/_Stylized");
         const materials = [];
         for(let folder of ambiendCG.dirs.concat(c4dcenter.dirs)){
           if(folder.endsWith("_Stylized")) continue;
