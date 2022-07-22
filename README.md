@@ -6,6 +6,12 @@ Simply copy paste the Manifest URL into the install module window manifest URL f
 
 ### Forge Users: https://forge-vtt.com/bazaar/package/canvas3dcompendium
 
+## Beautiful-Sky
+
+The assets in the 'assets/Beautiful-Sky' folder are licensed under the Unity Asset Store EULA (https://unity3d.com/legal/as_terms) and used with permission from the original author.
+You are not allowed to use\modify\redistribute these assets outside of 3D Canvas.
+If you wish to use these assets in your own project, visit https://assetstore.unity.com/packages/2d/textures-materials/sky/beautiful-sky-208439
+
 ## Tokens
 
 Tokens by https://www.shapeways.com/shops/dmworkshop
