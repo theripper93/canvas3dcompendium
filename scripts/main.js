@@ -17,6 +17,12 @@ async function injectMaterialBrowser(app,html){
   MaterialBrowser.create(filepicker, app);
 }
 
+Hooks.on("renderMapGen", (app, html) => {
+  html.find('input.image').closest('.form-group').each((i, el) => {
+    MaterialBrowser.create($(el), app);
+  });
+});
+
 Hooks.on("renderWallConfig", async (app,html) => {
   if(!game.modules.get("levels-3d-preview")?.active) return;
   function wait(ms) {
