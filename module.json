@@ -42,11 +42,6 @@
   "id": "canvas3dcompendium",
   "relationships": {
     "requires": [
-      {
-        "id": "levels-3d-preview",
-        "type": "module",
-        "compatibility": {}
-      }
     ]
   },
   "compatibility": {
