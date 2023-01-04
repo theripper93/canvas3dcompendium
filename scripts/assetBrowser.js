@@ -7,6 +7,8 @@ export class AssetBrowser extends Application {
         this._maxCount = 200;
     }
 
+    sources = ["modules/canvas3dcompendium/assets/Tiles", "modules/baileywiki-3d"];
+
     scale = 1;
 
     static get defaultOptions() {
@@ -44,12 +46,8 @@ export class AssetBrowser extends Application {
             this._assetCount = dataCache.materials.length;
             return dataCache;
         }
-        let source = "user";
-        if (typeof ForgeVTT !== "undefined" && ForgeVTT.usingTheForge) {
-            source = "forge-bazaar";
-        }
         const materials = [];
-        const files = fileCache ?? (await getFiles("modules/canvas3dcompendium/assets/Tiles", source));
+        const files = fileCache ?? (await this.getSources());
         fileCache = files;
         for (let file of files) {
             const filename = file.split("/").pop().replaceAll("%20", "_");
@@ -67,6 +65,28 @@ export class AssetBrowser extends Application {
         this._assetCount = materials.length;
         dataCache = data;
         return data;
+    }
+
+    async getSources() {
+        let source = "user";
+        if (typeof ForgeVTT !== "undefined" && ForgeVTT.usingTheForge) {
+            source = "forge-bazaar";
+        }
+        const files = [];
+        for (let target of this.sources) { 
+            let sourceFiles;
+            try {
+                sourceFiles = await getFiles(target, source);
+            } catch (e) { 
+                try {
+                    sourceFiles = await getFiles(target, "user");
+                } catch (e) {
+                    sourceFiles = [];
+                 }
+            }
+            files.push(...sourceFiles);
+        }
+        return files;
     }
 
     activateListeners(html) {
