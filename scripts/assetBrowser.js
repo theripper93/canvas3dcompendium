@@ -9,7 +9,10 @@ export class AssetBrowser extends Application {
 
     sources = ["modules/canvas3dcompendium/assets/Tiles", "modules/baileywiki-3d"];
 
-    scale = 1;
+
+    static get exclude(){return ["Stylized%20Trees"];}
+
+    static scale = 1;
 
     static get defaultOptions() {
         return {
@@ -44,6 +47,7 @@ export class AssetBrowser extends Application {
         const data = super.getData();
         if (dataCache) {
             this._assetCount = dataCache.materials.length;
+            dataCache.scale = AssetBrowser.scale !== 1 ? AssetBrowser.scale : "";
             return dataCache;
         }
         const materials = [];
@@ -73,16 +77,16 @@ export class AssetBrowser extends Application {
             source = "forge-bazaar";
         }
         const files = [];
-        for (let target of this.sources) { 
+        for (let target of this.sources) {
             let sourceFiles;
             try {
                 sourceFiles = await getFiles(target, source);
-            } catch (e) { 
+            } catch (e) {
                 try {
                     sourceFiles = await getFiles(target, "user");
                 } catch (e) {
                     sourceFiles = [];
-                 }
+                }
             }
             files.push(...sourceFiles);
         }
@@ -117,6 +121,7 @@ async function getFiles(root, source = "user") {
         if(ext.toLowerCase() == "glb") files.push(file);
     }
     for (let folder of contents.dirs) {
+        if(AssetBrowser.exclude.some(e => folder.includes(e))) continue;
         files.push(...(await getFiles(folder, source)));
     }
 
