@@ -1,4 +1,25 @@
-import { MaterialBrowser } from "./materialBrowser.js";
+import {MaterialBrowser} from "./materialBrowser.js";
+import {AssetBrowser} from "./assetBrowser.js";
+
+globalThis.AssetBrowser = AssetBrowser;
+
+Hooks.on("getSceneControlButtons", (buttons) => {
+  const tool = {
+      name: "assetBrowser",
+      title: "3D Asset Browser",
+      icon: "fa-duotone fa-grid-dividers",
+      button: true,
+      visible: game.Levels3DPreview?._active,
+      onClick: () => {
+          new AssetBrowser().render(true);
+      },
+  };
+
+  const tileTools = buttons.find((b) => b.name === "tiles")?.tools;
+  const browseToolIndex = tileTools.findIndex((t) => t.name === "browse");
+  tileTools.splice(browseToolIndex + 1, 0, tool);
+})
+
 
 Hooks.on("renderTileConfig", injectMaterialBrowser)
 Hooks.on("renderTokenConfig", injectMaterialBrowser)
