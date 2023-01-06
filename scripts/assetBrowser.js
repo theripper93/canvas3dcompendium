@@ -7,7 +7,7 @@ export class AssetBrowser extends Application {
         this._maxCount = 200;
         this._hasSelected = false;
         game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick.bind(this), false);
-        Hooks.on("controlTile", (tile, control) => { 
+        this.hookid = Hooks.on("controlTile", (tile, control) => { 
             if (this._hasSelected) canvas.tiles.releaseAll();
         })
     }
@@ -165,6 +165,7 @@ export class AssetBrowser extends Application {
     async close(...args) { 
         super.close(...args);
         game.Levels3DPreview.renderer.domElement.removeEventListener("mouseup", this._on3DCanvasClick);
+        Hooks.off("controlTile", this.hookid);
     }
 }
 
