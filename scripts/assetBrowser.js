@@ -1,12 +1,15 @@
 let fileCache = null;
 let dataCache = null;
 
+let _this = null;
+
 export class AssetBrowser extends Application {
     constructor() {
         super();
         this._maxCount = 200;
         this._hasSelected = false;
-        game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick.bind(this), false);
+        game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick, false);
+        _this = this;
         this.hookid = Hooks.on("controlTile", (tile, control) => { 
             if (this._hasSelected) canvas.tiles.releaseAll();
         })
@@ -37,11 +40,11 @@ export class AssetBrowser extends Application {
     }
 
     _on3DCanvasClick(event) {
-        if (!this._hasSelected || event.which !== 1 || !game.Levels3DPreview.interactionManager.eventData) return;
-        const li = this.element.find("li.selected")[0];
-        const angle = parseFloat(this.element.find("#angle").val() || 0);
-        const options = this.quickPlacementOptions;
-        let scale = parseFloat(this.element.find("#scale").val() || 1);
+        if (!_this._hasSelected || event.which !== 1 || !game.Levels3DPreview.interactionManager.eventData) return;
+        const li = _this.element.find("li.selected")[0];
+        const angle = parseFloat(_this.element.find("#angle").val() || 0);
+        const options = _this.quickPlacementOptions;
+        let scale = parseFloat(_this.element.find("#scale").val() || 1);
         let normal = null;
         const grid = options.grid;
         const randomRotate = options.rotation;
@@ -164,7 +167,7 @@ export class AssetBrowser extends Application {
 
     async close(...args) { 
         super.close(...args);
-        game.Levels3DPreview.renderer.domElement.removeEventListener("mouseup", this._on3DCanvasClick);
+        game.Levels3DPreview.renderer.domElement.removeEventListener("mouseup", this._on3DCanvasClick, false);
         Hooks.off("controlTile", this.hookid);
     }
 }
