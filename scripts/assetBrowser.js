@@ -5,6 +5,11 @@ export class AssetBrowser extends Application {
     constructor() {
         super();
         this._maxCount = 200;
+        this._hasSelected = false;
+        game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick.bind(this), false);
+        Hooks.on("controlTile", (tile, control) => { 
+            if (this._hasSelected) canvas.tiles.releaseAll();
+        })
     }
 
     sources = ["modules/canvas3dcompendium/assets/Tiles", "modules/baileywiki-3d"];
@@ -29,6 +34,28 @@ export class AssetBrowser extends Application {
 
     get title() {
         return "Asset Browser: " + this._assetCount + " assets available";
+    }
+
+    _on3DCanvasClick(event) {
+        if (!this._hasSelected || event.which !== 1 || !game.Levels3DPreview.interactionManager.eventData) return;
+        const li = this.element.find("li.selected")[0];
+        const angle = parseFloat(this.element.find("#angle").val() || 0);
+        const options = this.quickPlacementOptions;
+        let scale = parseFloat(this.element.find("#scale").val() || 1);
+        let normal = null;
+        const grid = options.grid;
+        const randomRotate = options.rotation;
+        const rotation = randomRotate ? Math.random() * 360 : angle;
+        if (options.scale) scale *= (Math.random() + 0.5);
+        if (options.normal) normal = game.Levels3DPreview.interactionManager.eventData.intersectData.face.normal;
+        AssetBrowser.scale = scale;
+        const dragData = {
+            type: "Tile",
+            texture: { src: li.dataset.output },
+            tileSize: canvas.dimensions.size / AssetBrowser.scale,
+        };
+
+        game.Levels3DPreview.interactionManager._onDrop(event, grid, normal, dragData, rotation, options.center);
     }
 
     _onDragStart(event) {
@@ -108,6 +135,36 @@ export class AssetBrowser extends Application {
             });
         });
         this.element.find("input").trigger("keyup");
+        this.element.on("mouseup", (e) => { 
+            const li = $(e.target).closest("li");
+            if(li.length === 0) return;
+            const isSelect = $(e.target).closest("li").hasClass("selected");
+            this.element.find("li").removeClass("selected");
+            if (!isSelect) {
+                $(e.target).closest("li").addClass("selected");
+                this._hasSelected = true;
+            }else{
+                this._hasSelected = false;
+            }
+        });
+        this.element.on("click", ".quick-placement-toggle", (e) => { 
+            e.currentTarget.classList.toggle("active");
+        });
+    }
+
+    get quickPlacementOptions() { 
+        const options = {};
+        const quickPlacementToggles = this.element.find(".quick-placement-toggle");
+        for (let toggle of quickPlacementToggles) { 
+            const action = toggle.dataset.action;
+            options[action] = toggle.classList.contains("active");
+        }
+        return options;
+    }
+
+    async close(...args) { 
+        super.close(...args);
+        game.Levels3DPreview.renderer.domElement.removeEventListener("mouseup", this._on3DCanvasClick);
     }
 }
 
