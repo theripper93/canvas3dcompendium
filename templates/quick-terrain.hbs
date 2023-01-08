@@ -1,0 +1,23 @@
+<form action="submit">
+
+<p class="notes">
+    If a tile is selected, it will be replaced with the generated terrain. Otherwise, a new tile will be created.
+</p>
+
+<div class="form-group">
+<label for="theme">Theme</label>
+<select name="theme" id="">
+    <option value="random" selected>Random</option>
+    {{#each themes}}
+    <option value="{{@key}}">{{name}}</option>
+    {{/each}}
+</select>
+</div>
+
+<hr>
+<div style="display: flex;">
+    <button data-action="generate"><i class="fa-duotone fa-dice"></i> Generate</button>
+    <button data-action="water"><i class="fa-duotone fa-water"></i></i> Add Water</button>
+    <button data-action="theme"><i class="fa-duotone fa-palette"></i> Apply Theme</button>
+</div>
+</form>

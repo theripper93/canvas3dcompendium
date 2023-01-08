@@ -173,13 +173,13 @@ export class AssetBrowser extends Application {
 }
 
 
-async function getFiles(root, source = "user") {
+export async function getFiles(root, source = "user", ext = "glb") {
     const files = [];
 
     const contents = await FilePicker.browse(source, root);
     for (let file of contents.files) {
         const ext = file.split(".").pop();
-        if(ext.toLowerCase() == "glb") files.push(file);
+        if(ext.toLowerCase() == ext) files.push(file);
     }
     for (let folder of contents.dirs) {
         if(AssetBrowser.exclude.some(e => folder.includes(e))) continue;

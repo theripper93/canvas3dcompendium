@@ -1,23 +1,36 @@
 import {MaterialBrowser} from "./materialBrowser.js";
 import {AssetBrowser} from "./assetBrowser.js";
+import {QuickTerrain} from "./quickTerrain.js";
 
 globalThis.AssetBrowser = AssetBrowser;
 
 Hooks.on("getSceneControlButtons", (buttons) => {
-  const tool = {
-      name: "assetBrowser",
-      title: "3D Asset Browser",
-      icon: "fa-duotone fa-grid-dividers",
-      button: true,
-      visible: game.Levels3DPreview?._active,
-      onClick: () => {
-          new AssetBrowser().render(true);
+  const tools = [
+      {
+          name: "assetBrowser",
+          title: "3D Asset Browser",
+          icon: "fa-duotone fa-grid-dividers",
+          button: true,
+          visible: game.Levels3DPreview?._active,
+          onClick: () => {
+              new AssetBrowser().render(true);
+          },
       },
-  };
+      {
+          name: "quickTerrain",
+          title: "Quick 3D Terrain",
+          icon: "fa-duotone fa-mountain",
+          button: true,
+          visible: game.Levels3DPreview?._active,
+          onClick: () => {
+              new QuickTerrain().render(true);
+          },
+      },
+  ];
 
   const tileTools = buttons.find((b) => b.name === "tiles")?.tools;
   const browseToolIndex = tileTools.findIndex((t) => t.name === "browse");
-  tileTools.splice(browseToolIndex + 1, 0, tool);
+  tileTools.splice(browseToolIndex + 1, 0, ...tools);
 })
 
 
