@@ -91,6 +91,7 @@ export class QuickTerrain extends FormApplication {
                     imageTexture: "modules/levels-3d-preview/assets/blankTex.jpg",
                     displacementMap: fileCache[Math.floor(Math.random() * fileCache.length)],
                     displacementMatrix: `${Math.random()},${Math.random()},${scale},${scale}`,
+                    invertDisplacementMap: true,
                     shaders: theme.data,
                     depth: Math.max(canvas.scene.dimensions.sceneWidth, canvas.scene.dimensions.sceneHeight) / 4,
                     dynaMesh: "box",
