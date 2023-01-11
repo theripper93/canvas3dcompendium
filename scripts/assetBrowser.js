@@ -18,7 +18,7 @@ export class AssetBrowser extends Application {
     sources = ["modules/canvas3dcompendium/assets/Tiles", "modules/baileywiki-3d"];
 
 
-    static get exclude(){return ["Stylized%20Trees"];}
+    static get exclude(){return [];}
 
     static scale = 1;
 
@@ -173,16 +173,16 @@ export class AssetBrowser extends Application {
 }
 
 
-export async function getFiles(root, source = "user", ext = "glb") {
+export async function getFiles(root, source = "user", extC = "glb") {
     const files = [];
 
     const contents = await FilePicker.browse(source, root);
     for (let file of contents.files) {
         const ext = file.split(".").pop();
-        if(ext.toLowerCase() == ext) files.push(file);
+        if (ext.toLowerCase() == extC) files.push(file);
     }
     for (let folder of contents.dirs) {
-        if(AssetBrowser.exclude.some(e => folder.includes(e))) continue;
+        //if(AssetBrowser.exclude.some(e => folder.includes(e))) continue;
         files.push(...(await getFiles(folder, source)));
     }
 
