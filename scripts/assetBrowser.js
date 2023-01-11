@@ -183,7 +183,7 @@ export async function getFiles(root, source = "user", extC = "glb") {
     }
     for (let folder of contents.dirs) {
         //if(AssetBrowser.exclude.some(e => folder.includes(e))) continue;
-        files.push(...(await getFiles(folder, source)));
+        files.push(...(await getFiles(folder, source, extC)));
     }
 
     return files;
