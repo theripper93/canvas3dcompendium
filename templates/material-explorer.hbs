@@ -18,7 +18,7 @@
 
     <ol>
         {{#each materials}}
-        <li {{#if isAssetBrowser}}draggable="true" {{/if}} data-search="{{search}}" data-output="{{output}}"
+        <li {{#if isAssetBrowser}}draggable="true" data-tooltip="{{displayName}} ({{output}})" {{/if}} data-search="{{search}}" data-output="{{output}}"
             data-displayname="{{displayName}}">
             <img src="{{preview}}" alt="" loading="lazy">
             <i class="material-name">{{displayName}}</i>

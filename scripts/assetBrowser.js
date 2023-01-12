@@ -41,7 +41,9 @@ export class AssetBrowser extends Application {
 
     _on3DCanvasClick(event) {
         if (!_this._hasSelected || event.which !== 1 || !game.Levels3DPreview.interactionManager.eventData) return;
-        const li = _this.element.find("li.selected")[0];
+        const srcs = [];
+        _this.element.find("li.selected").each((i, el) => srcs.push(el.dataset.output));
+        const randomSrc = srcs[Math.floor(Math.random() * srcs.length)];
         const angle = parseFloat(_this.element.find("#angle").val() || 0);
         const options = _this.quickPlacementOptions;
         let scale = parseFloat(_this.element.find("#scale").val() || 1);
@@ -54,7 +56,7 @@ export class AssetBrowser extends Application {
         AssetBrowser.scale = scale;
         const dragData = {
             type: "Tile",
-            texture: { src: li.dataset.output },
+            texture: { src: randomSrc },
             tileSize: canvas.dimensions.size / AssetBrowser.scale,
         };
 
@@ -142,13 +144,12 @@ export class AssetBrowser extends Application {
             const li = $(e.target).closest("li");
             if(li.length === 0) return;
             const isSelect = $(e.target).closest("li").hasClass("selected");
-            this.element.find("li").removeClass("selected");
+            if (!e.ctrlKey) this.element.find("li").removeClass("selected");
+            if(e.ctrlKey) $(e.target).closest("li").toggleClass("selected");
             if (!isSelect) {
-                $(e.target).closest("li").addClass("selected");
-                this._hasSelected = true;
-            }else{
-                this._hasSelected = false;
+                $(e.target).closest("li").addClass("selected"); 
             }
+            this._hasSelected = this.element.find("li.selected").length > 0;
         });
         this.element.on("click", ".quick-placement-toggle", (e) => { 
             e.currentTarget.classList.toggle("active");
