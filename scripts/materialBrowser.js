@@ -29,9 +29,10 @@ export class MaterialBrowser extends Application {
         }
         const ambiendCG = await FilePicker.browse(source, "modules/canvas3dcompendium/assets/Materials");
         const c4dcenter = await FilePicker.browse(source, "modules/canvas3dcompendium/assets/Materials/_Stylized");
+        const neuroTremolo = await FilePicker.browse(source, "modules/canvas3dcompendium/assets/Materials/_Stylized2");
         const materials = [];
-        for (let folder of ambiendCG.dirs.concat(c4dcenter.dirs)) {
-            if (folder.endsWith("_Stylized")) continue;
+        for (let folder of ambiendCG.dirs.concat(c4dcenter.dirs).concat(neuroTremolo.dirs)) {
+            if (folder.endsWith("_Stylized") || folder.endsWith("_Stylized2")) continue;
             const filename = folder.split("/").pop().replaceAll("%20", "_");
             const cleanName = filename.replaceAll("_", " ");
             materials.push({
@@ -52,7 +53,7 @@ export class MaterialBrowser extends Application {
         this.element.on("keyup", "input", (e) => {
             const value = e.target.value;
             this.element.find("li").each((i, el) => {
-                const displayName = $(el).data("displayname");
+                const displayName = $(el).data("src");
                 $(el).toggle(displayName.toLowerCase().includes(value.toLowerCase()));
             });
         });
