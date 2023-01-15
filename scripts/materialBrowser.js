@@ -46,7 +46,6 @@ export class MaterialBrowser extends Application {
         this._assetCount = materials.length;
         return data;
     }
-
     activateListeners(html) {
         super.activateListeners(html);
         this.element.find(".material-confirm").hide();
