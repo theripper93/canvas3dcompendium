@@ -155,14 +155,30 @@ const themes = {
     },
     desert: {
         name: "Desert",
-        data: {textureGradient: {enabled: true, texCount: 3, smoothing: 0.1275, useNormals: true, tex0Begin: 0, tex1Begin: 0.71, tex2Begin: 0.89, tex3Begin: 0.75, textureDiffuse0: "modules/canvas3dcompendium/assets/TheMadCartographerTexturePack/Texture-Desert.webp", color0: "#a17230", repeat0: 2, textureDiffuse1: "modules/canvas3dcompendium/assets/TheMadCartographerTexturePack/Texture-Desert.webp", color1: "#df9a3a", repeat1: 2, textureDiffuse2: "modules/canvas3dcompendium/assets/TheMadCartographerTexturePack/Texture-Desert.webp", color2: "#c88e3c", repeat2: 2, textureDiffuse3: "", color3: "#ffffff", repeat3: 1}},
+        data: { textureGradient: { enabled: true, texCount: 3, smoothing: 0.1275, useNormals: true, tex0Begin: 0, tex1Begin: 0.71, tex2Begin: 0.89, tex3Begin: 0.75, textureDiffuse0: "modules/canvas3dcompendium/assets/TheMadCartographerTexturePack/Texture-Desert.webp", color0: "#a17230", repeat0: 2, textureDiffuse1: "modules/canvas3dcompendium/assets/TheMadCartographerTexturePack/Texture-Desert.webp", color1: "#df9a3a", repeat1: 2, textureDiffuse2: "modules/canvas3dcompendium/assets/TheMadCartographerTexturePack/Texture-Desert.webp", color2: "#c88e3c", repeat2: 2, textureDiffuse3: "", color3: "#ffffff", repeat3: 1 } },
     },
     frozen: {
         name: "Frozen",
-        data: {"textureGradient": {"enabled": true, "texCount": 3, "smoothing": 0.2225, "useNormals": true, "tex0Begin": 0, "tex1Begin": 0.53, "tex2Begin": 0.89, "tex3Begin": 0.75, "textureDiffuse0": "modules/canvas3dcompendium/assets/Materials/Ice002/Ice002_Color.webp", "color0": "#19cee6", "repeat0": 5, "textureDiffuse1": "modules/canvas3dcompendium/assets/Materials/Snow004/Snow004_Color.webp", "color1": "#a8e6e5", "repeat1": 4, "textureDiffuse2": "modules/canvas3dcompendium/assets/Materials/Snow004/Snow004_Color.webp", "color2": "#ffffff", "repeat2": 4, "textureDiffuse3": "", "color3": "#ffffff", "repeat3": 1}},
+        data: { textureGradient: { enabled: true, texCount: 3, smoothing: 0.2225, useNormals: true, tex0Begin: 0, tex1Begin: 0.53, tex2Begin: 0.89, tex3Begin: 0.75, textureDiffuse0: "modules/canvas3dcompendium/assets/Materials/Ice002/Ice002_Color.webp", color0: "#19cee6", repeat0: 5, textureDiffuse1: "modules/canvas3dcompendium/assets/Materials/Snow004/Snow004_Color.webp", color1: "#a8e6e5", repeat1: 4, textureDiffuse2: "modules/canvas3dcompendium/assets/Materials/Snow004/Snow004_Color.webp", color2: "#ffffff", repeat2: 4, textureDiffuse3: "", color3: "#ffffff", repeat3: 1 } },
     },
     wasteland: {
         name: "Wasteland",
-        data: {"textureGradient": {"enabled": true, "texCount": 2, "smoothing": 0.1, "useNormals": true, "tex0Begin": 0, "tex1Begin": 0.87, "tex2Begin": 1, "tex3Begin": 0.75, "textureDiffuse0": "modules/canvas3dcompendium/assets/Materials/Rock029/Rock029_Color.webp", "color0": "#9b4517", "repeat0": 5, "textureDiffuse1": "modules/canvas3dcompendium/assets/Materials/Ground048/Ground048_Color.webp", "color1": "#e29255", "repeat1": 1, "textureDiffuse2": "", "color2": "#ffffff", "repeat2": 1, "textureDiffuse3": "", "color3": "#ffffff", "repeat3": 1}},
+        data: { textureGradient: { enabled: true, texCount: 2, smoothing: 0.1, useNormals: true, tex0Begin: 0, tex1Begin: 0.87, tex2Begin: 1, tex3Begin: 0.75, textureDiffuse0: "modules/canvas3dcompendium/assets/Materials/Rock029/Rock029_Color.webp", color0: "#9b4517", repeat0: 5, textureDiffuse1: "modules/canvas3dcompendium/assets/Materials/Ground048/Ground048_Color.webp", color1: "#e29255", repeat1: 1, textureDiffuse2: "", color2: "#ffffff", repeat2: 1, textureDiffuse3: "", color3: "#ffffff", repeat3: 1 } },
+    },
+    grassystyle: {
+        name: "Grassy Stylized",
+        data: { textureGradient: { enabled: true, texCount: 3, smoothing: 0.24, useNormals: true, tex0Begin: 0, tex1Begin: 0.71, tex2Begin: 0.89, tex3Begin: 0.75, textureDiffuse0: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Cliff_01/Cliff_01_Color.webp", color0: "#9b4517", repeat0: 5, textureDiffuse1: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Grass_03/Grass_03_Color.webp", color1: "#a25701", repeat1: 8, textureDiffuse2: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Grass_03/Grass_03_Color.webp", color2: "#ffffff", repeat2: 8, textureDiffuse3: "", color3: "#ffffff", repeat3: 1 } },
+    },
+    icestyle: {
+        name: "Ice Stylized",
+        data: { textureGradient: { enabled: true, texCount: 3, smoothing: 0.24, useNormals: true, tex0Begin: 0, tex1Begin: 0.71, tex2Begin: 0.89, tex3Begin: 0.75, textureDiffuse0: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Crystals_02/Crystals_02_Color.webp", color0: "#ffffff", repeat0: 8, textureDiffuse1: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Snow_04/Snow_04_Color.webp", color1: "#414b95", repeat1: 8, textureDiffuse2: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Snow_04/Snow_04_Color.webp", color2: "#ffffff", repeat2: 8, textureDiffuse3: "", color3: "#ffffff", repeat3: 1 } },
+    },
+    drystyle: {
+        name: "Dry Stylized",
+        data: { textureGradient: { enabled: true, texCount: 3, smoothing: 0.24, useNormals: true, tex0Begin: 0, tex1Begin: 0.71, tex2Begin: 0.89, tex3Begin: 0.75, textureDiffuse0: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Rocks_04/Rocks_04_Color.webp", color0: "#993d1e", repeat0: 14, textureDiffuse1: "modules/canvas3dcompendium/assets/Materials/_Stylized2/CrackedSoil_02/CrackedSoil_02_Color.webp", color1: "#e3944a", repeat1: 8, textureDiffuse2: "modules/canvas3dcompendium/assets/Materials/_Stylized2/CrackedSoil_02/CrackedSoil_02_Color.webp", color2: "#994315", repeat2: 8, textureDiffuse3: "", color3: "#ffffff", repeat3: 1 } },
+    },
+    gemsstyle: {
+        name: "Gems Stylized",
+        data: {"textureGradient": {"enabled": true, "texCount": 3, "smoothing": 0.24, "useNormals": true, "tex0Begin": 0, "tex1Begin": 0.71, "tex2Begin": 0.89, "tex3Begin": 0.75, "textureDiffuse0": "modules/canvas3dcompendium/assets/Materials/_Stylized2/Crystals_01/Crystals_01_Color.webp", "color0": "#ff3d3d", "repeat0": 14, "textureDiffuse1": "modules/canvas3dcompendium/assets/Materials/_Stylized2/Dirt_09/Dirt_09_Color.webp", "color1": "#48324d", "repeat1": 8, "textureDiffuse2": "modules/canvas3dcompendium/assets/Materials/_Stylized2/Dirt_09/Dirt_09_Color.webp", "color2": "#7e90b9", "repeat2": 8, "textureDiffuse3": "", "color3": "#ffffff", "repeat3": 1}},
     },
 };
