@@ -1,4 +1,5 @@
-import { getFiles } from "./assetBrowser.js";
+import {getFiles} from "./assetBrowser.js";
+import { AssetBrowser } from "./assetBrowser.js";
 
 let fileCache = null;
 let dataCache = null;
@@ -6,8 +7,10 @@ let dataCache = null;
 let _this = null;
 
 export class QuickTerrain extends FormApplication {
-    constructor() {
+    constructor (createOnOpen = false, openAssetBrowser = false) {
         super();
+        this.createOnOpen = createOnOpen;
+        this.openAssetBrowser = openAssetBrowser;
     }
 
     sources = ["modules/canvas3dcompendium/assets/Terrain_heightmaps"];
@@ -20,6 +23,8 @@ export class QuickTerrain extends FormApplication {
             template: `modules/canvas3dcompendium/templates/quick-terrain.hbs`,
             width: 400,
             height: "auto",
+            top: 0,
+            left: window.innerWidth - 730,
             resizable: false,
         };
     }
@@ -63,6 +68,9 @@ export class QuickTerrain extends FormApplication {
             if (dataAction == "generate") return this.generateTerrain();
             if(dataAction == "water") return this.createWater();
         });
+        if(this.createOnOpen) {
+            this.generateTerrain();
+        }
     }
 
     async applyTheme() { 
@@ -135,6 +143,13 @@ export class QuickTerrain extends FormApplication {
             },
         };
         const tile = (await canvas.scene.createEmbeddedDocuments("Tile", [tileData]))[0];
+    }
+
+    async close(...args) { 
+        if(this.openAssetBrowser) {
+            new AssetBrowser().render(true);
+        }
+        return super.close(...args);
     }
 }
 
