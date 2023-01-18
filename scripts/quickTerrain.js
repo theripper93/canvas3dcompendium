@@ -21,10 +21,10 @@ export class QuickTerrain extends FormApplication {
             title: "Quick Terrain",
             id: "quick-terrain",
             template: `modules/canvas3dcompendium/templates/quick-terrain.hbs`,
-            width: 400,
+            width: 480,
             height: "auto",
             top: 0,
-            left: window.innerWidth - 730,
+            left: window.innerWidth - 810,
             resizable: false,
         };
     }
@@ -66,7 +66,8 @@ export class QuickTerrain extends FormApplication {
             const dataAction = e.currentTarget.dataset.action;
             if (dataAction == "theme") return this.applyTheme();
             if (dataAction == "generate") return this.generateTerrain();
-            if(dataAction == "water") return this.createWater();
+            if (dataAction == "water") return this.createWater();
+            if(dataAction == "variation") return this.generateVariation();
         });
         if(this.createOnOpen) {
             this.generateTerrain();
@@ -115,6 +116,13 @@ export class QuickTerrain extends FormApplication {
             const tile = (await canvas.scene.createEmbeddedDocuments("Tile", [tileData]))[0];
             tile.object.control({ releaseOthers: true });
         }
+    }
+
+    async generateVariation() { 
+        if (!canvas.tiles.controlled[0]) return ui.notifications.error("Please select a terrain to generate a variation for.");
+        const scale = (Math.random() + 0.2) * 5;
+        canvas.tiles.controlled[0].document.setFlag("levels-3d-preview", "displacementMatrix", `${Math.random()},${Math.random()},${scale},${scale}`);
+        
     }
 
     async createWater() { 
