@@ -1,0 +1,33 @@
+<form action="submit">
+    <div class="heigtmap-container" style="background-image: url('{{heightmap}}'); background-size: contain; position: relative; width: 400px; height: 400px">
+        <div class="matrix-visualizer" style="position: absolute; border: 2px solid red"></div>
+    </div>
+    <div class="form-group">
+        <label>Offset X</label>
+        <div class="form-fields">
+            <input type="range" name="offsetX" value="{{matrix.offsetX}}" min="0" max="1" step="0.05">
+            <span class="range-value">{{matrix.offsetX}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Offset Y</label>
+        <div class="form-fields">
+            <input type="range" name="offsetY" value="{{matrix.offsetY}}" min="0" max="1" step="0.05">
+            <span class="range-value">{{matrix.offsetY}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Scale X</label>
+        <div class="form-fields">
+            <input type="range" name="scaleX" value="{{matrix.scaleX}}" min="0" max="10" step="0.05">
+            <span class="range-value">{{matrix.scaleX}}</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Scale Y</label>
+        <div class="form-fields">
+            <input type="range" name="scaleY" value="{{matrix.scaleY}}" min="0" max="10" step="0.05">
+            <span class="range-value">{{matrix.scaleY}}</span>
+        </div>
+    </div>
+</form>

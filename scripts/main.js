@@ -1,8 +1,8 @@
 import {MaterialBrowser} from "./materialBrowser.js";
 import {AssetBrowser} from "./assetBrowser.js";
 import {QuickTerrain} from "./quickTerrain.js";
+import {MatrixEditor} from "./matrixEditor.js";
 
-globalThis.AssetBrowser = AssetBrowser;
 
 Hooks.on("getSceneControlButtons", (buttons) => {
   const tools = [

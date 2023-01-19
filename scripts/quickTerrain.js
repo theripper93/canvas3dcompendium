@@ -1,5 +1,6 @@
 import {getFiles} from "./assetBrowser.js";
-import { AssetBrowser } from "./assetBrowser.js";
+import {AssetBrowser} from "./assetBrowser.js";
+import { MatrixEditor } from "./MatrixEditor.js";
 
 let fileCache = null;
 let dataCache = null;
@@ -21,10 +22,10 @@ export class QuickTerrain extends FormApplication {
             title: "Quick Terrain",
             id: "quick-terrain",
             template: `modules/canvas3dcompendium/templates/quick-terrain.hbs`,
-            width: 480,
+            width: 600,
             height: "auto",
             top: 0,
-            left: window.innerWidth - 810,
+            left: window.innerWidth - 930,
             resizable: false,
         };
     }
@@ -67,7 +68,8 @@ export class QuickTerrain extends FormApplication {
             if (dataAction == "theme") return this.applyTheme();
             if (dataAction == "generate") return this.generateTerrain();
             if (dataAction == "water") return this.createWater();
-            if(dataAction == "variation") return this.generateVariation();
+            if (dataAction == "variation") return this.generateVariation();
+            if (dataAction == "fine-tune") return new MatrixEditor(canvas.tiles.controlled[0]).render(true);
         });
         if(this.createOnOpen) {
             this.generateTerrain();
