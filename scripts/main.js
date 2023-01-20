@@ -1,7 +1,6 @@
 import {MaterialBrowser} from "./materialBrowser.js";
 import {AssetBrowser} from "./assetBrowser.js";
 import {QuickTerrain} from "./quickTerrain.js";
-import {MatrixEditor} from "./matrixEditor.js";
 
 
 Hooks.on("getSceneControlButtons", (buttons) => {

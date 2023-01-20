@@ -1,6 +1,6 @@
 import {getFiles} from "./assetBrowser.js";
 import {AssetBrowser} from "./assetBrowser.js";
-import { MatrixEditor } from "./MatrixEditor.js";
+import { MatrixEditor } from "./matrixEditor.js";
 
 let fileCache = null;
 let dataCache = null;
