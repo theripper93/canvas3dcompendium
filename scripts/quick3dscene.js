@@ -1,4 +1,4 @@
-import { QuickTerrain } from "./quickTerrain.js";
+import { QuickTerrain } from "./apps/quickTerrain.js";
 
 Hooks.on("renderDialog", (dialog, html, data) => {
     if (dialog.title !== "Create New Scene") return;

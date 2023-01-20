@@ -1,6 +1,6 @@
-import {MaterialBrowser} from "./materialBrowser.js";
-import {AssetBrowser} from "./assetBrowser.js";
-import {QuickTerrain} from "./quickTerrain.js";
+import {MaterialBrowser} from "./apps/materialBrowser.js";
+import { AssetBrowser } from "./apps/assetBrowser.js";
+import { QuickTerrain } from "./apps/quickTerrain.js";
 
 
 Hooks.on("getSceneControlButtons", (buttons) => {
