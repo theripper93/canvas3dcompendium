@@ -1,8 +1,9 @@
 export class MaterialBrowser extends Application {
-    constructor(input, app) {
+    constructor(input, app, targetTexture) {
         super();
         this._input = $(input);
         this._app = app;
+        this._targetTexture = targetTexture || "_NormalGL";
     }
 
     static get defaultOptions() {
@@ -42,7 +43,7 @@ export class MaterialBrowser extends Application {
             });
         }
         materials.sort((a, b) => a.displayName.localeCompare(b.displayName));
-      data.materials = materials;
+        data.materials = materials;
         this._assetCount = materials.length;
         return data;
     }
@@ -57,9 +58,9 @@ export class MaterialBrowser extends Application {
             });
         });
         this.element.on("click", "li", (e) => {
-            const material = $(e.currentTarget).data("output");
+            const material = $(e.currentTarget).data("output").replace("_NormalGL", this._targetTexture);
             this._input.val(material);
-            if (game.settings.get("canvas3dcompendium", "autoApply")) this._app._onSubmit(e, { preventClose: true, preventRender: true });
+            if (game.settings.get("canvas3dcompendium", "autoApply") && this._targetTexture != "_Color") this._app._onSubmit(e, { preventClose: true, preventRender: true });
             if (game.settings.get("canvas3dcompendium", "autoClose")) this.close();
             $(e.currentTarget)
                 .find(".material-confirm")
@@ -69,7 +70,7 @@ export class MaterialBrowser extends Application {
         });
     }
 
-    static create(filepicker, app) {
+    static create(filepicker, app, targetTexture) {
         const fpFG = filepicker.closest(".form-group").length ? filepicker.closest(".form-group") : filepicker;
         const button = $(`
         <button type="button" style="order: 99;" title="Open Material Browser">
@@ -81,7 +82,7 @@ export class MaterialBrowser extends Application {
         fpButton.before(button);
         button.on("click", (e) => {
             e.preventDefault();
-            new MaterialBrowser(input, app).render(true);
+            new MaterialBrowser(input, app, targetTexture).render(true);
         });
     }
 }
