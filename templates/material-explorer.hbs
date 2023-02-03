@@ -1,25 +1,37 @@
 <div style="max-height: 100%;overflow: hidden;position: relative;">
     {{#if isAssetBrowser}}
     <div class="grid-wrapper">
-        <input type="text" id="search" placeholder="Only the first 200 results shown - Start typing to Search...">
-        <input type="number" id="scale" placeholder="Scale" value="{{scale}}">
+        <input data-tooltip="Only the first 200 results shown - Start typing to Search..." type="text" id="search" placeholder="Only the first 200 results shown - Start typing to Search...">
+        <input data-tooltip="Scale" type="number" id="scale" placeholder="Scale" value="{{scale}}">
+        <input data-tooltip="Density (10)" type="number" id="density" placeholder="Density (10)" value="{{density}}">
+        <input data-tooltip="Angle (degrees)" type="number" id="angle" min="0" max="360" step="1" placeholder="Angle (degrees)">
     </div>
     <div class="quick-placement">
-        <a data-tooltip="Perpendicular placement" class="quick-placement-toggle" data-action="normal"><i class="fa-solid fa-chart-scatter-3d"></i></a>
-        <a data-tooltip="Randomize scale" class="quick-placement-toggle" data-action="scale"><i class="fa-regular fa-arrow-up-right-and-arrow-down-left-from-center"></i></a>
-        <a data-tooltip="Randomize rotation" class="quick-placement-toggle" data-action="rotation"><i class="fa-regular fa-rotate"></i></a>
-        <a data-tooltip="Allign to grid" class="quick-placement-toggle" data-action="grid"><i class="fa-regular fa-grid"></i></a>
-        <a data-tooltip="Auto-center tile" class="quick-placement-toggle active" data-action="center"><i class="fa-solid fa-arrows-to-circle"></i></i></a>
-        <input type="number" id="angle" min="0" max="360" step="1" placeholder="Angle (degrees)">
+        <a data-tooltip="Perpendicular placement" class="quick-placement-toggle" data-action="normal"><i
+                class="fa-solid fa-chart-scatter-3d"></i></a>
+        <a data-tooltip="Randomize scale" class="quick-placement-toggle" data-action="scale"><i
+                class="fa-regular fa-arrow-up-right-and-arrow-down-left-from-center"></i></a>
+        <a data-tooltip="Randomize rotation" class="quick-placement-toggle" data-action="rotation"><i
+                class="fa-regular fa-rotate"></i></a>
+        <a data-tooltip="Allign to grid" class="quick-placement-toggle" data-action="grid"><i
+                class="fa-regular fa-grid"></i></a>
+        <a data-tooltip="Auto-center tile" class="quick-placement-toggle active" data-action="center"><i
+                class="fa-solid fa-arrows-to-circle"></i></a>
+        <a data-tooltip="Block Movement" class="quick-placement-toggle active" data-action="collision"><i class="fa-regular fa-arrow-down-to-line"></i></a>
+        <a data-tooltip="Block Sight" class="quick-placement-toggle active" data-action="sight"><i class="fa-solid fa-eye-slash"></i></a>
+        <a data-tooltip="Camera Collider" class="quick-placement-toggle" data-action="cameraCollision"><i class="fa-solid fa-video"></i></a>
+        <a data-tooltip="Color Variation" class="quick-placement-toggle" data-action="colorvar"><i
+                class="fa-solid fa-palette"></i></a>
+        <input data-tooltip="Tint" style="height: 22px" type="color" id="color" value="#ffffff" placeholder="Color">
     </div>
     {{else}}
-    <input type="text" id="search"  placeholder="Search Materials...">
+    <input type="text" id="search" placeholder="Search Materials...">
     {{/if}}
 
     <ol>
         {{#each materials}}
-        <li {{#if isAssetBrowser}}draggable="true" data-tooltip="{{displayName}} ({{output}})" {{/if}} data-search="{{search}}" data-output="{{output}}"
-            data-displayname="{{displayName}}" data-src="{{preview}}">
+        <li {{#if isAssetBrowser}}draggable="true" data-tooltip="{{displayName}} ({{output}})" {{/if}}
+            data-search="{{search}}" data-output="{{output}}" data-displayname="{{displayName}}" data-src="{{preview}}">
             <img src="{{preview}}" alt="" loading="lazy">
             <i class="material-name">{{displayName}}</i>
             <div class="material-confirm">

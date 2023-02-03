@@ -8,19 +8,24 @@ export class AssetBrowser extends Application {
         super();
         this._maxCount = 200;
         this._hasSelected = false;
+        this.lastPlacementPosition = new game.Levels3DPreview.THREE.Vector3();
         game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick, false);
+        game.Levels3DPreview.renderer.domElement.addEventListener("mousemove", this._on3DCanvasMove, false);
         _this = this;
-        this.hookid = Hooks.on("controlTile", (tile, control) => { 
+        this.hookid = Hooks.on("controlTile", (tile, control) => {
             if (this._hasSelected) canvas.tiles.releaseAll();
-        })
+        });
     }
 
     sources = ["modules/canvas3dcompendium/assets/Tiles", "modules/baileywiki-3d"];
 
-
-    static get exclude(){return [];}
+    static get exclude() {
+        return [];
+    }
 
     static scale = 1;
+
+    static density = 10;
 
     static get defaultOptions() {
         return {
@@ -39,25 +44,57 @@ export class AssetBrowser extends Application {
         return "Asset Browser: " + this._assetCount + " assets available";
     }
 
-    _on3DCanvasClick(event) {
-        if (!_this._hasSelected || event.which !== 1 || !game.Levels3DPreview.interactionManager.eventData) return;
+    get currentPoint() {
+        //game.Levels3DPreview.interactionManager._mouseHoverIntersect
+        return game.Levels3DPreview.interactionManager.mouseIntersection3DCollision(undefined,true,"compendium")[0];
+    }
+
+    _on3DCanvasMove(event) {
+        if (!_this._hasSelected || !game.Levels3DPreview.interactionManager._leftDown || !_this.currentPoint?.point) return;
+        const currentPos = _this.currentPoint.point;
+        console.log(currentPos, "currentPos");
+        if (!_this.lastPlacementPosition) return _this._on3DCanvasClick(event, true);
+        console.log(currentPos.distanceTo(_this.lastPlacementPosition));
+        if (!currentPos || currentPos.distanceTo(_this.lastPlacementPosition) < 1/AssetBrowser.density) return;
+        _this._on3DCanvasClick(event, true);
+    }
+
+    _on3DCanvasClick(event, fromDrag = false) {
+        const currentIntersect = _this.currentPoint;
+        if (!_this._hasSelected || (event.which !== 1 && !fromDrag) || !currentIntersect) return;
+        _this.lastPlacementPosition.copy(currentIntersect.point);
         const srcs = [];
         _this.element.find("li.selected").each((i, el) => srcs.push(el.dataset.output));
         const randomSrc = srcs[Math.floor(Math.random() * srcs.length)];
         const angle = parseFloat(_this.element.find("#angle").val() || 0);
+        let color = _this.element.find("#color").val();
         const options = _this.quickPlacementOptions;
-        let scale = parseFloat(_this.element.find("#scale").val() || 1);
+        let scale = AssetBrowser.scale || 1;
         let normal = null;
         const grid = options.grid;
         const randomRotate = options.rotation;
         const rotation = randomRotate ? Math.random() * 360 : angle;
-        if (options.scale) scale *= (Math.random() + 0.5);
-        if (options.normal) normal = game.Levels3DPreview.interactionManager.eventData.intersectData.face.normal;
-        AssetBrowser.scale = scale;
+        if (options.scale) scale *= Math.random() + 0.5;
+        if (options.normal) normal = currentIntersect.face.normal;
+        if (options.colorvar) {
+            const threecolor = new game.Levels3DPreview.THREE.Color(color);
+            const hsl = threecolor.getHSL(new game.Levels3DPreview.THREE.Color());
+            const hue = hsl.h + (Math.random() - 0.5) * 0.05;
+            const sat = hsl.s + (Math.random() - 0.5) * 0.4;
+            const lum = hsl.l + (Math.random() - 0.5) * 0.4;
+            threecolor.setHSL(hue, sat, lum);
+            color = "#" + threecolor.getHexString();
+        }
+        //AssetBrowser.scale = scale;
+        const sight = _this.quickPlacementOptions.sight;
+        const collision = _this.quickPlacementOptions.collision;
+        const cameraCollision = _this.quickPlacementOptions.cameraCollision;
         const dragData = {
             type: "Tile",
             texture: { src: randomSrc },
             tileSize: canvas.dimensions.size / AssetBrowser.scale,
+            params: { color, sight, collision, cameraCollision },
+            coord3d: currentIntersect.point,
         };
 
         game.Levels3DPreview.interactionManager._onDrop(event, grid, normal, dragData, rotation, options.center);
@@ -80,6 +117,7 @@ export class AssetBrowser extends Application {
         if (dataCache) {
             this._assetCount = dataCache.materials.length;
             dataCache.scale = AssetBrowser.scale !== 1 ? AssetBrowser.scale : "";
+            dataCache.density = AssetBrowser.density !== 10 ? AssetBrowser.density : "";
             return dataCache;
         }
         const materials = [];
@@ -140,35 +178,42 @@ export class AssetBrowser extends Application {
             });
         });
         this.element.find("input").trigger("keyup");
-        this.element.on("mouseup", (e) => { 
+        this.element.on("mouseup", (e) => {
             const li = $(e.target).closest("li");
-            if(li.length === 0) return;
+            if (li.length === 0) return;
             const isSelect = $(e.target).closest("li").hasClass("selected");
             if (!e.ctrlKey) this.element.find("li").removeClass("selected");
-            if(e.ctrlKey) $(e.target).closest("li").toggleClass("selected");
+            if (e.ctrlKey) $(e.target).closest("li").toggleClass("selected");
             if (!isSelect) {
-                $(e.target).closest("li").addClass("selected"); 
+                $(e.target).closest("li").addClass("selected");
             }
             this._hasSelected = this.element.find("li.selected").length > 0;
         });
-        this.element.on("click", ".quick-placement-toggle", (e) => { 
+        this.element.on("click", ".quick-placement-toggle", (e) => {
             e.currentTarget.classList.toggle("active");
+        });
+        this.element.on("change", "#scale", (e) => {
+            AssetBrowser.scale = parseFloat(e.target.value);
+        });
+        this.element.on("change", "#density", (e) => {
+            AssetBrowser.density = parseFloat(e.target.value);
         });
     }
 
-    get quickPlacementOptions() { 
+    get quickPlacementOptions() {
         const options = {};
         const quickPlacementToggles = this.element.find(".quick-placement-toggle");
-        for (let toggle of quickPlacementToggles) { 
+        for (let toggle of quickPlacementToggles) {
             const action = toggle.dataset.action;
             options[action] = toggle.classList.contains("active");
         }
         return options;
     }
 
-    async close(...args) { 
+    async close(...args) {
         super.close(...args);
         game.Levels3DPreview.renderer.domElement.removeEventListener("mouseup", this._on3DCanvasClick, false);
+        game.Levels3DPreview.renderer.domElement.removeEventListener("mousemove", this._on3DCanvasMove, false);
         Hooks.off("controlTile", this.hookid);
     }
 }
