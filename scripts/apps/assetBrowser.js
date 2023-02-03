@@ -50,6 +50,7 @@ export class AssetBrowser extends Application {
     }
 
     _on3DCanvasMove(event) {
+        if (!_this.quickPlacementOptions.paint) return;
         if (!_this._hasSelected || !game.Levels3DPreview.interactionManager._leftDown || !_this.currentPoint?.point) return;
         const currentPos = _this.currentPoint.point;
         console.log(currentPos, "currentPos");
