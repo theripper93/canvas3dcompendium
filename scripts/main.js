@@ -3,7 +3,6 @@ import {AssetBrowser} from "./apps/assetBrowser.js";
 import {TokenBrowser} from "./apps/tokenBrowser.js";
 import { QuickTerrain } from "./apps/quickTerrain.js";
 
-globalThis.TokenBrowser = TokenBrowser;
 
 Hooks.on("getSceneControlButtons", (buttons) => {
   const tools = [
