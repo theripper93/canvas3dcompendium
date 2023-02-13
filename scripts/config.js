@@ -16,6 +16,15 @@ Hooks.once('init', async function() {
         type: Boolean,
         default: false,
       });
+  
+      game.settings.register("canvas3dcompendium", "allTokens", {
+          name: "Show All Tokens",
+          hint: "When disabled, show only colorized tokens, if enabled, show every token available.",
+          scope: "world",
+          config: true,
+          type: Boolean,
+          default: false,
+      });
 });
 
 Hooks.once('ready', async function() {

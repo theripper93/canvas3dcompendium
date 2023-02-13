@@ -1,7 +1,9 @@
 import {MaterialBrowser} from "./apps/materialBrowser.js";
-import { AssetBrowser } from "./apps/assetBrowser.js";
+import {AssetBrowser} from "./apps/assetBrowser.js";
+import {TokenBrowser} from "./apps/tokenBrowser.js";
 import { QuickTerrain } from "./apps/quickTerrain.js";
 
+globalThis.TokenBrowser = TokenBrowser;
 
 Hooks.on("getSceneControlButtons", (buttons) => {
   const tools = [
@@ -36,6 +38,18 @@ Hooks.on("getSceneControlButtons", (buttons) => {
 Hooks.on("renderTileConfig", injectMaterialBrowser)
 Hooks.on("renderTokenConfig", injectMaterialBrowser)
 Hooks.on("renderShaderConfig", injectMaterialBrowser);
+
+Hooks.on("renderTokenConfig", async (app, html) => {
+    if (!game.modules.get("levels-3d-preview")?.active) return;
+    function wait(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+    while (!html.find(`input[name="flags.levels-3d-preview.model3d"]`).length) {
+        await wait(100);
+  }
+            const filepicker = html.find(`input[name="flags.levels-3d-preview.model3d"]`).closest(".form-group");
+            TokenBrowser.create(filepicker, app);
+});
 
 async function injectMaterialBrowser(app, html) {
   if(!game.modules.get("levels-3d-preview")?.active) return;

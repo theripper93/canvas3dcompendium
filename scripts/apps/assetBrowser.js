@@ -12,6 +12,10 @@ export class AssetBrowser extends Application {
         game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick, false);
         game.Levels3DPreview.renderer.domElement.addEventListener("mousemove", this._on3DCanvasMove, false);
         _this = this;
+        this.setHooks();
+    }
+
+    setHooks() {
         this.hookid = Hooks.on("controlTile", (tile, control) => {
             if (this._hasSelected) canvas.tiles.releaseAll();
         });
@@ -46,7 +50,7 @@ export class AssetBrowser extends Application {
 
     get currentPoint() {
         //game.Levels3DPreview.interactionManager._mouseHoverIntersect
-        return game.Levels3DPreview.interactionManager.mouseIntersection3DCollision(undefined,true,"compendium")[0];
+        return game.Levels3DPreview.interactionManager.mouseIntersection3DCollision(undefined, true, "compendium")[0];
     }
 
     _on3DCanvasMove(event) {
@@ -56,7 +60,7 @@ export class AssetBrowser extends Application {
         console.log(currentPos, "currentPos");
         if (!_this.lastPlacementPosition) return _this._on3DCanvasClick(event, true);
         console.log(currentPos.distanceTo(_this.lastPlacementPosition));
-        if (!currentPos || currentPos.distanceTo(_this.lastPlacementPosition) < 1/AssetBrowser.density) return;
+        if (!currentPos || currentPos.distanceTo(_this.lastPlacementPosition) < 1 / AssetBrowser.density) return;
         _this._on3DCanvasClick(event, true);
     }
 
@@ -70,7 +74,6 @@ export class AssetBrowser extends Application {
         const angle = parseFloat(_this.element.find("#angle").val() || 0);
         let color = _this.element.find("#color").val();
         const options = _this.quickPlacementOptions;
-        let scale = AssetBrowser.scale || 1;
         let normal = null;
         const grid = options.grid;
         const randomRotate = options.rotation;
@@ -128,7 +131,7 @@ export class AssetBrowser extends Application {
             const filename = file.split("/").pop().replaceAll("%20", "_");
             const cleanName = filename.replaceAll("_", " ").replace(".glb", "");
             materials.push({
-                displayName: cleanName,
+                displayName: cleanName.replace("MZ4250 - ", ""),
                 preview: file.replace(".glb", ".webp"),
                 output: file,
                 search: file.split("/assets/Tiles/").pop(),
@@ -219,7 +222,6 @@ export class AssetBrowser extends Application {
     }
 }
 
-
 export async function getFiles(root, source = "user", extC = "glb") {
     const files = [];
 
@@ -234,4 +236,4 @@ export async function getFiles(root, source = "user", extC = "glb") {
     }
 
     return files;
- }
+}
