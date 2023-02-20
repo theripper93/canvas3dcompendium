@@ -21,7 +21,16 @@ export class AssetBrowser extends Application {
         });
     }
 
-    sources = ["modules/canvas3dcompendium/assets/Tiles", "modules/baileywiki-3d"];
+    get sources() { 
+        const sources = this.defaultSources;
+        const custom = game.settings.get("canvas3dcompendium", "assetBrowserCustomPath");
+        if (custom) sources.push(custom);
+        return sources;
+    }
+
+    get defaultSources() { 
+        return ["modules/canvas3dcompendium/assets/Tiles", "modules/baileywiki-3d"];
+    }
 
     static get exclude() {
         return [];
@@ -152,6 +161,7 @@ export class AssetBrowser extends Application {
         }
         const files = [];
         for (let target of this.sources) {
+            if(!this.defaultSources.includes(target)) source = FilePicker.prototype._inferCurrentDirectory(target)[0];
             let sourceFiles;
             try {
                 sourceFiles = await getFiles(target, source);

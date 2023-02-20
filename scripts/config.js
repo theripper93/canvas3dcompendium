@@ -25,6 +25,16 @@ Hooks.once('init', async function() {
           type: Boolean,
           default: false,
       });
+  
+      game.settings.register("canvas3dcompendium", "assetBrowserCustomPath", {
+          name: "Custom Asset Path",
+          hint: "If you want to use a custom path for the asset browser, set it here.",
+          scope: "world",
+          config: true,
+          filePicker: "folder",
+          type: String,
+          default: "",
+      });
 });
 
 Hooks.once('ready', async function() {
