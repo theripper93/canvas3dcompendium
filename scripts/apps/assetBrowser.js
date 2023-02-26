@@ -21,14 +21,14 @@ export class AssetBrowser extends Application {
         });
     }
 
-    get sources() { 
+    get sources() {
         const sources = this.defaultSources;
         const custom = game.settings.get("canvas3dcompendium", "assetBrowserCustomPath");
         if (custom) sources.push(custom);
         return sources;
     }
 
-    get defaultSources() { 
+    get defaultSources() {
         return ["modules/canvas3dcompendium/assets/Tiles", "modules/baileywiki-3d"];
     }
 
@@ -163,7 +163,7 @@ export class AssetBrowser extends Application {
         }
         const files = [];
         for (let target of this.sources) {
-            if(!this.defaultSources.includes(target)) source = FilePicker.prototype._inferCurrentDirectory(target)[0];
+            if (!this.defaultSources.includes(target)) source = FilePicker.prototype._inferCurrentDirectory(target)[0];
             let sourceFiles;
             try {
                 sourceFiles = await getFiles(target, source);
@@ -204,7 +204,7 @@ export class AssetBrowser extends Application {
                 $(e.target).closest("li").addClass("selected");
             }
             this._hasSelected = this.element.find("li.selected").length > 0;
-            if(this._hasSelected) canvas.tiles.releaseAll();
+            if (this._hasSelected) canvas.tiles.releaseAll();
         });
         this.element.on("click", ".quick-placement-toggle", (e) => {
             e.currentTarget.classList.toggle("active");
@@ -215,6 +215,19 @@ export class AssetBrowser extends Application {
         this.element.on("change", "#density", (e) => {
             AssetBrowser.density = parseFloat(e.target.value);
         });
+    }
+
+    _getHeaderButtons() { 
+        const buttons = super._getHeaderButtons();
+        buttons.unshift({
+            label: "Merge",
+            class: "merge",
+            icon: "fas fa-object-group",
+            onclick: () => {
+                game.Levels3DPreview.UTILS.autoMergeTiles();
+            },
+        });
+        return buttons;
     }
 
     get quickPlacementOptions() {
