@@ -84,6 +84,7 @@ export class AssetBrowser extends Application {
         let color = _this.element.find("#color").val();
         const options = _this.quickPlacementOptions;
         let normal = null;
+        let scale = AssetBrowser.scale;
         const grid = options.grid;
         const randomRotate = options.rotation;
         const rotation = randomRotate ? Math.random() * 360 : angle;
@@ -105,7 +106,7 @@ export class AssetBrowser extends Application {
         const dragData = {
             type: "Tile",
             texture: { src: randomSrc },
-            tileSize: canvas.dimensions.size / AssetBrowser.scale,
+            tileSize: canvas.dimensions.size / scale,
             params: { color, sight, collision, cameraCollision },
             coord3d: currentIntersect.point,
         };
@@ -114,6 +115,7 @@ export class AssetBrowser extends Application {
     }
 
     _onDragStart(event) {
+        canvas.tiles.releaseAll();
         const li = event.currentTarget;
         const scale = parseFloat(this.element.find("#scale").val() || 1);
         AssetBrowser.scale = scale;
@@ -202,6 +204,7 @@ export class AssetBrowser extends Application {
                 $(e.target).closest("li").addClass("selected");
             }
             this._hasSelected = this.element.find("li.selected").length > 0;
+            if(this._hasSelected) canvas.tiles.releaseAll();
         });
         this.element.on("click", ".quick-placement-toggle", (e) => {
             e.currentTarget.classList.toggle("active");
