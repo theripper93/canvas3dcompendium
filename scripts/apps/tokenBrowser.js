@@ -75,7 +75,7 @@ export class TokenBrowser extends Application {
         }
         const files = [];
         for (let target of this.sources) {
-            if(this.usingTheForge) target.replace("modules", "assets")
+            if(this.usingTheForge) target = target.replace("modules", "assets")
             let sourceFiles;
             try {
                 sourceFiles = await getFiles(target, source);
