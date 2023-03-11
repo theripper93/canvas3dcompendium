@@ -64,13 +64,18 @@ export class TokenBrowser extends Application {
         return data;
     }
 
+    get usingTheForge() { 
+        return typeof ForgeVTT !== "undefined" && ForgeVTT.usingTheForge;
+    }
+
     async getSources() {
         let source = "user";
-        if (typeof ForgeVTT !== "undefined" && ForgeVTT.usingTheForge) {
+        if (this.usingTheForge) {
             source = "forge-bazaar";
         }
         const files = [];
         for (let target of this.sources) {
+            if(this.usingTheForge) target.replace("modules", "assets")
             let sourceFiles;
             try {
                 sourceFiles = await getFiles(target, source);
