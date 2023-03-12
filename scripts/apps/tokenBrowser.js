@@ -98,8 +98,8 @@ export class TokenBrowser extends Application {
             const value = e.target.value;
             let count = 0;
             this.element.find("li").each((i, el) => {
-                const displayName = $(el).data("displayname");
-                const search = $(el).data("search");
+                const displayName = String($(el).data("displayname"));
+                const search = String($(el).data("search"));
                 const display = search.toLowerCase().includes(value.toLowerCase()) || displayName.toLowerCase().includes(value.toLowerCase());
                 $(el).toggle(display);
                 if (display) count++;
