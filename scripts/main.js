@@ -1,7 +1,8 @@
 import {MaterialBrowser} from "./apps/materialBrowser.js";
 import {AssetBrowser} from "./apps/assetBrowser.js";
 import {TokenBrowser} from "./apps/tokenBrowser.js";
-import { QuickTerrain } from "./apps/quickTerrain.js";
+import {QuickTerrain} from "./apps/quickTerrain.js";
+import { EffectBrowser } from "./apps/effectBrowser.js";
 
 
 Hooks.on("getSceneControlButtons", (buttons) => {
@@ -25,7 +26,17 @@ Hooks.on("getSceneControlButtons", (buttons) => {
           onClick: () => {
               new QuickTerrain().render(true);
           },
+    },
+    {
+      name: "effectBrowser",
+      title: "3D Effect Browser",
+      icon: "fa-duotone fa-fire",
+      button: true,
+      visible: game.Levels3DPreview?._active,
+      onClick: () => {
+        new EffectBrowser().render(true);
       },
+    },
   ];
 
   const tileTools = buttons.find((b) => b.name === "tiles")?.tools;

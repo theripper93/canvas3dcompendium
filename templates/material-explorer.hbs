@@ -26,7 +26,14 @@
         <input data-tooltip="Tint" style="height: 22px" type="color" id="color" value="#ffffff" placeholder="Color">
     </div>
     {{else}}
+    {{#if isEffectBrowser}}
+    <div style="display: flex; gap: 0.2rem;">
     <input type="text" id="search" placeholder="Search...">
+    <input style="width: 7rem;" data-tooltip="Scale" type="number" id="scale" placeholder="Grid Squares" value="{{scale}}">
+    </div>
+    {{else}}
+    <input type="text" id="search" placeholder="Search...">
+    {{/if}}
     {{/if}}
 
     <ol>
