@@ -49,12 +49,13 @@ export class EffectBrowser extends Application {
         const data = {};
         await getJB2A();
         const addEffect = (effectId, effect, variation) => {
-            const name = variation ? effect.name + " - " + variation.name : effect.name;
+            const name = variation ? variation.name + ": " + effect.name : effect.name;
             materials.push({
                 displayName: name,
                 preview: effect.thumb ?? effect.src,
                 output: variation ? effectId + "-" + variation.id : effectId,
                 search: name,
+                isVariation: !!variation,
             });
          };
 
@@ -66,7 +67,7 @@ export class EffectBrowser extends Application {
             }
         }
 
-        materials.sort((a, b) => a.displayName.localeCompare(b.displayName));
+        materials.sort((a, b) => a.displayName.localeCompare(b.displayName)).sort((a, b) => b.isVariation - a.isVariation);
         data.materials = materials;
         data.isEffectBrowser = true;
         this._assetCount = materials.length;
@@ -147,6 +148,26 @@ const effectsDatabase = {
         src: "modules/canvas3dcompendium/assets/Effects/JB2A/cracks3.webp",
         name: "Cracks 3",
     },
+    surface1: {
+        src: "modules/canvas3dcompendium/assets/Effects/Spills/spill1.webp",
+        name: "Surface 1",
+    },
+    surface2: {
+        src: "modules/canvas3dcompendium/assets/Effects/Spills/spill2.webp",
+        name: "Surface 2",
+    },
+    surface3: {
+        src: "modules/canvas3dcompendium/assets/Effects/Spills/spill3.webp",
+        name: "Surface 3",
+    },
+    surface4: {
+        src: "modules/canvas3dcompendium/assets/Effects/Spills/spill4.webp",
+        name: "Surface 4",
+    },
+    surface5: {
+        src: "modules/canvas3dcompendium/assets/Effects/Spills/spill5.webp",
+        name: "Surface 5",
+    },
 };
 
 
@@ -156,9 +177,15 @@ const effectsDatabase = {
     addGlow(effectsDatabase[e])
 });
 
-["cracks1", "cracks2", "cracks3"].forEach((e) => {
+["surface1", "surface2", "surface3", "surface4", "surface5"].forEach((e) => {
     createElementalVariations(effectsDatabase[e])
-    addGlow(effectsDatabase[e], true)
+    addGlow(effectsDatabase[e], false, 0.4)
+    addWavy(effectsDatabase[e])
+});
+
+[("cracks1", "cracks2", "cracks3")].forEach((e) => {
+    createElementalVariations(effectsDatabase[e]);
+    addGlow(effectsDatabase[e], true);
 });
 
 
@@ -175,9 +202,17 @@ function createElementalVariations(effect){
             shaderData: { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Ice_01/Ice_01_Color.webp", color: "#80dfff", strength: 1, coveragePercent: 1, inclination: 0, repeat: 1, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true } },
         },
         {
+            id: "lightning",
+            name: "Lightning",
+            shaderData: {
+                overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Ice_01/Ice_01_Color.webp", color: "#80dfff", strength: 1, coveragePercent: 1, inclination: 0, repeat: 1, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true },
+                lightning: { enabled: true, speed: 0.1, intensity: 0.4924, scale: 1, color: "#0037ff", blendMode: true },
+            },
+        },
+        {
             id: "acid",
             name: "Acid",
-            shaderData: { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Scales_04/Scales_04_Color.webp", color: "#00e62e", strength: 1, coveragePercent: 1, inclination: 0, repeat: 1, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true } },
+            shaderData: { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Lava_04/Lava_04_Color.webp", color: "#00e62e", strength: 1, coveragePercent: 1, inclination: 0, repeat: 1, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true } },
         },
         {
             id: "dark",
@@ -195,16 +230,22 @@ function addRotation(effect) {
     });
 }
 
-function addGlow(effect, pulse = false) {
+function addGlow(effect, pulse = false, intensity = 2) {
     if (pulse) {
         effect.variations.forEach((variation) => {
-            variation.shaderData.colorwarp = { enabled: true, speed: 0.1, glow: 2, hue_angle: 0, flicker: false, animate_range: 1 };
+            variation.shaderData.colorwarp = { enabled: true, speed: 0.1, glow: intensity, hue_angle: 0, flicker: false, animate_range: 1 };
         });
     } else {
         effect.variations.forEach((variation) => { 
-            variation.shaderData.colorwarp = { enabled: true, speed: 0, glow: 2, hue_angle: 0, flicker: false, animate_range: 0.5 }
+            variation.shaderData.colorwarp = { enabled: true, speed: 0, glow: intensity, hue_angle: 0, flicker: false, animate_range: 0.5 };
         });
     }
+}
+
+function addWavy(effect) {
+    effect.variations.forEach((variation) => { 
+        variation.shaderData.ocean = { enabled: true, speed: 0.05, scale: 0.1, waveA_wavelength: 0.6, waveA_steepness: 0.3029, waveA_direction: 90, waveB_wavelength: 0.3, waveB_steepness: 0.2524, waveB_direction: 260, waveC_wavelength: 0.2, waveC_steepness: 0.3534, waveC_direction: 180, foam: false };
+    });
 }
 
 async function getJB2A() {

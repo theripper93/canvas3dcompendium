@@ -41,7 +41,7 @@
         <li {{#if isAssetBrowser}}draggable="true" data-tooltip="{{displayName}} ({{output}})" {{/if}}
             data-search="{{search}}" data-output="{{output}}" data-displayname="{{displayName}}" data-src="{{preview}}">
             <img src="{{preview}}" alt="" loading="lazy">
-            <i class="material-name">{{displayName}}</i>
+            <i data-tooltip="{{displayName}}" class="material-name">{{displayName}}</i>
             <div class="material-confirm">
                 <i class="fas fa-check"></i>
             </div>
