@@ -1,0 +1,79 @@
+:root{
+    --build-panel-width: 40px;
+    --build-panel-height: 30vh;
+}
+
+#build-panel{
+    position: absolute;
+    width: var(--build-panel-width);
+    height: var(--build-panel-height);
+    top: calc(50% - (var(--build-panel-height) / 2));
+    left: calc( -1 * var(--build-panel-width) + 10px);
+    z-index: -10;
+    border: 1px solid var(--color-border-dark);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    box-shadow: 0 0 20px var(--color-shadow-dark);
+    color: var(--color-text-light-0);
+    transition: all 0.3s ease-in-out;
+    background: url(/../ui/denim075.png) repeat;
+}
+
+#build-panel.minimized{
+    left: calc( var(--build-panel-width) * 0.1 );
+}
+
+#build-panel ul{
+    height: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#build-panel li{
+    font-size: calc(var(--build-panel-width) * 0.7);
+}
+
+#build-panel i{
+    pointer-events: all;
+}
+
+#build-panel i:hover{
+    cursor: pointer;
+    text-shadow: 0 0 8px var(--color-shadow-primary);
+}
+
+#build-panel .minimize-container{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+#build-panel .minimize-container i{
+    transition: all 0.1s ease-in-out;
+}
+
+#build-panel #build-panel-minimize{
+    pointer-events: all;
+    width: 0.8rem;
+    height: 1.5rem;
+    position: absolute;
+    top: calc(50% - 0.5rem);
+    left: -0.8rem;
+    border: 1px solid var(--color-border-dark);
+    border-radius: 3px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+    font-size: 1.3rem;
+    box-shadow: 0 0 20px var(--color-shadow-dark);
+    background: url(/../ui/denim075.png) repeat;
+}
+
+#build-panel.minimized #build-panel-minimize i{
+    transform: rotate(180deg);
+}

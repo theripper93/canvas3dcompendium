@@ -35,7 +35,7 @@
     cursor: pointer;
 }
 
-#material-browser ol li:hover{
+#material-browser ol li:hover, #quick-environment .environment:hover{
     box-shadow: 0 0 8px var(--color-shadow-highlight);
 }
 
@@ -107,4 +107,42 @@
 
 #material-browser .quick-placement a.active{
     background-color: #ffffff30;
+}
+
+#quick-terrain .window-content, #quick-environment .window-content{
+    background: url(/../ui/denim075.png) repeat;
+    color: var(--color-text-light-primary);
+}
+
+#quick-terrain button{
+    color: var(--color-text-light-primary);
+    border: none;
+    border-top: 1px solid;
+    border-radius: 0;
+}
+
+#quick-terrain select{
+    color: var(--color-text-light-primary);
+    border: none;
+    border-bottom: 1px solid;
+    border-radius: 0;
+}
+
+#quick-environment .environment{
+    width: 70px;
+    height: 70px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 5px;
+    box-shadow: 0 0 8px #00000052;
+    transition: box-shadow 0.2s ease-in-out, border 0.2s ease-in-out;
+}
+
+#quick-environment #env-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.2rem;
+    max-height: 300px;
+    overflow-y: scroll;
+    justify-items: center;
 }

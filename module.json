@@ -25,7 +25,8 @@
     "scripts/quick3dscene.js"
   ],
   "styles": [
-    "styles/module.css"
+    "styles/module.css",
+    "styles/build-panel.css"
   ],
   "packs": [
     {

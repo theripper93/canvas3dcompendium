@@ -37,10 +37,16 @@ Hooks.on("renderDialog", (dialog, html, data) => {
             scene.view();
         })
 
+        Hooks.once("renderSceneConfig", (dialog, html, data) => {
+            setTimeout(() => {
+                dialog.close(true);
+            }, 1000);
+        });
+
         Hooks.once("3DCanvasSceneReady", () => {
             setTimeout(() => {
                 canvas.tiles.activate();
-                new QuickTerrain(true, true).render(true);
+                new QuickTerrain(true).render(true);
             }, 1000);
         });
     });

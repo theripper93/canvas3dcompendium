@@ -1,0 +1,14 @@
+<div id="build-panel">
+    <div class="minimize-container">
+        <div id="build-panel-minimize">
+            <i class="fa-duotone fa-caret-right"></i>
+        </div>
+    </div>
+    <ul>
+        {{#each buttons}}
+        <li>
+            <i data-action={{id}} data-tooltip="{{name}}" class="{{icon}} build-panel-button"></i>
+        </li>
+        {{/each}}
+    </ul>
+</div>

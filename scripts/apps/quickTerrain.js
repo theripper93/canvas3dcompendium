@@ -22,10 +22,10 @@ export class QuickTerrain extends FormApplication {
             title: "Quick Terrain",
             id: "quick-terrain",
             template: `modules/canvas3dcompendium/templates/quick-terrain.hbs`,
-            width: 600,
+            width: 200,
             height: "auto",
             top: 0,
-            left: window.innerWidth - 930,
+            left: window.innerWidth - 500,
             resizable: false,
         };
     }

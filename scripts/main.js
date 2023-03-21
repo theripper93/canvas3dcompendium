@@ -2,7 +2,10 @@ import {MaterialBrowser} from "./apps/materialBrowser.js";
 import {AssetBrowser} from "./apps/assetBrowser.js";
 import {TokenBrowser} from "./apps/tokenBrowser.js";
 import {QuickTerrain} from "./apps/quickTerrain.js";
-import { EffectBrowser } from "./apps/effectBrowser.js";
+import {EffectBrowser} from "./apps/effectBrowser.js";
+import {BuildPanel} from "./apps/buildPanel.js";
+
+BuildPanel.setHook();
 
 
 Hooks.on("getSceneControlButtons", (buttons) => {

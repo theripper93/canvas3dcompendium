@@ -1,0 +1,14 @@
+<form action="submit">
+
+<div class="form-group">
+<label for="timeofday">Time</label>
+{{rangePicker name="timeofday" value=timeofday min=0 max=24 step=1}}
+</div>
+
+<div id="env-container">
+    {{#each envs}}
+    <div class="environment" data-url="{{url}}" style="background-image: url('{{url}}');"></div>
+    {{/each}}
+</div>
+
+</form>
