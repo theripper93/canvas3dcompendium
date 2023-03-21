@@ -82,5 +82,11 @@ const BUILD_PANEL_BUTTONS = [
         name: "Effects",
         icon: "fa-duotone fa-fire",
         callback: () => { new EffectBrowser().render(true); }
+    },
+    {
+        id: "community-maps",
+        name: "Community Maps",
+        icon: "fa-duotone fa-map",
+        callback: () => { new game.Levels3DPreview.sharing.apps.MapBrowser().render(true); }
     }
 ]
