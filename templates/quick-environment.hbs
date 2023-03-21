@@ -5,6 +5,12 @@
 {{rangePicker name="timeofday" value=timeofday min=0 max=24 step=1}}
 </div>
 
+<div class="form-group">
+    <select name="weather">
+    {{selectOptions weather selected=selectedWeather localize=false}}
+    </select>
+</div>
+
 <div id="env-container">
     {{#each envs}}
     <div class="environment" data-url="{{url}}" style="background-image: url('{{url}}');"></div>

@@ -58,7 +58,24 @@ export class QuickEnvironment extends Application {
                 name: file.split("/").pop().split(".")[0],
             });
         }
+        const weather = {
+            none: "Weather (" + game.i18n.localize("levels3dpreview.flags.particlePreset.options.none") + ")",
+            rain: game.i18n.localize("levels3dpreview.flags.particlePreset.options.rain"),
+            heavyrain: game.i18n.localize("levels3dpreview.flags.particlePreset.options.heavyrain"),
+            snow: game.i18n.localize("levels3dpreview.flags.particlePreset.options.snow"),
+            hail: game.i18n.localize("levels3dpreview.flags.particlePreset.options.hail"),
+            leaves: game.i18n.localize("levels3dpreview.flags.particlePreset.options.leaves"),
+            embers: game.i18n.localize("levels3dpreview.flags.particlePreset.options.embers"),
+            mysteriouslights: game.i18n.localize("levels3dpreview.flags.particlePreset.options.mysteriouslights"),
+            stars: game.i18n.localize("levels3dpreview.flags.particlePreset.options.stars"),
+            starfall: game.i18n.localize("levels3dpreview.flags.particlePreset.options.starfall"),
+            dust: game.i18n.localize("levels3dpreview.flags.particlePreset.options.dust"),
+            smoke: game.i18n.localize("levels3dpreview.flags.particlePreset.options.smoke"),
+            toxic: game.i18n.localize("levels3dpreview.flags.particlePreset.options.toxic"),
+        };
         return {
+            weather: weather,
+            selectedWeather: canvas.scene.getFlag("levels-3d-preview", "particlePreset2") ?? "none",
             envs: data,
             timeofday: canvas.scene.getFlag("levels-3d-preview", "sunPosition") ?? 9,
         };
@@ -70,6 +87,10 @@ export class QuickEnvironment extends Application {
             const time = event.currentTarget.value;
             canvas.scene.setFlag("levels-3d-preview", "sunPosition", time);
             html.find(".range-value").text(time);
+        });
+        html.on("change", "select", (event) => { 
+            const weather = event.currentTarget.value;
+            canvas.scene.setFlag("levels-3d-preview", "particlePreset2", weather);
         });
         html.on("click", ".environment", (event) => { 
             const url = event.currentTarget.dataset.url;

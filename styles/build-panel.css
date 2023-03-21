@@ -20,7 +20,7 @@
 }
 
 #build-panel.minimized{
-    left: calc( var(--build-panel-width) * 0.1 );
+    left: calc( var(--build-panel-width) * 0.15 );
 }
 
 #build-panel ul{

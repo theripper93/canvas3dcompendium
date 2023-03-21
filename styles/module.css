@@ -121,7 +121,7 @@
     border-radius: 0;
 }
 
-#quick-terrain select{
+#quick-terrain select,#quick-environment select{
     color: var(--color-text-light-primary);
     border: none;
     border-bottom: 1px solid;
