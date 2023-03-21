@@ -63,30 +63,51 @@ const BUILD_PANEL_BUTTONS = [
         id: "environment",
         name: "Environment",
         icon: "fa-duotone fa-cloud-bolt-sun",
-        callback: () => { new QuickEnvironment().render(true); }
+        callback: () => {
+            new QuickEnvironment().render(true);
+        },
     },
     {
         id: "terrain",
         name: "Terrain",
         icon: "fa-duotone fa-mountain",
-        callback: () => { new QuickTerrain().render(true); }
+        callback: () => {
+            new QuickTerrain().render(true);
+        },
     },
     {
         id: "props",
         name: "Props",
         icon: "fa-duotone fa-tree",
-        callback: () => { new AssetBrowser().render(true); }
+        callback: () => {
+            new AssetBrowser().render(true);
+        },
     },
     {
         id: "effects",
         name: "Effects",
         icon: "fa-duotone fa-fire",
-        callback: () => { new EffectBrowser().render(true); }
+        callback: () => {
+            new EffectBrowser().render(true);
+        },
     },
     {
         id: "community-maps",
         name: "Community Maps",
         icon: "fa-duotone fa-map",
-        callback: () => { new game.Levels3DPreview.sharing.apps.MapBrowser().render(true); }
-    }
-]
+        callback: () => {
+            new game.Levels3DPreview.sharing.apps.MapBrowser().render(true);
+        },
+    },
+    {
+        id: "tutorials",
+        name: "More Tours",
+        icon: "fad fa-person-hiking",
+        callback: () => {
+            new ToursManagement().render(true);
+            setTimeout(() => {
+                $('.item[data-tab="levels-3d-preview"]')[0].click();
+            }, 500);
+        },
+    },
+];
