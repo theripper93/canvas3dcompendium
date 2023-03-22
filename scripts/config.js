@@ -35,6 +35,13 @@ Hooks.once('init', async function() {
           type: String,
           default: "",
       });
+  
+      game.settings.register("canvas3dcompendium", "assetbrowsertour", {
+          scope: "world",
+          config: false,
+          type: Boolean,
+          default: false,
+      });
 });
 
 Hooks.once('ready', async function() {

@@ -7,6 +7,16 @@ import {BuildPanel} from "./apps/buildPanel.js";
 
 BuildPanel.setHook();
 
+Hooks.on("3DCanvasConfig", (config) => {
+  const UI = config.UI;
+  UI.MaterialBrowser = MaterialBrowser;
+  UI.AssetBrowser = AssetBrowser;
+  UI.TokenBrowser = TokenBrowser;
+  UI.QuickTerrain = QuickTerrain;
+  UI.EffectBrowser = EffectBrowser;
+  UI.BuildPanel = BuildPanel;
+})
+
 
 Hooks.on("getSceneControlButtons", (buttons) => {
   const tools = [

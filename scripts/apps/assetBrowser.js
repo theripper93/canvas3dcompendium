@@ -183,6 +183,7 @@ export class AssetBrowser extends Application {
 
     activateListeners(html) {
         super.activateListeners(html);
+        this.startTour();
         this.element.find(".material-confirm").hide();
         this.element.on("keyup", "#search", (e) => {
             const value = e.target.value;
@@ -217,6 +218,15 @@ export class AssetBrowser extends Application {
         this.element.on("change", "#density", (e) => {
             AssetBrowser.density = parseFloat(e.target.value);
         });
+    }
+
+    startTour() {
+        const done = game.settings.get("canvas3dcompendium", "assetbrowsertour");
+        if (done) return;
+        game.settings.set("canvas3dcompendium", "assetbrowsertour", true);
+        setTimeout(() => {
+            game.tours.get("levels-3d-preview.asset-browser").start();
+        }, 2000);
     }
 
     _getHeaderButtons() { 
