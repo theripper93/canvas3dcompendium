@@ -134,6 +134,8 @@ export class AssetBrowser extends Application {
             dataCache.scale = AssetBrowser.scale !== 1 ? AssetBrowser.scale : "";
             dataCache.density = AssetBrowser.density !== 10 ? AssetBrowser.density : "";
             return dataCache;
+        } else {
+            ui.notifications.info("Loading 3D asset list, please wait...");
         }
         const materials = [];
         const files = fileCache ?? (await this.getSources());
