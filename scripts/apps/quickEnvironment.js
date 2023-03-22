@@ -10,7 +10,7 @@ export class QuickEnvironment extends Application {
         super();
     }
 
-    sources = ["modules/canvas3dcompendium/assets/Beautiful-Sky/2K"];
+    sources = ["modules/canvas3dcompendium/assets/Beautiful-Sky/2K", "modules/canvas3dcompendium/assets/hdri_panoramas"];
 
     static get defaultOptions() {
         return {
@@ -83,16 +83,16 @@ export class QuickEnvironment extends Application {
 
     activateListeners(html) {
         super.activateListeners(html);
-        html.on("change", "input", (event) => { 
+        html.on("change", "input", (event) => {
             const time = event.currentTarget.value;
             canvas.scene.setFlag("levels-3d-preview", "sunPosition", time);
             html.find(".range-value").text(time);
         });
-        html.on("change", "select", (event) => { 
+        html.on("change", "select", (event) => {
             const weather = event.currentTarget.value;
             canvas.scene.setFlag("levels-3d-preview", "particlePreset2", weather);
         });
-        html.on("click", ".environment", (event) => { 
+        html.on("click", ".environment", (event) => {
             const url = event.currentTarget.dataset.url;
             canvas.scene.setFlag("levels-3d-preview", "exr", url);
         });
