@@ -67,6 +67,7 @@ const BUILD_PANEL_BUTTONS = [
         id: "environment",
         name: "Environment",
         icon: "fa-duotone fa-cloud-bolt-sun",
+        visible: () => true,
         callback: () => {
             new QuickEnvironment().render(true);
         },
@@ -75,6 +76,7 @@ const BUILD_PANEL_BUTTONS = [
         id: "terrain",
         name: "Terrain",
         icon: "fa-duotone fa-mountain",
+        visible: () => true,
         callback: () => {
             new QuickTerrain().render(true);
         },
@@ -83,6 +85,7 @@ const BUILD_PANEL_BUTTONS = [
         id: "props",
         name: "Props",
         icon: "fa-duotone fa-tree",
+        visible: () => true,
         callback: () => {
             new AssetBrowser().render(true);
         },
@@ -91,6 +94,7 @@ const BUILD_PANEL_BUTTONS = [
         id: "effects",
         name: "Effects",
         icon: "fa-duotone fa-fire",
+        visible: () => true,
         callback: () => {
             new EffectBrowser().render(true);
         },
@@ -99,6 +103,7 @@ const BUILD_PANEL_BUTTONS = [
         id: "community-maps",
         name: "Community Maps",
         icon: "fa-duotone fa-map",
+        visible: () => true,
         callback: () => {
             new game.Levels3DPreview.sharing.apps.MapBrowser().render(true);
         },
@@ -107,6 +112,11 @@ const BUILD_PANEL_BUTTONS = [
         id: "tutorials",
         name: "More Tours",
         icon: "fad fa-person-hiking",
+        visible: () => {
+            return !Array.from(game.tours)
+                .filter((t) => t.moduleId == "levels-3d-preview")
+                .every((t) => t.status == "completed");
+        },
         callback: () => {
             new ToursManagement().render(true);
             setTimeout(() => {
