@@ -21,7 +21,7 @@ export class QuickEnvironment extends Application {
             width: 200,
             height: "auto",
             top: 0,
-            left: window.innerWidth - 500,
+            left: window.innerWidth - 550,
             resizable: false,
         };
     }

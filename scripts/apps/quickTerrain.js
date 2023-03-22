@@ -25,7 +25,7 @@ export class QuickTerrain extends FormApplication {
             width: 200,
             height: "auto",
             top: 0,
-            left: window.innerWidth - 500,
+            left: window.innerWidth - 550,
             resizable: false,
         };
     }
