@@ -7,6 +7,10 @@ export class BuildPanel extends Application {
     constructor() {
         super();
         this._autoHide = true;
+        if (game.Levels3DPreview.CONFIG.UI.BUILD_PANEL.FORCE_AUTOHIDE_OFF) {
+            this._autoHide = false;
+            game.Levels3DPreview.CONFIG.UI.BUILD_PANEL.FORCE_AUTOHIDE_OFF = false;
+        }
     }
 
     static get defaultOptions() {
