@@ -25,7 +25,7 @@ export class BuildPanel extends Application {
 
     getData() {
         return {
-            buttons: BUILD_PANEL_BUTTONS,
+            buttons: BUILD_PANEL_BUTTONS.filter((b) => b.visible()),
         };
     }
 

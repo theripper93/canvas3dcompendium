@@ -114,6 +114,9 @@
     color: var(--color-text-light-primary);
 }
 
+#quick-terrain option{
+    background: var(--color-text-dark-secondary);
+}
 #quick-terrain button{
     color: var(--color-text-light-primary);
     border: none;

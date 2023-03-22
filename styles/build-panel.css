@@ -8,11 +8,12 @@
     width: var(--build-panel-width);
     height: var(--build-panel-height);
     top: calc(50% - (var(--build-panel-height) / 2));
-    left: calc( -1 * var(--build-panel-width) + 10px);
+    left: calc( -1 * var(--build-panel-width) + 5px);
     z-index: -10;
     border: 1px solid var(--color-border-dark);
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
+    border-right: none;
     box-shadow: 0 0 20px var(--color-shadow-dark);
     color: var(--color-text-light-0);
     transition: all 0.3s ease-in-out;
@@ -21,6 +22,13 @@
 
 #build-panel.minimized{
     left: calc( var(--build-panel-width) * 0.15 );
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+#build-panel.minimized ul{
+    opacity: 0;
 }
 
 #build-panel ul{
