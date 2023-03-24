@@ -10,6 +10,7 @@ export class MaterialBrowser extends Application {
         return {
             ...super.defaultOptions,
             title: "Material Browser",
+            classes: ["three-canvas-compendium-app"],
             id: "material-browser",
             template: `modules/canvas3dcompendium/templates/material-explorer.hbs`,
             width: 400,

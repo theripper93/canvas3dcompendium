@@ -45,6 +45,7 @@ export class AssetBrowser extends Application {
             ...super.defaultOptions,
             title: "Asset Browser",
             id: "material-browser",
+            classes: ["three-canvas-compendium-app"],
             template: `modules/canvas3dcompendium/templates/material-explorer.hbs`,
             width: 400,
             height: window.innerHeight * 0.8,
@@ -58,7 +59,6 @@ export class AssetBrowser extends Application {
     }
 
     get currentPoint() {
-        //game.Levels3DPreview.interactionManager._mouseHoverIntersect
         return game.Levels3DPreview.interactionManager.mouseIntersection3DCollision(undefined, true, "compendium")[0];
     }
 
@@ -66,9 +66,7 @@ export class AssetBrowser extends Application {
         if (!_this.quickPlacementOptions.paint) return;
         if (!_this._hasSelected || !game.Levels3DPreview.interactionManager._leftDown || !_this.currentPoint?.point) return;
         const currentPos = _this.currentPoint.point;
-        console.log(currentPos, "currentPos");
-        if (!_this.lastPlacementPosition) return _this._on3DCanvasClick(event, true);
-        console.log(currentPos.distanceTo(_this.lastPlacementPosition));
+        if (!_this.lastPlacementPosition) return _this._on3DCanvasClick(event, true); 
         if (!currentPos || currentPos.distanceTo(_this.lastPlacementPosition) < 1 / AssetBrowser.density) return;
         _this._on3DCanvasClick(event, true);
     }

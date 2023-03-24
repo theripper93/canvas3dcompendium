@@ -1,4 +1,4 @@
-#material-browser ol{
+.three-canvas-compendium-app ol{
     list-style-type: none;
     margin: 0;
     padding: 8px;
@@ -12,7 +12,7 @@
     max-height: calc(100% - 2rem);
 }
 
-#material-browser ol li img{
+.three-canvas-compendium-app ol li img{
     position: absolute;
     width: 100%;
     height: 100%;
@@ -21,7 +21,7 @@
     pointer-events: none;
 }
 
-#material-browser ol li{
+.three-canvas-compendium-app ol li{
     height: 100px;
     background-repeat: no-repeat;
     background-size: cover;
@@ -35,16 +35,16 @@
     cursor: pointer;
 }
 
-#material-browser ol li:hover, #quick-environment .environment:hover{
+.three-canvas-compendium-app ol li:hover, #quick-environment .environment:hover{
     box-shadow: 0 0 8px var(--color-shadow-highlight);
 }
 
-#material-browser ol li.selected{
+.three-canvas-compendium-app ol li.selected{
     border: 2px solid var(--color-border-highlight);
     box-shadow: 0 0 8px var(--color-shadow-highlight);
 }
 
-#material-browser ol li i.material-name{
+.three-canvas-compendium-app ol li i.material-name{
     position: absolute;
     width: 100%;
     text-align: center;
@@ -56,11 +56,11 @@
     padding: 0 0.3em;
 }
 
-#material-browser input{
+.three-canvas-compendium-app input{
     color: var(--color-text-light-heading);
 }
 
-#material-browser #searchbox-wrapper{
+.three-canvas-compendium-app #searchbox-wrapper{
     position: fixed;
     z-index: 100;
     background-color: #0c0c0cc7;
@@ -69,12 +69,12 @@
     padding: 8px;
 }
 
-#material-browser .window-content{
+.three-canvas-compendium-app .window-content{
     color: var(--color-text-light-heading);
     background: url(/../ui/denim075.png) repeat;
 }
 
-#material-browser .material-confirm{
+.three-canvas-compendium-app .material-confirm{
     position: absolute;
     width: 100%;
     height: 100%;
@@ -86,26 +86,26 @@
     font-size: 50px;
 }
 
-#material-browser .grid-wrapper{
+.three-canvas-compendium-app .grid-wrapper{
     display: grid;
     grid-template-columns: 5fr 1fr 1fr 1fr;
     gap: 0.2rem;
 }
 
-#material-browser .quick-placement{
+.three-canvas-compendium-app .quick-placement{
         display: flex;
     gap: 0.2rem;
     padding-top: 0.2rem;
     align-items: center;
 }
 
-#material-browser .quick-placement a{
+.three-canvas-compendium-app .quick-placement a{
     border: 1px solid;
     border-radius: 3px;
     padding: 0.1rem 0.5em;
 }
 
-#material-browser .quick-placement a.active{
+.three-canvas-compendium-app .quick-placement a.active{
     background-color: #ffffff30;
 }
 

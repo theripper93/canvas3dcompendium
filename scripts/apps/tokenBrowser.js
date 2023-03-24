@@ -26,7 +26,8 @@ export class TokenBrowser extends Application {
         return {
             ...super.defaultOptions,
             title: "Asset Browser",
-            id: "material-browser",
+            id: "token-browser",
+            classes: ["three-canvas-compendium-app"],
             template: `modules/canvas3dcompendium/templates/material-explorer.hbs`,
             width: 400,
             height: window.innerHeight * 0.8,

@@ -18,46 +18,6 @@ Hooks.on("3DCanvasConfig", (config) => {
 })
 
 
-Hooks.on("getSceneControlButtons", (buttons) => {
-  const tools = [
-      {
-          name: "assetBrowser",
-          title: "3D Asset Browser",
-          icon: "fa-duotone fa-grid-dividers",
-          button: true,
-          visible: game.Levels3DPreview?._active,
-          onClick: () => {
-              new AssetBrowser().render(true);
-          },
-      },
-      {
-          name: "quickTerrain",
-          title: "Quick 3D Terrain",
-          icon: "fa-duotone fa-mountain",
-          button: true,
-          visible: game.Levels3DPreview?._active,
-          onClick: () => {
-              new QuickTerrain().render(true);
-          },
-    },
-    {
-      name: "effectBrowser",
-      title: "3D Effect Browser",
-      icon: "fa-duotone fa-fire",
-      button: true,
-      visible: game.Levels3DPreview?._active,
-      onClick: () => {
-        new EffectBrowser().render(true);
-      },
-    },
-  ];
-
-  const tileTools = buttons.find((b) => b.name === "tiles")?.tools;
-  const browseToolIndex = tileTools.findIndex((t) => t.name === "browse");
-  tileTools.splice(browseToolIndex + 1, 0, ...tools);
-})
-
-
 Hooks.on("renderTileConfig", injectMaterialBrowser)
 Hooks.on("renderTokenConfig", injectMaterialBrowser)
 Hooks.on("renderShaderConfig", injectMaterialBrowser);

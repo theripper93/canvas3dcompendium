@@ -7,7 +7,7 @@ export class BuildPanel extends Application {
     constructor() {
         super();
         this._autoHide = true;
-        if (game.Levels3DPreview.CONFIG.UI.BUILD_PANEL.FORCE_AUTOHIDE_OFF) {
+        if (game.Levels3DPreview.CONFIG.UI.BUILD_PANEL.FORCE_AUTOHIDE_OFF || !game.settings.get("levels-3d-preview", "loadingShown")) {
             this._autoHide = false;
             game.Levels3DPreview.CONFIG.UI.BUILD_PANEL.FORCE_AUTOHIDE_OFF = false;
         }
@@ -24,13 +24,23 @@ export class BuildPanel extends Application {
     }
 
     getData() {
+        game.Levels3DPreview.CONFIG.UI.CLIP_NAVIGATION.BUTTONS.forEach((b) => { 
+            b.icon = b.icon.replace("fas", "fad");
+        });
+        const b = game.user.isGM ? BUILD_PANEL_BUTTONS.filter((b) => b.visible()) : [];
+        const c = game.Levels3DPreview.CONFIG.UI.CLIP_NAVIGATION.BUTTONS.filter(b => b.visible());
+        document.querySelector(":root").style.setProperty("--build-panel-height", `${(b.length + c.length) * 40 + 50}px`);
+        const showSeparator = b.length > 0 && c.length > 0;
         return {
-            buttons: BUILD_PANEL_BUTTONS.filter((b) => b.visible()),
+            showSeparator,
+            buttons: b,
+            clipNavigation: c,
         };
     }
 
     activateListeners(html) {
         super.activateListeners(html);
+        html.find("#clip-navigation-fog").addClass("clip-navigation-enabled");
         setTimeout(() => { 
             if (this._autoHide) {
                 html.addClass("minimized");
@@ -43,14 +53,13 @@ export class BuildPanel extends Application {
         html.on("click", ".build-panel-button", (event) => { 
             this._autoHide = false;
             const action = event.currentTarget.dataset.action;
-            const btn = BUILD_PANEL_BUTTONS.find(b => b.id === action);
-            btn.callback();
+            const btn = [...BUILD_PANEL_BUTTONS, ...game.Levels3DPreview.CONFIG.UI.CLIP_NAVIGATION.BUTTONS].find((b) => b.id === action);
+            btn.callback(event);
         });
     }
 
     static setHook() {
         Hooks.once("ready", () => { 
-            if(!game.user.isGM) return;
             Hooks.on("3DCanvasToggleMode", (enabled) => {
                 if (ui.buildPanel) ui.buildPanel.close();
             });

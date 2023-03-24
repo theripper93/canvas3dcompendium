@@ -2,12 +2,16 @@ import {getFiles} from "./assetBrowser.js";
 
 let jb2a_loaded = false;
 
+let _this = null;
+
 export class EffectBrowser extends Application {
     constructor() {
         super();
-        this.lastPlacementPosition = new game.Levels3DPreview.THREE.Vector3();
         game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick, false);
-        game.Levels3DPreview.renderer.domElement.addEventListener("mousemove", this._on3DCanvasMove, false);
+        this.hookid = Hooks.on("controlTile", (tile, control) => {
+            if (this._hasSelected) canvas.tiles.releaseAll();
+        });
+        _this = this;
     }
 
     static scale = 5;
@@ -16,7 +20,8 @@ export class EffectBrowser extends Application {
         return {
             ...super.defaultOptions,
             title: "Effect Browser",
-            id: "material-browser",
+            classes: ["three-canvas-compendium-app"],
+            id: "effect-browser",
             template: `modules/canvas3dcompendium/templates/material-explorer.hbs`,
             width: 400,
             height: window.innerHeight * 0.8,
@@ -37,11 +42,34 @@ export class EffectBrowser extends Application {
         const effect = getEffect(li.dataset.output);
         const dragData = {
             type: "Tile",
-            texture: {src: effect.src},
+            texture: { src: effect.src },
             shaderData: effect.shaderData,
             tileSize: EffectBrowser.scale,
         };
         event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
+    }
+
+    get currentPoint() {
+        return game.Levels3DPreview.interactionManager.mouseIntersection3DCollision(undefined, true, "compendium")[0];
+    }
+
+    _on3DCanvasClick(event, fromDrag = false) {
+        const currentIntersect = _this.currentPoint;
+        if (!_this._hasSelected || (event.which !== 1 && !fromDrag) || !currentIntersect) return;
+        const srcs = [];
+        _this.element.find("li.selected").each((i, el) => srcs.push(el.dataset.output));
+        const scale = parseFloat(_this.element.find("#scale").val() || 5);
+        EffectBrowser.scale = scale;
+        const effect = getEffect(srcs[Math.floor(Math.random() * srcs.length)]);
+        const dragData = {
+            type: "Tile",
+            texture: { src: effect.src },
+            shaderData: effect.shaderData,
+            tileSize: EffectBrowser.scale,
+            coord3d: currentIntersect.point,
+        };
+
+        game.Levels3DPreview.interactionManager._onDrop(event, null, null, dragData);
     }
 
     async getData() {
@@ -57,7 +85,7 @@ export class EffectBrowser extends Application {
                 search: name,
                 isVariation: !!variation,
             });
-         };
+        };
 
         for (const [effectId, effect] of Object.entries(effectsDatabase)) {
             if (effect.variations) {
@@ -88,6 +116,18 @@ export class EffectBrowser extends Application {
                 if (display) count++;
             });
         });
+        this.element.on("mouseup", (e) => {
+            const li = $(e.target).closest("li");
+            if (li.length === 0) return;
+            const isSelect = $(e.target).closest("li").hasClass("selected");
+            if (!e.ctrlKey) this.element.find("li").removeClass("selected");
+            if (e.ctrlKey) $(e.target).closest("li").toggleClass("selected");
+            if (!isSelect) {
+                $(e.target).closest("li").addClass("selected");
+            }
+            this._hasSelected = this.element.find("li.selected").length > 0;
+            if (this._hasSelected) canvas.tiles.releaseAll();
+        });
         this.element.find("input").trigger("keyup");
         this.element.on("change", "#scale", (e) => {
             EffectBrowser.scale = parseFloat(e.target.value);
@@ -97,7 +137,6 @@ export class EffectBrowser extends Application {
     async close(...args) {
         super.close(...args);
         game.Levels3DPreview.renderer.domElement.removeEventListener("mouseup", this._on3DCanvasClick, false);
-        game.Levels3DPreview.renderer.domElement.removeEventListener("mousemove", this._on3DCanvasMove, false);
         Hooks.off("controlTile", this.hookid);
     }
 }

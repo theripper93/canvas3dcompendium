@@ -10,5 +10,13 @@
             <i data-action={{id}} data-tooltip="{{name}}" class="{{icon}} build-panel-button"></i>
         </li>
         {{/each}}
+        {{#if showSeparator}}
+        <li style="border-top: 1px solid; width: 70%;margin: 0.2rem 0rem;"></li>
+        {{/if}}
+        {{#each clipNavigation}}
+        <li>
+            <i data-action={{id}} id="{{id}}" data-tooltip="{{name}}" class="{{icon}} build-panel-button"></i>
+        </li>
+        {{/each}}
     </ul>
 </div>
