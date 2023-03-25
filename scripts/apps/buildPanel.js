@@ -60,6 +60,9 @@ export class BuildPanel extends Application {
 
     static setHook() {
         Hooks.once("ready", () => { 
+            Hooks.on("canvasReady", () => {
+                if (ui.buildPanel) ui.buildPanel.close();
+            });
             Hooks.on("3DCanvasToggleMode", (enabled) => {
                 if (ui.buildPanel) ui.buildPanel.close();
             });

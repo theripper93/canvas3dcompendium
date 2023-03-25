@@ -199,8 +199,22 @@ export class AssetBrowser extends Application {
             const li = $(e.target).closest("li");
             if (li.length === 0) return;
             const isSelect = $(e.target).closest("li").hasClass("selected");
-            if (!e.ctrlKey) this.element.find("li").removeClass("selected");
+            if (!e.ctrlKey && !e.shiftKey) this.element.find("li").removeClass("selected");
             if (e.ctrlKey) $(e.target).closest("li").toggleClass("selected");
+            if (e.shiftKey) {
+                const selected = this.element.find("li.selected");
+                if (selected.length === 0) {
+                    $(e.target).closest("li").addClass("selected");
+                } else {
+                    const start = selected.first().index();
+                    const end = li.index();
+                    const min = Math.min(start, end);
+                    const max = Math.max(start, end);
+                    this.element.find("li").each((i, el) => {
+                        if (i >= min && i <= max) $(el).addClass("selected");
+                    });
+                }
+            }
             if (!isSelect) {
                 $(e.target).closest("li").addClass("selected");
             }
