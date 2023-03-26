@@ -112,11 +112,12 @@ export class QuickTerrain extends FormApplication {
                 },
             },
         };
-        const controlled = canvas.tiles.controlled[0];
+        const controlled = this.terrainTile ?? canvas.tiles.controlled[0];
         if (controlled) {
             await controlled.document.update(tileData);
         } else {
             const tile = (await canvas.scene.createEmbeddedDocuments("Tile", [tileData]))[0];
+            this.terrainTile = tile.object;
             tile.object.control({ releaseOthers: true });
         }
     }
