@@ -147,9 +147,9 @@ export class AssetBrowser extends Application {
         materials.sort((a, b) => a.displayName.localeCompare(b.displayName));
         data.materials = materials;
         data.isAssetBrowser = true;
-        data.scale = AssetBrowser.scale ?? 1;
-        data.density = AssetBrowser.density ?? 10;
-        data.angle = AssetBrowser.angle ?? 0;
+        data.scale = AssetBrowser.scale || 1;
+        data.density = AssetBrowser.density || 10;
+        data.angle = AssetBrowser.angle || 0;
         this._assetCount = materials.length;
         dataCache = data;
         return data;

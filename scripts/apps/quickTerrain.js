@@ -108,6 +108,7 @@ export class QuickTerrain extends FormApplication {
                     dynaMesh: "box",
                     dynaMeshResolution: 2,
                     autoGround: true,
+                    cameraCollision: true,
                 },
             },
         };
@@ -152,6 +153,7 @@ export class QuickTerrain extends FormApplication {
                 },
             },
         };
+        ui.notifications.info("Water created. Depending on your terrain, it might be under the terrain.")
         const tile = (await canvas.scene.createEmbeddedDocuments("Tile", [tileData]))[0];
     }
 

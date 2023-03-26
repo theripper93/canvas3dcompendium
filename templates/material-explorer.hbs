@@ -66,7 +66,9 @@
     {{#if isEffectBrowser}}
     <div style="display: flex; gap: 0.2rem;">
     <input type="text" id="search" placeholder="Search...">
-    <input style="width: 7rem;" data-tooltip="Scale" type="number" id="scale" placeholder="Grid Squares" value="{{scale}}">
+    <select name="scale" id="scale" data-tooltip="Size" style="color: var(--color-text-light-primary);">
+        {{selectOptions sizeSelect selected=scale localize=false}}
+    </select>
     </div>
     {{else}}
     <input type="text" id="search" placeholder="Search...">

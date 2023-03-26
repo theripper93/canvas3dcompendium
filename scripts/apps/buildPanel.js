@@ -41,6 +41,7 @@ export class BuildPanel extends Application {
     activateListeners(html) {
         super.activateListeners(html);
         html.find("#clip-navigation-fog").addClass("clip-navigation-enabled");
+        html.find("#game-camera-toggle").toggleClass("clip-navigation-enabled", game.Levels3DPreview.GameCamera.enabled);
         setTimeout(() => { 
             if (this._autoHide) {
                 html.addClass("minimized");

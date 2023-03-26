@@ -1,12 +1,13 @@
 <form action="submit">
 
 <div class="form-group">
-<label for="timeofday">Time</label>
+<i class="fa-duotone fa-clock" style="max-width: 1.5rem;font-size: large;"></i>
 {{rangePicker name="timeofday" value=timeofday min=0 max=24 step=1}}
 </div>
 
 <div class="form-group">
-    <select name="weather">
+    <i class="fa-duotone fa-cloud-bolt" style="max-width: 1.6rem;font-size: large;"></i>
+    <select name="weather" style="height: 2rem; font-size: large;">
     {{selectOptions weather selected=selectedWeather localize=false}}
     </select>
 </div>

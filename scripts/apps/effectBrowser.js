@@ -101,6 +101,11 @@ export class EffectBrowser extends Application {
         data.materials = materials;
         data.isEffectBrowser = true;
         this._assetCount = materials.length;
+        data.sizeSelect = {}
+        for (let i = 1; i <= 10; i++) {
+            data.sizeSelect[i] = `${canvas.scene.dimensions.distance*i} ${canvas.scene.grid.units}.`;
+        }
+        data.scale = EffectBrowser.scale;
         return data;
     }
 
