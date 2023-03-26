@@ -6,19 +6,13 @@ let _this = null;
 export class AssetBrowser extends Application {
     constructor() {
         super();
+        game.Levels3DPreview.CONFIG.UI.windows.AssetBrowser = this;
         this._maxCount = 200;
         this._hasSelected = false;
         this.lastPlacementPosition = new game.Levels3DPreview.THREE.Vector3();
         game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick, false);
         game.Levels3DPreview.renderer.domElement.addEventListener("mousemove", this._on3DCanvasMove, false);
         _this = this;
-        this.setHooks();
-    }
-
-    setHooks() {
-        this.hookid = Hooks.on("controlTile", (tile, control) => {
-            if (this._hasSelected) canvas.tiles.releaseAll();
-        });
     }
 
     get sources() {
@@ -44,10 +38,10 @@ export class AssetBrowser extends Application {
         return {
             ...super.defaultOptions,
             title: "Asset Browser",
-            id: "material-browser",
+            id: "asset-browser",
             classes: ["three-canvas-compendium-app"],
             template: `modules/canvas3dcompendium/templates/material-explorer.hbs`,
-            width: 400,
+            width: 390,
             height: window.innerHeight * 0.8,
             resizable: true,
             dragDrop: [{ dragSelector: "li", dropSelector: "" }],
@@ -72,8 +66,10 @@ export class AssetBrowser extends Application {
     }
 
     _on3DCanvasClick(event, fromDrag = false) {
+        if (!event.shiftKey && !fromDrag) return;
         const currentIntersect = _this.currentPoint;
         if (!_this._hasSelected || (event.which !== 1 && !fromDrag) || !currentIntersect) return;
+        canvas.tiles.releaseAll();
         _this.lastPlacementPosition.copy(currentIntersect.point);
         const srcs = [];
         _this.element.find("li.selected").each((i, el) => srcs.push(el.dataset.output));
@@ -151,6 +147,9 @@ export class AssetBrowser extends Application {
         materials.sort((a, b) => a.displayName.localeCompare(b.displayName));
         data.materials = materials;
         data.isAssetBrowser = true;
+        data.scale = AssetBrowser.scale ?? 1;
+        data.density = AssetBrowser.density ?? 10;
+        data.angle = AssetBrowser.angle ?? 0;
         this._assetCount = materials.length;
         dataCache = data;
         return data;
@@ -182,6 +181,7 @@ export class AssetBrowser extends Application {
     activateListeners(html) {
         super.activateListeners(html);
         this.startTour();
+        this.element.find("#selected-notification").toggle(false);
         this.element.find(".material-confirm").hide();
         this.element.on("keyup", "#search", (e) => {
             const value = e.target.value;
@@ -219,6 +219,7 @@ export class AssetBrowser extends Application {
                 $(e.target).closest("li").addClass("selected");
             }
             this._hasSelected = this.element.find("li.selected").length > 0;
+            this.element.find("#selected-notification").toggle(this._hasSelected, 200);
             if (this._hasSelected) canvas.tiles.releaseAll();
         });
         this.element.on("click", ".quick-placement-toggle", (e) => {
@@ -268,7 +269,7 @@ export class AssetBrowser extends Application {
         super.close(...args);
         game.Levels3DPreview.renderer.domElement.removeEventListener("mouseup", this._on3DCanvasClick, false);
         game.Levels3DPreview.renderer.domElement.removeEventListener("mousemove", this._on3DCanvasMove, false);
-        Hooks.off("controlTile", this.hookid);
+        game.Levels3DPreview.CONFIG.UI.windows.assetBrowser = null;
     }
 }
 
@@ -286,4 +287,8 @@ export async function getFiles(root, source = "user", extC = "glb") {
     }
 
     return files;
+}
+
+function wait (ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

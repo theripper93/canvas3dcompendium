@@ -7,6 +7,7 @@ let _this = null;
 export class EffectBrowser extends Application {
     constructor() {
         super();
+        game.Levels3DPreview.CONFIG.UI.windows.EffectBrowser = this;
         game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick, false);
         this.hookid = Hooks.on("controlTile", (tile, control) => {
             if (this._hasSelected) canvas.tiles.releaseAll();
@@ -54,6 +55,7 @@ export class EffectBrowser extends Application {
     }
 
     _on3DCanvasClick(event, fromDrag = false) {
+        if (!event.shiftKey && !fromDrag) return;
         const currentIntersect = _this.currentPoint;
         if (!_this._hasSelected || (event.which !== 1 && !fromDrag) || !currentIntersect) return;
         const srcs = [];
@@ -151,7 +153,7 @@ export class EffectBrowser extends Application {
     async close(...args) {
         super.close(...args);
         game.Levels3DPreview.renderer.domElement.removeEventListener("mouseup", this._on3DCanvasClick, false);
-        Hooks.off("controlTile", this.hookid);
+        game.Levels3DPreview.CONFIG.UI.windows.EffectBrowser = null;
     }
 }
 

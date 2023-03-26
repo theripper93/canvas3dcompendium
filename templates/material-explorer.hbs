@@ -1,30 +1,67 @@
-<div style="max-height: 100%;overflow: hidden;position: relative;">
+<div style="max-height: 100%;overflow: hidden;position: relative;display: flex;flex-direction: column;">
     {{#if isAssetBrowser}}
-    <div class="grid-wrapper">
-        <input data-tooltip="Only the first 200 results shown - Start typing to Search..." type="text" id="search" placeholder="Only the first 200 results shown - Start typing to Search...">
-        <input data-tooltip="Scale" type="number" id="scale" placeholder="Scale" value="{{scale}}">
-        <input data-tooltip="Density (10)" type="number" id="density" placeholder="Density (10)" value="{{density}}">
-        <input data-tooltip="Angle (degrees)" type="number" id="angle" min="0" max="360" step="1" placeholder="Angle (degrees)">
-    </div>
-    <div class="quick-placement">
-        <a data-tooltip="Asset Paint (Click and drag to place multiple assets)" class="quick-placement-toggle" data-action="paint"><i class="fa-solid fa-paintbrush"></i></a>
-        <a data-tooltip="Perpendicular placement" class="quick-placement-toggle" data-action="normal"><i
-                class="fa-solid fa-chart-scatter-3d"></i></a>
-        <a data-tooltip="Randomize scale" class="quick-placement-toggle" data-action="scale"><i
-                class="fa-regular fa-arrow-up-right-and-arrow-down-left-from-center"></i></a>
-        <a data-tooltip="Randomize rotation" class="quick-placement-toggle" data-action="rotation"><i
-                class="fa-regular fa-rotate"></i></a>
-        <a data-tooltip="Allign to grid" class="quick-placement-toggle" data-action="grid"><i
-                class="fa-regular fa-grid"></i></a>
-        <a data-tooltip="Auto-center tile" class="quick-placement-toggle active" data-action="center"><i
-                class="fa-solid fa-arrows-to-circle"></i></a>
-        <a data-tooltip="Block Movement" class="quick-placement-toggle active" data-action="collision"><i class="fa-regular fa-arrow-down-to-line"></i></a>
-        <a data-tooltip="Block Sight" class="quick-placement-toggle active" data-action="sight"><i class="fa-solid fa-eye-slash"></i></a>
-        <a data-tooltip="Camera Collider" class="quick-placement-toggle" data-action="cameraCollision"><i class="fa-solid fa-video"></i></a>
-        <a data-tooltip="Color Variation" class="quick-placement-toggle" data-action="colorvar"><i
-                class="fa-solid fa-palette"></i></a>
-        <input data-tooltip="Tint" style="height: 22px" type="color" id="color" value="#ffffff" placeholder="Color">
-    </div>
+    
+    <details open>
+        <summary>Options</summary>
+        <div class="quick-placement">
+        <fieldset>
+            <legend>Randomization</legend>
+            <a data-tooltip="Randomize scale" class="quick-placement-toggle" data-action="scale"><i
+                    class="fa-regular fa-arrow-up-right-and-arrow-down-left-from-center"></i></a>
+            <a data-tooltip="Randomize rotation" class="quick-placement-toggle" data-action="rotation"><i
+                    class="fa-regular fa-rotate"></i></a>
+            <a data-tooltip="Color Variation" class="quick-placement-toggle" data-action="colorvar"><i
+                    class="fa-solid fa-palette"></i></a>
+        </fieldset>
+    
+        <fieldset>
+            <legend>Placement</legend>
+            <a data-tooltip="Perpendicular placement" class="quick-placement-toggle" data-action="normal"><i
+                    class="fa-solid fa-chart-scatter-3d"></i></a>
+            <a data-tooltip="Allign to grid" class="quick-placement-toggle" data-action="grid"><i
+                    class="fa-regular fa-grid"></i></a>
+            <a data-tooltip="Auto-center tile" class="quick-placement-toggle active" data-action="center"><i
+                    class="fa-solid fa-arrows-to-circle"></i></a>
+        </fieldset>
+        <fieldset>
+            <legend>Collision</legend>
+            <a data-tooltip="Block Movement" class="quick-placement-toggle active" data-action="collision"><i
+                    class="fa-regular fa-arrow-down-to-line"></i></a>
+            <a data-tooltip="Block Sight" class="quick-placement-toggle active" data-action="sight"><i
+                    class="fa-solid fa-eye-slash"></i></a>
+            <a data-tooltip="Camera Collider" class="quick-placement-toggle" data-action="cameraCollision"><i
+                    class="fa-solid fa-video"></i></a>
+        </fieldset>
+        <fieldset>
+            <legend>Painting</legend>
+            <a data-tooltip="Asset Paint (Click and drag to place multiple assets)" class="quick-placement-toggle"
+                data-action="paint"><i class="fa-solid fa-paintbrush"></i></a>
+            <div class="asset-browser-icon-group">
+                <i class="fa-solid fa-grip-dots"></i>
+                <input data-tooltip="Density" type="number" id="density" value="{{density}}" step="0.1" min="0.1">
+            </div>
+        </fieldset>
+        <fieldset style="grid-column: span 2;">
+            <legend>Appearance</legend>
+            <div data-tooltip="Scale" class="asset-browser-icon-group">
+                <i class="fa-solid fa-arrow-up-small-big"></i>
+                <input type="number" id="scale" value="{{scale}}" step="0.1" min="0.1">
+            </div>
+            <div data-tooltip="Angle (degrees)" class="asset-browser-icon-group">
+                <i class="fa-solid fa-angle"></i>
+                <input type="number" id="angle" min="0" max="360" step="1" value="{{angle}}">
+            </div>
+            <div data-tooltip="Tint" class="asset-browser-icon-group">
+                <i class="fa-solid fa-droplet"></i>
+                <input type="color" id="color" value="#ffffff">
+            </div>
+        </fieldset>
+    
+    </div></details>
+
+    <input data-tooltip="Only the first 200 results shown - Start typing to Search..." type="text" id="search"
+        placeholder="Only the first 200 results shown - Start typing to Search...">
+    <a id="selected-notification" class="notification info" style="pointer-events: none; font-size: small;position: absolute;bottom: 0px;width: 100%;z-index: 100;">One or more Assets selected - Hold Shift and click to place.</a>
     {{else}}
     {{#if isEffectBrowser}}
     <div style="display: flex; gap: 0.2rem;">

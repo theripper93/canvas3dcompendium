@@ -93,20 +93,82 @@
 }
 
 .three-canvas-compendium-app .quick-placement{
-        display: flex;
     gap: 0.2rem;
     padding-top: 0.2rem;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    max-width: 100%;
 }
 
 .three-canvas-compendium-app .quick-placement a{
     border: 1px solid;
     border-radius: 3px;
-    padding: 0.1rem 0.5em;
+    width: 1.5rem;
+    text-align: center;
 }
 
 .three-canvas-compendium-app .quick-placement a.active{
     background-color: #ffffff30;
+}
+
+.three-canvas-compendium-app .asset-browser-icon-group input{
+    width: 2rem;
+    height: 1.2rem;
+    border: none;
+    text-align: center;
+}
+
+.three-canvas-compendium-app .quick-placement input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+.three-canvas-compendium-app .quick-placement input[type="color"]::-webkit-color-swatch {
+	border: none;
+}
+
+.three-canvas-compendium-app #selected-notification:hover{
+    cursor: default;
+    text-shadow: none;
+}
+
+ 
+.three-canvas-compendium-app .asset-browser-icon-group{
+        position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-right: 0.5rem;
+        border: 1px solid;
+    border-radius: 3px;
+    padding: 0 0.2rem;
+}
+
+.three-canvas-compendium-app .quick-placement fieldset{
+    display: flex;
+    justify-content: space-evenly;
+    gap: 0.2rem;
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: inset;
+}
+
+.three-canvas-compendium-app #search{
+    padding: 0.3rem;
+}
+
+#asset-browser.three-canvas-compendium-app #search{
+    margin-top: 0.5rem;
+}
+
+#asset-browser.three-canvas-compendium-app details{
+    border: 1px inset;
+    border-radius: 5px;
+    padding: 0.3rem;
+    border-color: #ffffff42;
+}
+
+#asset-browser.three-canvas-compendium-app summary{
+    cursor: pointer;
+    text-align: center;
 }
 
 #quick-terrain .window-content, #quick-environment .window-content{
