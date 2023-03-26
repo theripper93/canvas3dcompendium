@@ -4,7 +4,7 @@
     <details open>
         <summary>Options</summary>
         <div class="quick-placement">
-        <fieldset>
+        <fieldset id="ab-randomization">
             <legend>Randomization</legend>
             <a data-tooltip="Randomize scale" class="quick-placement-toggle" data-action="scale"><i
                     class="fa-regular fa-arrow-up-right-and-arrow-down-left-from-center"></i></a>
@@ -14,7 +14,7 @@
                     class="fa-solid fa-palette"></i></a>
         </fieldset>
     
-        <fieldset>
+        <fieldset id="ab-placement">
             <legend>Placement</legend>
             <a data-tooltip="Perpendicular placement" class="quick-placement-toggle" data-action="normal"><i
                     class="fa-solid fa-chart-scatter-3d"></i></a>
@@ -23,7 +23,7 @@
             <a data-tooltip="Auto-center tile" class="quick-placement-toggle active" data-action="center"><i
                     class="fa-solid fa-arrows-to-circle"></i></a>
         </fieldset>
-        <fieldset>
+        <fieldset id="ab-collision">
             <legend>Collision</legend>
             <a data-tooltip="Block Movement" class="quick-placement-toggle active" data-action="collision"><i
                     class="fa-regular fa-arrow-down-to-line"></i></a>
@@ -32,7 +32,7 @@
             <a data-tooltip="Camera Collider" class="quick-placement-toggle" data-action="cameraCollision"><i
                     class="fa-solid fa-video"></i></a>
         </fieldset>
-        <fieldset>
+        <fieldset id="ab-painting">
             <legend>Painting</legend>
             <a data-tooltip="Asset Paint (Click and drag to place multiple assets)" class="quick-placement-toggle"
                 data-action="paint"><i class="fa-solid fa-paintbrush"></i></a>
@@ -41,7 +41,7 @@
                 <input data-tooltip="Density" type="number" id="density" value="{{density}}" step="0.1" min="0.1">
             </div>
         </fieldset>
-        <fieldset style="grid-column: span 2;">
+        <fieldset  id="ab-appearance" style="grid-column: span 2;">
             <legend>Appearance</legend>
             <div data-tooltip="Scale" class="asset-browser-icon-group">
                 <i class="fa-solid fa-arrow-up-small-big"></i>
