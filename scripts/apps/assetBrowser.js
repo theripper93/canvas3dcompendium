@@ -281,7 +281,7 @@ export async function getFiles(root, source = "user", extC = "glb", outerPass = 
     }
     for (let i = 0; i < contents.dirs.length; i++) {
         let folder = contents.dirs[i];
-        if (outerPass) SceneNavigation.displayProgressBar({ label: `Loading assets in folder: ${folder}`, pct: Math.round((i / contents.dirs.length) * 100) });
+        if (outerPass) SceneNavigation.displayProgressBar({ label: `Loading assets in folder: ${folder}`, pct: Math.round(((i+1) / contents.dirs.length) * 100) });
         files.push(...(await getFiles(folder, source, extC, false)));
     }
 
