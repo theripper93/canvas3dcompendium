@@ -273,7 +273,7 @@ export class AssetBrowser extends Application {
     }
 }
 
-export async function getFiles(root, source = "user", extC = "glb") {
+export async function getFiles(root, source = "user", extC = "glb", outerPass = true) {
     const files = [];
 
     const contents = await FilePicker.browse(source, root);
@@ -281,9 +281,10 @@ export async function getFiles(root, source = "user", extC = "glb") {
         const ext = file.split(".").pop();
         if (ext.toLowerCase() == extC) files.push(file);
     }
-    for (let folder of contents.dirs) {
-        //if(AssetBrowser.exclude.some(e => folder.includes(e))) continue;
-        files.push(...(await getFiles(folder, source, extC)));
+    for (let i = 0; i < contents.dirs.length; i++) {
+        let folder = contents.dirs[i];
+        SceneNavigation.displayProgressBar({label: `Loading assets in folder: ${folder}`, pct: (contents.dirs.length / i)*100});
+        files.push(...(await getFiles(folder, source, extC, false)));
     }
 
     return files;
