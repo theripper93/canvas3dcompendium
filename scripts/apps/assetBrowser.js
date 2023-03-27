@@ -56,9 +56,11 @@ export class AssetBrowser extends Application {
         return game.Levels3DPreview.interactionManager.mouseIntersection3DCollision(undefined, true, "compendium")[0];
     }
 
+    finishPaint(){}
+
     _on3DCanvasMove(event) {
-        if (!_this.quickPlacementOptions.paint) return;
-        if (!_this._hasSelected || !game.Levels3DPreview.interactionManager._leftDown || !_this.currentPoint?.point) return;
+        if (!event.shiftKey || event.which !== 1 || !_this.quickPlacementOptions.paint) return;
+        if (!_this._hasSelected || !_this.currentPoint?.point) return;
         const currentPos = _this.currentPoint.point;
         if (!_this.lastPlacementPosition) return _this._on3DCanvasClick(event, true); 
         if (!currentPos || currentPos.distanceTo(_this.lastPlacementPosition) < 1 / AssetBrowser.density) return;
