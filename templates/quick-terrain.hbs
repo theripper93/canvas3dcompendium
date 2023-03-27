@@ -1,25 +1,29 @@
 <form action="submit">
 
-<p class="notes" style="color: inherit">
-    If a tile is selected, it will be replaced with the generated terrain. Otherwise, a new tile will be created.
-</p>
-
-<div class="form-group">
-<label for="theme">Theme</label>
-<select name="theme" id="">
-    <option value="random" selected>Random</option>
-    {{#each themes}}
-    <option value="{{@key}}">{{name}}</option>
-    {{/each}}
-</select>
-</div>
+<fieldset>
+    <legend>Theme</legend>
+    <select name="theme" id="" style="width: 100%; border:none">
+        <option value="random" selected>Random</option>
+        {{#each themes}}
+        <option value="{{@key}}">{{name}}</option>
+        {{/each}}
+    </select>
+    <button data-action="theme" style="border-bottom: 1px solid;"><i class="fa-duotone fa-palette"></i> Apply Theme</button>
+</fieldset>
 
 
-<div style="padding-top: 1rem; display: flex; flex-direction: column; color: var(--color-text-light-primary) !important;">
+<div style="margin-top: 0.2rem; display: flex; flex-direction: column; color: var(--color-text-light-primary) !important;">
+    <fieldset>
+    <legend>Terrain</legend>
     <button data-action="generate"><i class="fa-duotone fa-dice"></i> Generate</button>
     <button data-action="variation"><i class="fa-duotone fa-arrows-rotate"></i> Variation</button>
-    <button data-action="fine-tune"><i class="fa-duotone fa-pencil-ruler"></i> Fine Tune</button>
+    <button data-action="fine-tune" style="border-bottom: 1px solid;"><i class="fa-duotone fa-pencil-ruler"></i> Fine Tune</button>
+    </fieldset>
+    <fieldset style="margin-top: 0.2rem">
+    <legend>Fluids</legend>
     <button data-action="water"><i class="fa-duotone fa-water"></i></i> Add Water</button>
-    <button data-action="theme"><i class="fa-duotone fa-palette"></i> Apply Theme</button>
+    <button data-action="lava"><i class="fa-duotone fa-volcano"></i> Add Lava</button>
+    <button data-action="acid" style="border-bottom: 1px solid;"><i class="fa-duotone fa-vial"></i> Add Acid</button>
+    </fieldset>
 </div>
 </form>

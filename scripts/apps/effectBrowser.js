@@ -326,6 +326,11 @@ async function getJB2A() {
     }
     const filtered = files.filter((file) => {
         if (file.includes("Opacities") || file.includes("Nametag")) return false;
+        try {            
+            const size = file.split("_").pop().split(".")[0].split("x");
+            if(size[0] === size[1]) return true;
+        } catch (error) {
+        }
         return JB2A_FILTER.some((filter) => file.includes(filter));
     });
     for (const file of filtered) {

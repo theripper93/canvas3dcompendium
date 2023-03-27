@@ -56,8 +56,6 @@ export class AssetBrowser extends Application {
         return game.Levels3DPreview.interactionManager.mouseIntersection3DCollision(undefined, true, "compendium")[0];
     }
 
-    finishPaint(){}
-
     _on3DCanvasMove(event) {
         if (!event.shiftKey || event.which !== 1 || !_this.quickPlacementOptions.paint) return;
         if (!_this._hasSelected || !_this.currentPoint?.point) return;
@@ -127,8 +125,9 @@ export class AssetBrowser extends Application {
         const data = super.getData();
         if (dataCache) {
             this._assetCount = dataCache.materials.length;
-            dataCache.scale = AssetBrowser.scale !== 1 ? AssetBrowser.scale : "";
-            dataCache.density = AssetBrowser.density !== 10 ? AssetBrowser.density : "";
+            dataCache.scale = AssetBrowser.scale || 1;
+            dataCache.density = AssetBrowser.density || 10;
+            dataCache.angle = AssetBrowser.angle || 0;
             return dataCache;
         }
         const materials = [];
@@ -181,6 +180,18 @@ export class AssetBrowser extends Application {
     activateListeners(html) {
         super.activateListeners(html);
         this.startTour();
+        this.element.find(`.tab[data-tab="options"]`).show();
+        this.element.find(".tab-button").on("click", (e) => { 
+            const tab = $(e.target).data("tab");
+            this.element.find(".tab").hide();
+            this.element.find(`.tab[data-tab="${tab}"]`).show();
+            this.element.find(".tab-button").removeClass("active");
+            $(e.target).addClass("active");
+        });
+        this.element.find("#toggle-tabs").on("click", (e) => { 
+            this.element.find(".tab").toggleClass("hidden");
+            $(e.currentTarget).find("i").toggleClass("fa-caret-up fa-caret-down");
+        });
         this.element.find("#selected-notification").toggle(false);
         this.element.find(".material-confirm").hide();
         this.element.on("keyup", "#search", (e) => {
@@ -225,11 +236,21 @@ export class AssetBrowser extends Application {
         this.element.on("click", ".quick-placement-toggle", (e) => {
             e.currentTarget.classList.toggle("active");
         });
+        this.element.on("click", ".utility-button", (e) => { 
+            const action = e.currentTarget.dataset.action;
+            runScript(action);
+        });
         this.element.on("change", "#scale", (e) => {
             AssetBrowser.scale = parseFloat(e.target.value);
         });
         this.element.on("change", "#density", (e) => {
             AssetBrowser.density = parseFloat(e.target.value);
+        });
+        this.element.on("change", "#utility", (e) => { 
+            const selectValue = e.target.value;
+            if (selectValue === "none") return;
+            runScript(selectValue);
+            e.target.value = "none";
         });
     }
 
@@ -240,19 +261,6 @@ export class AssetBrowser extends Application {
         setTimeout(() => {
             game.tours.get("levels-3d-preview.asset-browser").start();
         }, 2000);
-    }
-
-    _getHeaderButtons() { 
-        const buttons = super._getHeaderButtons();
-        buttons.unshift({
-            label: "Merge",
-            class: "merge",
-            icon: "fas fa-object-group",
-            onclick: () => {
-                game.Levels3DPreview.UTILS.autoMergeTiles();
-            },
-        });
-        return buttons;
     }
 
     get quickPlacementOptions() {
@@ -292,4 +300,14 @@ export async function getFiles(root, source = "user", extC = "glb", outerPass = 
 
 function wait (ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function runScript(id) {
+    switch (id) { 
+        case "merge":
+            game.Levels3DPreview.UTILS.autoMergeTiles();
+            break;
+        case "split":
+            game.Levels3DPreview.UTILS.unmergeTiles();
+    }
 }

@@ -1,21 +1,28 @@
 <form action="submit">
 
+    <fieldset>
+        <legend>Time of Day</legend>
 <div class="form-group">
 <i class="fa-duotone fa-clock" style="max-width: 1.5rem;font-size: large;"></i>
 {{rangePicker name="timeofday" value=timeofday min=0 max=24 step=1}}
 </div>
+</fieldset>
 
+    <fieldset style="margin-top: 0.2rem;">
+        <legend>Weather</legend>
 <div class="form-group">
     <i class="fa-duotone fa-cloud-bolt" style="max-width: 1.6rem;font-size: large;"></i>
-    <select name="weather" style="height: 2rem; font-size: large;">
+    <select name="weather" style="height: 2rem;">
     {{selectOptions weather selected=selectedWeather localize=false}}
     </select>
 </div>
-
+</fieldset>
+    <fieldset style="margin-top: 0.2rem;">
+        <legend>Sky</legend>
 <div id="env-container">
     {{#each envs}}
     <div class="environment" data-url="{{url}}" style="background-image: url('{{url}}');"></div>
     {{/each}}
 </div>
-
+</fieldset>
 </form>

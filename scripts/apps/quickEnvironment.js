@@ -15,7 +15,7 @@ export class QuickEnvironment extends Application {
     static get defaultOptions() {
         return {
             ...super.defaultOptions,
-            title: "Quick Environment",
+            title: "Environment Panel",
             id: "quick-environment",
             template: `modules/canvas3dcompendium/templates/quick-environment.hbs`,
             width: 200,
@@ -59,7 +59,7 @@ export class QuickEnvironment extends Application {
             });
         }
         const weather = {
-            none: "Weather (" + game.i18n.localize("levels3dpreview.flags.particlePreset.options.none") + ")",
+            none: game.i18n.localize("levels3dpreview.flags.particlePreset.options.none"),
             rain: game.i18n.localize("levels3dpreview.flags.particlePreset.options.rain"),
             heavyrain: game.i18n.localize("levels3dpreview.flags.particlePreset.options.heavyrain"),
             snow: game.i18n.localize("levels3dpreview.flags.particlePreset.options.snow"),

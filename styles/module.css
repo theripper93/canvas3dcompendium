@@ -159,14 +159,31 @@
     margin-top: 0.5rem;
 }
 
-#asset-browser.three-canvas-compendium-app details{
+.three-canvas-compendium-app .tab-container, #quick-terrain fieldset, #quick-environment fieldset{
     border: 1px inset;
     border-radius: 5px;
     padding: 0.3rem;
     border-color: #ffffff42;
 }
 
-#asset-browser.three-canvas-compendium-app summary{
+.three-canvas-compendium-app .tab-buttons{
+        border-bottom: 1px solid;
+    border-color: #ffffff42;
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 0.2rem;
+    position: relative;
+}
+
+.three-canvas-compendium-app .tab-button.active{
+    font-weight: bold;
+}
+
+.three-canvas-compendium-app .tab.hidden{
+    display: none !important;
+}
+
+.three-canvas-compendium-app summary{
     cursor: pointer;
     text-align: center;
 }
@@ -176,9 +193,6 @@
     color: var(--color-text-light-primary);
 }
 
-#quick-terrain option{
-    background: var(--color-text-dark-secondary);
-}
 #quick-terrain button{
     color: var(--color-text-light-primary);
     border: none;
@@ -186,11 +200,15 @@
     border-radius: 0;
 }
 
-#quick-terrain select,#quick-environment select{
+#quick-terrain select,#quick-environment select, #asset-browser select{
     color: var(--color-text-light-primary);
     border: none;
     border-bottom: 1px solid;
     border-radius: 0;
+}
+
+#quick-terrain option,#quick-environment option, #asset-browser option{
+    background: var(--color-text-dark-secondary);
 }
 
 #quick-environment .environment{

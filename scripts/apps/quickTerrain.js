@@ -8,7 +8,7 @@ let dataCache = null;
 let _this = null;
 
 export class QuickTerrain extends FormApplication {
-    constructor (createOnOpen = false, openAssetBrowser = false) {
+    constructor(createOnOpen = false, openAssetBrowser = false) {
         super();
         this.createOnOpen = createOnOpen;
         this.openAssetBrowser = openAssetBrowser;
@@ -19,7 +19,7 @@ export class QuickTerrain extends FormApplication {
     static get defaultOptions() {
         return {
             ...super.defaultOptions,
-            title: "Quick Terrain",
+            title: "Terrain Panel",
             id: "quick-terrain",
             template: `modules/canvas3dcompendium/templates/quick-terrain.hbs`,
             width: 200,
@@ -28,6 +28,16 @@ export class QuickTerrain extends FormApplication {
             left: window.innerWidth - 550,
             resizable: false,
         };
+    }
+
+    get terrainTile() {
+        const tt = this._terrainTile ?? canvas.tiles.controlled[0];
+        if (!this._terrainTile && tt) this._terrainTile = tt;
+        return tt;
+    }
+
+    set terrainTile(tile) {
+        this._terrainTile = tile;
     }
 
     async getSources() {
@@ -68,16 +78,18 @@ export class QuickTerrain extends FormApplication {
             if (dataAction == "theme") return this.applyTheme();
             if (dataAction == "generate") return this.generateTerrain();
             if (dataAction == "water") return this.createWater();
+            if (dataAction == "lava") return this.createLava();
+            if (dataAction == "acid") return this.createAcid();
             if (dataAction == "variation") return this.generateVariation();
-            if (dataAction == "fine-tune") return new MatrixEditor(canvas.tiles.controlled[0]).render(true);
+            if (dataAction == "fine-tune") return new MatrixEditor(this.terrainTile).render(true);
         });
-        if(this.createOnOpen) {
+        if (this.createOnOpen) {
             this.generateTerrain();
         }
     }
 
-    async applyTheme() { 
-        const tile = canvas.tiles.controlled[0];
+    async applyTheme() {
+        const tile = this.terrainTile;
         if (!tile) return ui.notifications.error("Please select a tile to apply the theme to.");
         const data = this._getSubmitData();
         const theme = data.theme == "random" ? themes[Object.keys(themes)[Math.floor(Math.random() * Object.keys(themes).length)]] : themes[data.theme];
@@ -85,10 +97,10 @@ export class QuickTerrain extends FormApplication {
     }
 
     async generateTerrain() {
-        if(canvas.scene.getFlag("levels-3d-preview", "renderBackground")) await canvas.scene.setFlag("levels-3d-preview", "renderBackground", false);
+        if (canvas.scene.getFlag("levels-3d-preview", "renderBackground")) await canvas.scene.setFlag("levels-3d-preview", "renderBackground", false);
         const data = this._getSubmitData();
         const theme = data.theme == "random" ? themes[Object.keys(themes)[Math.floor(Math.random() * Object.keys(themes).length)]] : themes[data.theme];
-        const scale = (Math.random()+ 0.2)*5;
+        const scale = (Math.random() + 0.2) * 5;
         const tileData = {
             width: canvas.scene.dimensions.sceneWidth,
             height: canvas.scene.dimensions.sceneHeight,
@@ -112,7 +124,7 @@ export class QuickTerrain extends FormApplication {
                 },
             },
         };
-        const controlled = this.terrainTile ?? canvas.tiles.controlled[0];
+        const controlled = this.terrainTile;
         if (controlled) {
             await controlled.document.update(tileData);
         } else {
@@ -122,17 +134,17 @@ export class QuickTerrain extends FormApplication {
         }
     }
 
-    async generateVariation() { 
-        if (!canvas.tiles.controlled[0]) return ui.notifications.error("Please select a terrain to generate a variation for.");
+    async generateVariation() {
+        const tile = this.terrainTile;
+        if (!tile) return ui.notifications.error("Please select a terrain to generate a variation for.");
         const scale = (Math.random() + 0.2) * 5;
-        canvas.tiles.controlled[0].document.setFlag("levels-3d-preview", "displacementMatrix", `${Math.random()},${Math.random()},${scale},${scale}`);
-        
+        tile.document.setFlag("levels-3d-preview", "displacementMatrix", `${Math.random()},${Math.random()},${scale},${scale}`);
     }
 
-    async createWater() { 
+    async createWater() {
         const tileData = {
-            width: canvas.scene.dimensions.sceneWidth-10,
-            height: canvas.scene.dimensions.sceneHeight-10,
+            width: canvas.scene.dimensions.sceneWidth - 10,
+            height: canvas.scene.dimensions.sceneHeight - 10,
             x: canvas.scene.dimensions.sceneX + 5,
             y: canvas.scene.dimensions.sceneY + 5,
             flags: {
@@ -141,6 +153,7 @@ export class QuickTerrain extends FormApplication {
                 },
                 "levels-3d-preview": {
                     shaders: water,
+                    imageTexture: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Water_09/Water_09_NormalGL.webp",
                     depth: 100,
                     dynaMesh: "box",
                     dynaMeshResolution: 1,
@@ -148,19 +161,74 @@ export class QuickTerrain extends FormApplication {
                     color: "#3db5ff",
                     sight: false,
                     collision: false,
-                    metalness: 0.53,
-                    roughness: 0,
-                    transparency: 0.88,
+                    textureRepeat: 5,
                 },
             },
         };
-        ui.notifications.info("Water created. Depending on your terrain, it might be under the terrain.")
+        ui.notifications.info("Water created. Depending on your terrain, it might be under the terrain.");
         const tile = (await canvas.scene.createEmbeddedDocuments("Tile", [tileData]))[0];
         tile.object.control({ releaseOthers: true });
     }
 
-    async close(...args) { 
-        if(this.openAssetBrowser) {
+    async createLava() {
+        const tileData = {
+            width: canvas.scene.dimensions.sceneWidth - 10,
+            height: canvas.scene.dimensions.sceneHeight - 10,
+            x: canvas.scene.dimensions.sceneX + 5,
+            y: canvas.scene.dimensions.sceneY + 5,
+            flags: {
+                levels: {
+                    rangeBottom: 0,
+                },
+                "levels-3d-preview": {
+                    imageTexture: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Lava_04/Lava_04_NormalGL.webp",
+                    shaders: lava,
+                    depth: 100,
+                    dynaMesh: "box",
+                    dynaMeshResolution: 1,
+                    autoGround: true,
+                    sight: false,
+                    collision: false,
+                    textureRepeat: 5,
+                },
+            },
+        };
+        ui.notifications.info("Lava created. Depending on your terrain, it might be under the terrain.");
+        const tile = (await canvas.scene.createEmbeddedDocuments("Tile", [tileData]))[0];
+        tile.object.control({ releaseOthers: true });
+    }
+
+    async createAcid() {
+        const tileData = {
+            width: canvas.scene.dimensions.sceneWidth - 10,
+            height: canvas.scene.dimensions.sceneHeight - 10,
+            x: canvas.scene.dimensions.sceneX + 5,
+            y: canvas.scene.dimensions.sceneY + 5,
+            flags: {
+                levels: {
+                    rangeBottom: 0,
+                },
+                "levels-3d-preview": {
+                    imageTexture: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Water_09/Water_09_NormalGL.webp",
+                    shaders: acid,
+                    depth: 100,
+                    dynaMesh: "box",
+                    dynaMeshResolution: 1,
+                    autoGround: true,
+                    color: "#5aab17",
+                    sight: false,
+                    collision: false,
+                    textureRepeat: 5,
+                },
+            },
+        };
+        ui.notifications.info("Acid created. Depending on your terrain, it might be under the terrain.");
+        const tile = (await canvas.scene.createEmbeddedDocuments("Tile", [tileData]))[0];
+        tile.object.control({ releaseOthers: true });
+    }
+
+    async close(...args) {
+        if (this.openAssetBrowser) {
             new AssetBrowser().render(true);
         }
         return super.close(...args);
@@ -168,6 +236,10 @@ export class QuickTerrain extends FormApplication {
 }
 
 const water = { ocean: { enabled: true, speed: 0.1, scale: 0.1, waveA_wavelength: 0.6, waveA_steepness: 0.3029, waveA_direction: 90, waveB_wavelength: 0.3, waveB_steepness: 0.2524, waveB_direction: 260, waveC_wavelength: 0.2, waveC_steepness: 0.3534, waveC_direction: 180, foam: false } };
+
+const lava = { ocean: { enabled: true, speed: 0.02, scale: 0.1, waveA_wavelength: 0.6, waveA_steepness: 0.3029, waveA_direction: 90, waveB_wavelength: 0.3, waveB_steepness: 0.2524, waveB_direction: 260, waveC_wavelength: 0.2, waveC_steepness: 0.3534, waveC_direction: 180, foam: false }, colorwarp: { enabled: true, speed: 0.1, glow: 0.3, hue_angle: 0, flicker: false, animate_range: 0.18 } };
+
+const acid = { ocean: lava.ocean }
 
 const themes = {
     grassy: {

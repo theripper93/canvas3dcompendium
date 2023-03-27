@@ -1,66 +1,87 @@
 <div style="max-height: 100%;overflow: hidden;position: relative;display: flex;flex-direction: column;">
     {{#if isAssetBrowser}}
     
-    <details open>
-        <summary>Options</summary>
-        <div class="quick-placement">
-        <fieldset id="ab-randomization">
-            <legend>Randomization</legend>
-            <a data-tooltip="Randomize scale" class="quick-placement-toggle" data-action="scale"><i
-                    class="fa-regular fa-arrow-up-right-and-arrow-down-left-from-center"></i></a>
-            <a data-tooltip="Randomize rotation" class="quick-placement-toggle" data-action="rotation"><i
-                    class="fa-regular fa-rotate"></i></a>
-            <a data-tooltip="Color Variation" class="quick-placement-toggle" data-action="colorvar"><i
-                    class="fa-solid fa-palette"></i></a>
-        </fieldset>
+    <div class="tab-container">
+        <div class="tab-buttons">
+            <a id="toggle-tabs" style="position: absolute;left: 0.3rem;"><i class="fas fa-caret-up"></i></a>
+            <a class="tab-button active" data-tab="options"><i class="fa-solid fa-gears"></i> Options</a>
+            <a class="tab-button" data-tab="utility"><i class="fa-solid fa-screwdriver-wrench"></i> Utility</a>
+        </div>
+        <div class="tab" data-tab="options">
+            <div class="quick-placement">
+                <fieldset id="ab-randomization">
+                    <legend>Randomization</legend>
+                    <a data-tooltip="Randomize scale" class="quick-placement-toggle" data-action="scale"><i
+                            class="fa-regular fa-arrow-up-right-and-arrow-down-left-from-center"></i></a>
+                    <a data-tooltip="Randomize rotation" class="quick-placement-toggle" data-action="rotation"><i
+                            class="fa-regular fa-rotate"></i></a>
+                    <a data-tooltip="Color Variation" class="quick-placement-toggle" data-action="colorvar"><i
+                            class="fa-solid fa-palette"></i></a>
+                </fieldset>
+            
+                <fieldset id="ab-placement">
+                    <legend>Placement</legend>
+                    <a data-tooltip="Perpendicular placement" class="quick-placement-toggle" data-action="normal"><i
+                            class="fa-solid fa-chart-scatter-3d"></i></a>
+                    <a data-tooltip="Allign to grid" class="quick-placement-toggle" data-action="grid"><i
+                            class="fa-regular fa-grid"></i></a>
+                    <a data-tooltip="Auto-center tile" class="quick-placement-toggle active" data-action="center"><i
+                            class="fa-solid fa-arrows-to-circle"></i></a>
+                </fieldset>
+                <fieldset id="ab-collision">
+                    <legend>Collision</legend>
+                    <a data-tooltip="Block Movement" class="quick-placement-toggle active" data-action="collision"><i
+                            class="fa-regular fa-arrow-down-to-line"></i></a>
+                    <a data-tooltip="Block Sight" class="quick-placement-toggle active" data-action="sight"><i
+                            class="fa-solid fa-eye-slash"></i></a>
+                    <a data-tooltip="Camera Collider" class="quick-placement-toggle" data-action="cameraCollision"><i
+                            class="fa-solid fa-video"></i></a>
+                </fieldset>
+                <fieldset id="ab-painting">
+                    <legend>Painting</legend>
+                    <a data-tooltip="Asset Paint (Click and drag to place multiple assets)" class="quick-placement-toggle"
+                        data-action="paint"><i class="fa-solid fa-paintbrush"></i></a>
+                    <div class="asset-browser-icon-group">
+                        <i class="fa-solid fa-grip-dots"></i>
+                        <input data-tooltip="Density" type="number" id="density" value="{{density}}" step="0.1" min="0.1">
+                    </div>
+                </fieldset>
+                <fieldset id="ab-appearance" style="grid-column: span 2;">
+                    <legend>Appearance</legend>
+                    <div data-tooltip="Scale" class="asset-browser-icon-group">
+                        <i class="fa-solid fa-arrow-up-small-big"></i>
+                        <input type="number" id="scale" value="{{scale}}" step="0.1" min="0.1">
+                    </div>
+                    <div data-tooltip="Angle (degrees)" class="asset-browser-icon-group">
+                        <i class="fa-solid fa-angle"></i>
+                        <input type="number" id="angle" min="0" max="360" step="1" value="{{angle}}">
+                    </div>
+                    <div data-tooltip="Tint" class="asset-browser-icon-group">
+                        <i class="fa-solid fa-droplet"></i>
+                        <input type="color" id="color" value="#ffffff">
+                    </div>
+                </fieldset>
+                </div>
+        </div>
+
+        <div class="tab" data-tab="utility">
+            <div class="quick-placement">
+                <fieldset id="ab-optimization">
+                    <legend>Optimization</legend>
+                    <a data-tooltip="Merge Tiles" class="utility-button" data-action="merge"><i
+                            class="fas fa-object-group"></i></a>
+                    <a data-tooltip="Split Tiles" class="utility-button" data-action="split"><i
+                            class="fas fa-object-ungroup"></i></a>
+                </fieldset>
+            </div>
+        </div>
+        
     
-        <fieldset id="ab-placement">
-            <legend>Placement</legend>
-            <a data-tooltip="Perpendicular placement" class="quick-placement-toggle" data-action="normal"><i
-                    class="fa-solid fa-chart-scatter-3d"></i></a>
-            <a data-tooltip="Allign to grid" class="quick-placement-toggle" data-action="grid"><i
-                    class="fa-regular fa-grid"></i></a>
-            <a data-tooltip="Auto-center tile" class="quick-placement-toggle active" data-action="center"><i
-                    class="fa-solid fa-arrows-to-circle"></i></a>
-        </fieldset>
-        <fieldset id="ab-collision">
-            <legend>Collision</legend>
-            <a data-tooltip="Block Movement" class="quick-placement-toggle active" data-action="collision"><i
-                    class="fa-regular fa-arrow-down-to-line"></i></a>
-            <a data-tooltip="Block Sight" class="quick-placement-toggle active" data-action="sight"><i
-                    class="fa-solid fa-eye-slash"></i></a>
-            <a data-tooltip="Camera Collider" class="quick-placement-toggle" data-action="cameraCollision"><i
-                    class="fa-solid fa-video"></i></a>
-        </fieldset>
-        <fieldset id="ab-painting">
-            <legend>Painting</legend>
-            <a data-tooltip="Asset Paint (Click and drag to place multiple assets)" class="quick-placement-toggle"
-                data-action="paint"><i class="fa-solid fa-paintbrush"></i></a>
-            <div class="asset-browser-icon-group">
-                <i class="fa-solid fa-grip-dots"></i>
-                <input data-tooltip="Density" type="number" id="density" value="{{density}}" step="0.1" min="0.1">
-            </div>
-        </fieldset>
-        <fieldset  id="ab-appearance" style="grid-column: span 2;">
-            <legend>Appearance</legend>
-            <div data-tooltip="Scale" class="asset-browser-icon-group">
-                <i class="fa-solid fa-arrow-up-small-big"></i>
-                <input type="number" id="scale" value="{{scale}}" step="0.1" min="0.1">
-            </div>
-            <div data-tooltip="Angle (degrees)" class="asset-browser-icon-group">
-                <i class="fa-solid fa-angle"></i>
-                <input type="number" id="angle" min="0" max="360" step="1" value="{{angle}}">
-            </div>
-            <div data-tooltip="Tint" class="asset-browser-icon-group">
-                <i class="fa-solid fa-droplet"></i>
-                <input type="color" id="color" value="#ffffff">
-            </div>
-        </fieldset>
-    
-    </div></details>
+    </div>
 
     <input data-tooltip="Only the first 200 results shown - Start typing to Search..." type="text" id="search"
         placeholder="Only the first 200 results shown - Start typing to Search...">
+
     <a id="selected-notification" class="notification info" style="pointer-events: none; font-size: small;position: absolute;bottom: 0px;width: 100%;z-index: 100;">One or more Assets selected - Hold Shift and click to place.</a>
     {{else}}
     {{#if isEffectBrowser}}
