@@ -179,7 +179,6 @@ export class AssetBrowser extends Application {
 
     activateListeners(html) {
         super.activateListeners(html);
-        this.startTour();
         this.element.find(`.tab[data-tab="options"]`).show();
         this.element.find(".tab-button").on("click", (e) => { 
             const tab = $(e.target).data("tab");
@@ -271,6 +270,12 @@ export class AssetBrowser extends Application {
             options[action] = toggle.classList.contains("active");
         }
         return options;
+    }
+
+    async _render(...args) { 
+        const res = await super._render(...args);
+        this.startTour();
+        return res;
     }
 
     async close(...args) {
