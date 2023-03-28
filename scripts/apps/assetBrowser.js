@@ -245,12 +245,6 @@ export class AssetBrowser extends Application {
         this.element.on("change", "#density", (e) => {
             AssetBrowser.density = parseFloat(e.target.value);
         });
-        this.element.on("change", "#utility", (e) => { 
-            const selectValue = e.target.value;
-            if (selectValue === "none") return;
-            runScript(selectValue);
-            e.target.value = "none";
-        });
     }
 
     startTour() {
@@ -307,12 +301,21 @@ function wait (ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function runScript(id) {
+async function runScript(id) {
     switch (id) { 
         case "merge":
             game.Levels3DPreview.UTILS.autoMergeTiles();
             break;
         case "split":
             game.Levels3DPreview.UTILS.unmergeTiles();
+        case "lock":
+            const tiles = canvas.tiles.controlled;
+            if (!tiles.length) return ui.notifications.error("Please select a tile to lock/unlock.");
+            const locked = tiles[0].document.locked;
+            const updates = tiles.map(tile => {
+                return {_id: tile.id, locked: !tile.data.locked};
+            });
+            await canvas.scene.updateEmbeddedDocuments("Tile", updates);
+            ui.notifications.info(`Tile/s ${locked ? "unlocked" : "locked"}.`);
     }
 }

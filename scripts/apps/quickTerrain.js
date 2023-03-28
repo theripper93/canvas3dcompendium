@@ -98,6 +98,7 @@ export class QuickTerrain extends FormApplication {
             if (dataAction == "acid") return this.createAcid();
             if (dataAction == "variation") return this.generateVariation();
             if (dataAction == "fine-tune") return new MatrixEditor(this.terrainTile).render(true);
+            if (dataAction == "lock") return this.lock();
         });
         if (this.createOnOpen) {
             this.generateTerrain();
@@ -159,6 +160,14 @@ export class QuickTerrain extends FormApplication {
         if (!tile) return ui.notifications.error("Please select a terrain to generate a variation for.");
         const scale = (Math.random() + 0.2) * 5;
         tile.document.setFlag("levels-3d-preview", "displacementMatrix", `${Math.random()},${Math.random()},${scale},${scale}`);
+    }
+
+    async lock() { 
+        const tile = canvas.tiles.controlled[0] ?? this.terrainTile;
+        if (!tile) return ui.notifications.error("Please select a tile to lock/unlock.");
+        const locked = tile.document.locked;
+        await tile.document.update({locked: !locked});
+        ui.notifications.info(`Tile ${locked ? "unlocked" : "locked"}.`);
     }
 
     async createWater() {
