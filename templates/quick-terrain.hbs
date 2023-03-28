@@ -15,6 +15,9 @@
 <div style="margin-top: 0.2rem; display: flex; flex-direction: column; color: var(--color-text-light-primary) !important;">
     <fieldset>
     <legend>Terrain</legend>
+    <select name="terrain" id="" style="width: 100%; border:none">
+        {{selectOptions terrainTypes localize=false}}
+    </select>
     <button data-action="generate"><i class="fa-duotone fa-dice"></i> Generate</button>
     <button data-action="variation"><i class="fa-duotone fa-arrows-rotate"></i> Variation</button>
     <button data-action="fine-tune" style="border-bottom: 1px solid;"><i class="fa-duotone fa-pencil-ruler"></i> Fine Tune</button>

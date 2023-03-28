@@ -65,8 +65,24 @@ export class QuickTerrain extends FormApplication {
     async getData() {
         const files = fileCache ?? (await this.getSources()).filter((f) => /\d/.test(f.split("/").pop()));
         fileCache = files;
+        const selectOptions = {
+            "random": "Random",
+        };
+        for (let file of files) { 
+            if (file.includes("Erosion")) {
+                selectOptions["Erosion"] = "Erosion";
+                continue;
+            }
+            if (file.includes("Badlands")) { 
+                selectOptions["Badlands"] = "Badlands";
+                continue;
+            }
+            const id = file.split("Terrain_heightmaps/")[1].split("/")[0];
+            selectOptions[id] = id.replaceAll("-", " ");
+        }
         return {
             themes: themes,
+            terrainTypes: selectOptions,
         };
     }
 
@@ -101,6 +117,10 @@ export class QuickTerrain extends FormApplication {
         const data = this._getSubmitData();
         const theme = data.theme == "random" ? themes[Object.keys(themes)[Math.floor(Math.random() * Object.keys(themes).length)]] : themes[data.theme];
         const scale = (Math.random() + 0.2) * 5;
+        const selectedTerrain = this.element.find("select[name='terrain']").val();
+        const terrains = selectedTerrain == "random" ? fileCache : fileCache.filter((f) => f.includes(selectedTerrain));
+        const heightmap = terrains[Math.floor(Math.random() * terrains.length)];
+        const depth = Math.max(canvas.scene.dimensions.sceneWidth, canvas.scene.dimensions.sceneHeight) / 4;
         const tileData = {
             width: canvas.scene.dimensions.sceneWidth,
             height: canvas.scene.dimensions.sceneHeight,
@@ -112,11 +132,11 @@ export class QuickTerrain extends FormApplication {
                 },
                 "levels-3d-preview": {
                     imageTexture: "modules/levels-3d-preview/assets/blankTex.jpg",
-                    displacementMap: fileCache[Math.floor(Math.random() * fileCache.length)],
+                    displacementMap: heightmap,
                     displacementMatrix: `${Math.random()},${Math.random()},${scale},${scale}`,
                     invertDisplacementMap: true,
                     shaders: theme.data,
-                    depth: Math.max(canvas.scene.dimensions.sceneWidth, canvas.scene.dimensions.sceneHeight) / 4,
+                    depth: heightmap.includes("Cave") ? depth / 3 : depth,
                     dynaMesh: "box",
                     dynaMeshResolution: 2,
                     autoGround: true,

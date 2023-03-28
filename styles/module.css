@@ -207,7 +207,7 @@
     border-radius: 0;
 }
 
-#quick-terrain option,#quick-environment option, #asset-browser option{
+#quick-terrain option,#quick-environment option, #asset-browser option, #effect-browser option{
     background: var(--color-text-dark-secondary);
 }
 
