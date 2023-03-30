@@ -16,15 +16,13 @@ export class AssetBrowser extends Application {
     }
 
     get sources() {
-        const sources = this.defaultSources;
+        const sources = AssetBrowser.defaultSources;
         const custom = game.settings.get("canvas3dcompendium", "assetBrowserCustomPath");
         if (custom) sources.push(custom);
         return sources;
     }
 
-    get defaultSources() {
-        return ["modules/canvas3dcompendium/assets/Tiles", "modules/baileywiki-3d"];
-    }
+    static defaultSources = [];
 
     static get exclude() {
         return [];
@@ -162,7 +160,7 @@ export class AssetBrowser extends Application {
         }
         const files = [];
         for (let target of this.sources) {
-            if (!this.defaultSources.includes(target)) source = FilePicker.prototype._inferCurrentDirectory(target)[0];
+            if (!AssetBrowser.defaultSources.includes(target)) source = FilePicker.prototype._inferCurrentDirectory(target)[0];
             let sourceFiles;
             try {
                 sourceFiles = await getFiles(target, source);
@@ -241,14 +239,16 @@ export class AssetBrowser extends Application {
 
     onSearch() {
         const value = this.element.find("#search").val();
-        const pack = this.element.find("#asset-packs").val().split(",").filter((p) => p).map(p => p.trim().toLowerCase());
+        const packData = this.element.find("#asset-packs").val().split(",").filter((p) => p).map(p => p.trim().toLowerCase().replaceAll(" ", "%20"));
+        const packName = packData[0].toLowerCase();
+        const pack = packData.filter((p) => p !== packName);
         let count = 0;
         this.element.find("li").each((i, el) => {
             const displayName = $(el).data("displayname");
-            const search = $(el).data("search");
+            const search = $(el).data("output");
             const searchLC = search.toLowerCase();
             const inSearch = count >= this._maxCount ? false : searchLC.includes(value.toLowerCase()) || displayName.toLowerCase().includes(value.toLowerCase());
-            const packMatch = pack[0] === "all" || pack.some(p => searchLC.includes(p));
+            const packMatch = packName === "all" || (searchLC.includes(packName) && pack.some((p) => searchLC.includes(p)));
             const display = inSearch && packMatch;
             $(el).toggle(display);
             if (display) count++;
@@ -287,7 +287,18 @@ export class AssetBrowser extends Application {
         game.Levels3DPreview.CONFIG.UI.windows.assetBrowser = null;
     }
 
-    static registerPack(packId, packName, assetPacks) {
+    static registerPack(packId, packName, assetPacks = [], options = {}) {
+        let packPath = `modules/${packId}`;
+        if(options.subfolder) packPath += `/${options.subfolder}`;
+        if (!AssetBrowser.defaultSources.includes(packPath)) AssetBrowser.defaultSources.push(packPath);
+        if(!assetPacks.length) return;
+        assetPacks.map((p) => {
+            p.query = packId + "," + p.query;
+            p.query = p.query.toLowerCase();
+            p.query.replaceAll(" ", "%20");
+            return p;
+        });
+        assetPacks.sort((a, b) => a.name.localeCompare(b.name));
         if (!AssetBrowser.assetPacks[packId]) {
             AssetBrowser.assetPacks[packId] = { name: packName, packs: assetPacks };
         } else {

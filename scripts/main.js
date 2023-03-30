@@ -18,17 +18,65 @@ Hooks.on("3DCanvasConfig", (config) => {
   Hooks.callAll("3DCanvasMapmakingPackRegisterAssetPacks", UI.AssetBrowser);
 })
 
-Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => { 
-  ab.registerPack("3DCanvasMapmakingPack", "Mapmaking Pack", [
-      {
-          name: "Nature",
-          query: "nature",
-    },
-    {
-      name: "Sci-Fi",
-      query: "scifi,cyberpunk,space",
-    }
-  ]);
+Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => {
+    ab.registerPack(
+        "canvas3dcompendium",
+        "Mapmaking Pack",
+        [
+            {
+                name: "Items",
+                query: "Tiles/RPG Items,CreativeTrio/Potions",
+          },
+          {
+            name: "Furniture",
+            query: "Furniture",
+          },
+            {
+                name: "Dungeon",
+                query: "KayKitPack/Dungeon,Kenney/Medieval,Tiles/Medieval Dungeon,Tiles/Modular Ruins",
+            },
+            {
+                name: "Nature",
+                query: "nature",
+            },
+            {
+                name: "Sci-Fi",
+                query: "scifi,cyberpunk,space",
+            },
+            {
+                name: "Structures",
+                query: "tiles/buildings,Tiles/Ultimate Fantasy",
+            },
+            {
+                name: "Bridges",
+                query: "CreativeTrio/Bridges",
+            },
+            {
+                name: "Doors",
+                query: "door,gate,arch",
+            },
+            {
+                name: "Fences",
+                query: "fence,pole,board",
+            },
+            {
+                name: "Vegetation",
+                query: "CreativeTrio/FlowersPlants,CreativeTrio/Mushrooms,CreativeTrio/Trees,Tiles/Stylized Trees",
+            },
+            {
+                name: "Crops",
+                query: "tiles/Crops",
+            },
+            {
+                name: "Food",
+                query: "food",
+            },
+        ],
+        {
+            subfolder: "assets/Tiles",
+        },
+    );
+    ab.registerPack("baileywiki-3d", "Baileywiki 3D");
 });
 
 
