@@ -83,8 +83,19 @@
     
     </div>
 
+<div class="search-container" style="margin-top: 0.5rem; display: flex;align-items: center;">
     <input data-tooltip="Only the first 200 results shown - Start typing to Search..." type="text" id="search"
         placeholder="Only the first 200 results shown - Start typing to Search...">
+            <select name="asset-packs" id="asset-packs" data-tooltip="Size" style="border: none;">
+                <option value="all">All</option>
+                {{#each assetPacks}}
+                    <optgroup label="{{this.name}}">
+                        {{#each this.packs}}
+                            <option value="{{this.query}}">{{this.name}}</option>
+                        {{/each}}
+                {{/each}}
+            </select>
+</div>
 
     <a id="selected-notification" class="notification info" style="pointer-events: none; font-size: small;position: absolute;bottom: 0px;width: 100%;z-index: 100;">One or more Assets selected - Hold Shift and click to place.</a>
     {{else}}

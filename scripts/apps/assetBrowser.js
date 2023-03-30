@@ -123,6 +123,7 @@ export class AssetBrowser extends Application {
 
     async getData() {
         const data = super.getData();
+        data.assetPacks = AssetBrowser.assetPacks;
         if (dataCache) {
             this._assetCount = dataCache.materials.length;
             dataCache.scale = AssetBrowser.scale || 1;
@@ -193,17 +194,7 @@ export class AssetBrowser extends Application {
         });
         this.element.find("#selected-notification").toggle(false);
         this.element.find(".material-confirm").hide();
-        this.element.on("keyup", "#search", (e) => {
-            const value = e.target.value;
-            let count = 0;
-            this.element.find("li").each((i, el) => {
-                const displayName = $(el).data("displayname");
-                const search = $(el).data("search");
-                const display = count >= this._maxCount ? false : search.toLowerCase().includes(value.toLowerCase()) || displayName.toLowerCase().includes(value.toLowerCase());
-                $(el).toggle(display);
-                if (display) count++;
-            });
-        });
+        this.element.on("keyup", "#search", this.onSearch.bind(this));
         this.element.find("input").trigger("keyup");
         this.element.on("mouseup", (e) => {
             const li = $(e.target).closest("li");
@@ -232,6 +223,7 @@ export class AssetBrowser extends Application {
             this.element.find("#selected-notification").toggle(this._hasSelected, 200);
             if (this._hasSelected) canvas.tiles.releaseAll();
         });
+        this.element.on("change", "#asset-packs", this.onSearch.bind(this));
         this.element.on("click", ".quick-placement-toggle", (e) => {
             e.currentTarget.classList.toggle("active");
         });
@@ -244,6 +236,22 @@ export class AssetBrowser extends Application {
         });
         this.element.on("change", "#density", (e) => {
             AssetBrowser.density = parseFloat(e.target.value);
+        });
+    }
+
+    onSearch() {
+        const value = this.element.find("#search").val();
+        const pack = this.element.find("#asset-packs").val().split(",").filter((p) => p).map(p => p.trim().toLowerCase());
+        let count = 0;
+        this.element.find("li").each((i, el) => {
+            const displayName = $(el).data("displayname");
+            const search = $(el).data("search");
+            const searchLC = search.toLowerCase();
+            const inSearch = count >= this._maxCount ? false : searchLC.includes(value.toLowerCase()) || displayName.toLowerCase().includes(value.toLowerCase());
+            const packMatch = pack[0] === "all" || pack.some(p => searchLC.includes(p));
+            const display = inSearch && packMatch;
+            $(el).toggle(display);
+            if (display) count++;
         });
     }
 
@@ -278,7 +286,17 @@ export class AssetBrowser extends Application {
         game.Levels3DPreview.renderer.domElement.removeEventListener("mousemove", this._on3DCanvasMove, false);
         game.Levels3DPreview.CONFIG.UI.windows.assetBrowser = null;
     }
+
+    static registerPack(packId, packName, assetPacks) {
+        if (!AssetBrowser.assetPacks[packId]) {
+            AssetBrowser.assetPacks[packId] = { name: packName, packs: assetPacks };
+        } else {
+            AssetBrowser.assetPacks[packId].packs.push(...assetPacks);
+        }
+    }
 }
+
+AssetBrowser.assetPacks = {};
 
 export async function getFiles(root, source = "user", extC = "glb", outerPass = true) {
     const files = [];

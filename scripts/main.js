@@ -15,7 +15,21 @@ Hooks.on("3DCanvasConfig", (config) => {
   UI.QuickTerrain = QuickTerrain;
   UI.EffectBrowser = EffectBrowser;
   UI.BuildPanel = BuildPanel;
+  Hooks.callAll("3DCanvasMapmakingPackRegisterAssetPacks", UI.AssetBrowser);
 })
+
+Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => { 
+  ab.registerPack("3DCanvasMapmakingPack", "Mapmaking Pack", [
+      {
+          name: "Nature",
+          query: "nature",
+    },
+    {
+      name: "Sci-Fi",
+      query: "scifi,cyberpunk,space",
+    }
+  ]);
+});
 
 
 Hooks.on("renderTileConfig", injectMaterialBrowser)

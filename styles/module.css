@@ -155,9 +155,6 @@
     padding: 0.3rem;
 }
 
-#asset-browser.three-canvas-compendium-app #search{
-    margin-top: 0.5rem;
-}
 
 .three-canvas-compendium-app .tab-container, #quick-terrain fieldset, #quick-environment fieldset{
     border: 1px inset;
@@ -209,6 +206,10 @@
 
 #quick-terrain option,#quick-environment option, #asset-browser option, #effect-browser option{
     background: var(--color-text-dark-secondary);
+}
+
+#quick-terrain optgroup,#quick-environment optgroup, #asset-browser optgroup, #effect-browser optgroup{
+    background: var(--color-text-dark-header);
 }
 
 #quick-environment .environment{
