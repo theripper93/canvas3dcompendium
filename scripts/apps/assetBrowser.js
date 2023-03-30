@@ -7,7 +7,7 @@ export class AssetBrowser extends Application {
     constructor() {
         super();
         game.Levels3DPreview.CONFIG.UI.windows.AssetBrowser = this;
-        this._maxCount = 200;
+        this._maxCount = 400;
         this._hasSelected = false;
         this.lastPlacementPosition = new game.Levels3DPreview.THREE.Vector3();
         game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick, false);

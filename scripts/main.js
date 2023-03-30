@@ -26,14 +26,18 @@ Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => {
             {
                 name: "Items",
                 query: "Tiles/RPG Items,CreativeTrio/Potions",
-          },
-          {
-            name: "Furniture",
-            query: "Furniture",
-          },
+            },
+            {
+                name: "Furniture",
+                query: "Furniture",
+            },
             {
                 name: "Dungeon",
                 query: "KayKitPack/Dungeon,Kenney/Medieval,Tiles/Medieval Dungeon,Tiles/Modular Ruins",
+            },
+            {
+                name: "Dungeon Set",
+                query: "KayKitPack/Dungeon/Remastered",
             },
             {
                 name: "Nature",

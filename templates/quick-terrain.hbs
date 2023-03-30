@@ -8,7 +8,7 @@
         <option value="{{@key}}">{{name}}</option>
         {{/each}}
     </select>
-    <button data-action="theme" style="border-bottom: 1px solid;"><i class="fa-duotone fa-palette"></i> Apply Theme</button>
+    <button data-action="theme"><i class="fa-duotone fa-palette"></i> Apply Theme</button>
 </fieldset>
 
 
@@ -20,17 +20,18 @@
     </select>
     <button data-action="generate"><i class="fa-duotone fa-dice"></i> Generate</button>
     <button data-action="variation"><i class="fa-duotone fa-arrows-rotate"></i> Variation</button>
-    <button data-action="fine-tune" style="border-bottom: 1px solid;"><i class="fa-duotone fa-pencil-ruler"></i> Fine Tune</button>
+    <button data-action="fine-tune"><i class="fa-duotone fa-pencil-ruler"></i> Fine Tune</button>
     </fieldset>
     <fieldset style="margin-top: 0.2rem">
     <legend>Fluids</legend>
     <button data-action="water"><i class="fa-duotone fa-water"></i></i> Add Water</button>
     <button data-action="lava"><i class="fa-duotone fa-volcano"></i> Add Lava</button>
-    <button data-action="acid" style="border-bottom: 1px solid;"><i class="fa-duotone fa-vial"></i> Add Acid</button>
+    <button data-action="acid"><i class="fa-duotone fa-vial"></i> Add Acid</button>
     </fieldset>
     <fieldset style="margin-top: 0.2rem">
     <legend>Tools</legend>
-    <button data-tooltip="A Locked Tile cannot be selected except with Right Click" data-action="lock" style="border-bottom: 1px solid;"><i class="fa-duotone fa-lock"></i> Lock/Unlock</button>
+    <button data-tooltip="A Locked Tile cannot be selected except with Right Click" data-action="lock"><i class="fa-duotone fa-lock"></i> Lock/Unlock</button>
+    <button data-action="grid"><i class="fa-duotone fa-grid"></i> Toggle Grid</button>
     </fieldset>
 </div>
 </form>

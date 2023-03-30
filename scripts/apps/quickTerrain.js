@@ -99,6 +99,7 @@ export class QuickTerrain extends FormApplication {
             if (dataAction == "variation") return this.generateVariation();
             if (dataAction == "fine-tune") return new MatrixEditor(this.terrainTile).render(true);
             if (dataAction == "lock") return this.lock();
+            if (dataAction == "grid") return this.toggleGrid();
         });
         if (this.createOnOpen) {
             this.generateTerrain();
@@ -168,6 +169,20 @@ export class QuickTerrain extends FormApplication {
         const locked = tile.document.locked;
         await tile.document.update({locked: !locked});
         ui.notifications.info(`Tile ${locked ? "unlocked" : "locked"}.`);
+    }
+
+    async toggleGrid() { 
+        const shaderData = {grid: {enabled: true, normalCulling: 0.75, heightCulling: 1}};
+        const tile = this.terrainTile;
+        if (!tile) return ui.notifications.error("Please select a tile to toggle the grid on.");
+        const currentShader = tile.document.getFlag("levels-3d-preview", "shaders");
+        if (currentShader.grid?.enabled) {
+            await tile.document.update({flags: {"levels-3d-preview": {shaders: {grid: {enabled: false}}}}});
+            ui.notifications.info("Grid disabled.");
+        } else {
+            await tile.document.update({flags: {"levels-3d-preview": {shaders: shaderData}}});
+            ui.notifications.info("Grid enabled.");
+        }
     }
 
     async createWater() {

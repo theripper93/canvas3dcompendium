@@ -151,6 +151,10 @@
     border-style: inset;
 }
 
+#quick-terrain fieldset button:last-child{
+    border-bottom: 1px solid;
+}
+
 .three-canvas-compendium-app #search{
     padding: 0.3rem;
 }
