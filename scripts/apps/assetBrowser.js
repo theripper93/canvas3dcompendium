@@ -68,9 +68,16 @@ export class AssetBrowser extends Application {
         const currentIntersect = _this.currentPoint;
         if (!_this._hasSelected || (event.which !== 1 && !fromDrag) || !currentIntersect) return;
         canvas.tiles.releaseAll();
-        _this.lastPlacementPosition.copy(currentIntersect.point);
+        const dragData = _this.buildTileData();
+
+        game.Levels3DPreview.interactionManager._onDrop(event, dragData);
+    }
+
+    buildTileData(src) {
+        const currentIntersect = _this.currentPoint;
+        if (currentIntersect?.point) _this.lastPlacementPosition.copy(currentIntersect.point);
         const srcs = [];
-        _this.element.find("li.selected").each((i, el) => srcs.push(el.dataset.output));
+        src ? srcs.push(src) : _this.element.find("li.selected").each((i, el) => srcs.push(el.dataset.output));
         const randomSrc = srcs[Math.floor(Math.random() * srcs.length)];
         const angle = parseFloat(_this.element.find("#angle").val() || 0);
         let color = _this.element.find("#color").val();
@@ -81,7 +88,7 @@ export class AssetBrowser extends Application {
         const randomRotate = options.rotation;
         const rotation = randomRotate ? Math.random() * 360 : angle;
         if (options.scale) scale *= Math.random() + 0.5;
-        if (options.normal) normal = currentIntersect.face.normal;
+        if (options.normal) normal = currentIntersect?.face?.normal ?? {x: 0, y: 1, z: 0};
         if (options.colorvar) {
             const threecolor = new game.Levels3DPreview.THREE.Color(color);
             const hsl = threecolor.getHSL(new game.Levels3DPreview.THREE.Color());
@@ -95,27 +102,29 @@ export class AssetBrowser extends Application {
         const sight = _this.quickPlacementOptions.sight;
         const collision = _this.quickPlacementOptions.collision;
         const cameraCollision = _this.quickPlacementOptions.cameraCollision;
+        const isImage = !randomSrc.toLowerCase().endsWith(".glb");
         const dragData = {
             type: "Tile",
             texture: { src: randomSrc },
             tileSize: canvas.dimensions.size / scale,
-            params: { color, sight, collision, cameraCollision },
-            coord3d: currentIntersect.point,
+            params: { color, sight, collision, cameraCollision, dynaMesh: isImage ? "billboard2" : "default" },
+            coord3d: currentIntersect?.point ?? null,
+            assetBrowser: {
+                grid,
+                normal,
+                rotation,
+                pos: options.center,
+            },
         };
+        if(src) delete dragData.coord3d;
 
-        game.Levels3DPreview.interactionManager._onDrop(event, grid, normal, dragData, rotation, options.center);
+        return dragData;
     }
 
     _onDragStart(event) {
         canvas.tiles.releaseAll();
-        const li = event.currentTarget;
-        const scale = parseFloat(this.element.find("#scale").val() || 1);
-        AssetBrowser.scale = scale;
-        const dragData = {
-            type: "Tile",
-            texture: { src: li.dataset.output },
-            tileSize: canvas.dimensions.size / AssetBrowser.scale,
-        };
+        const src = event.currentTarget.dataset.output;
+        const dragData = _this.buildTileData(src);
         event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
     }
 
@@ -154,16 +163,13 @@ export class AssetBrowser extends Application {
     }
 
     async getSources() {
-        let source = "user";
-        if (typeof ForgeVTT !== "undefined" && ForgeVTT.usingTheForge) {
-            source = "forge-bazaar";
-        }
         const files = [];
+        const billboards = await getFiles("modules/canvas3dcompendium/assets/Vegetation_billboard/high_res", "", "webp");
+        files.push(...billboards);
         for (let target of this.sources) {
-            if (!AssetBrowser.defaultSources.includes(target)) source = FilePicker.prototype._inferCurrentDirectory(target)[0];
             let sourceFiles;
             try {
-                sourceFiles = await getFiles(target, source);
+                sourceFiles = await getFiles(target, "");
             } catch (e) {
                 try {
                     sourceFiles = await getFiles(target, "user");
@@ -311,7 +317,7 @@ AssetBrowser.assetPacks = {};
 
 export async function getFiles(root, source = "user", extC = "glb", outerPass = true) {
     const files = [];
-
+    source = new FilePicker()._inferCurrentDirectory(root)[0];
     const contents = await FilePicker.browse(source, root);
     for (let file of contents.files) {
         const ext = file.split(".").pop();

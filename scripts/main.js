@@ -68,6 +68,10 @@ Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => {
                 query: "CreativeTrio/FlowersPlants,CreativeTrio/Mushrooms,CreativeTrio/Trees,Tiles/Stylized Trees",
             },
             {
+                name: "Grass & Shrubs",
+                query: "Vegetation_billboard/high_res",
+            },
+            {
                 name: "Crops",
                 query: "tiles/Crops",
             },
