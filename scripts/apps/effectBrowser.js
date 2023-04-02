@@ -228,6 +228,46 @@ const effectsDatabase = {
         src: "modules/canvas3dcompendium/assets/Effects/Spills/spill5.webp",
         name: "Surface 5",
     },
+    road1: {
+        src: "modules/canvas3dcompendium/assets/Effects/Roads/road-1.webp",
+        name: "Road 1",
+    },
+    road2: {
+        src: "modules/canvas3dcompendium/assets/Effects/Roads/road-2.webp",
+        name: "Road 2",
+    },
+    road3: {
+        src: "modules/canvas3dcompendium/assets/Effects/Roads/road-3.webp",
+        name: "Road 3",
+    },
+    road4: {
+        src: "modules/canvas3dcompendium/assets/Effects/Roads/road-4.webp",
+        name: "Road 4",
+    },
+    road5: {
+        src: "modules/canvas3dcompendium/assets/Effects/Roads/road-5.webp",
+        name: "Road 5",
+    },
+    road6: {
+        src: "modules/canvas3dcompendium/assets/Effects/Roads/road-6.webp",
+        name: "Road 6",
+    },
+    road7: {
+        src: "modules/canvas3dcompendium/assets/Effects/Roads/road-7.webp",
+        name: "Road 7",
+    },
+    road8: {
+        src: "modules/canvas3dcompendium/assets/Effects/Roads/road-8.webp",
+        name: "Road 8",
+    },
+    road9: {
+        src: "modules/canvas3dcompendium/assets/Effects/Roads/road-9.webp",
+        name: "Road 9",
+    },
+    road10: {
+        src: "modules/canvas3dcompendium/assets/Effects/Roads/road-10.webp",
+        name: "Road 10",
+    },
 };
 
 
@@ -246,6 +286,10 @@ const effectsDatabase = {
 [("cracks1", "cracks2", "cracks3")].forEach((e) => {
     createElementalVariations(effectsDatabase[e]);
     addGlow(effectsDatabase[e], true);
+});
+
+["road1", "road2", "road3", "road4", "road5", "road6", "road7", "road8", "road9", "road10"].forEach((e) => {
+    createRoadVariations(effectsDatabase[e]);
 });
 
 
@@ -282,6 +326,49 @@ function createElementalVariations(effect){
     ];
     if (!effect.variations) effect.variations = [];
     effect.variations.push(...elementalVariations);
+}
+
+function createRoadVariations(effect) {
+    const roadVariations = [
+        {
+            id: "bricks",
+            name: "Bricks",
+            shaderData: { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized/Floor%20Tile%2003/Floor_Tile_03_Color.webp", color: "#545454", strength: 1, coveragePercent: 1, inclination: 0, repeat: 10, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true } },
+        },
+        {
+            id: "mud",
+            name: "Mud",
+            shaderData: { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Mud_07/Mud_07_Color.webp", color: "#4f2e08", strength: 1, coveragePercent: 1, inclination: 0, repeat: 10, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true } },
+        },
+        {
+            id: "rocks",
+            name: "Rocks",
+            shaderData: { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Rocks_05/Rocks_05_Color.webp", color: "#4f2e08", strength: 1, coveragePercent: 1, inclination: 0, repeat: 10, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true } },
+        },
+        {
+            id: "stones",
+            name: "Stones",
+            shaderData: { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Stones_09/Stones_09_Color.webp", color: "#41321f", strength: 1, coveragePercent: 1, inclination: 0, repeat: 10, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true } },
+        },
+        {
+            id: "rocks2",
+            name: "Rocks 2",
+            shaderData: { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Rocks_04/Rocks_04_Color.webp", color: "#41321f", strength: 1, coveragePercent: 1, inclination: 0, repeat: 10, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true } },
+        },
+        {
+            id: "moss",
+            name: "Moss",
+            shaderData: { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Moss_10/Moss_10_Color.webp", color: "#41321f", strength: 1, coveragePercent: 1, inclination: 0, repeat: 10, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true } },
+        },
+        {
+            id: "cracks",
+            name: "Cracks",
+            shaderData: { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/CrackedSoil_01/CrackedSoil_01_Color.webp", color: "#41321f", strength: 1, coveragePercent: 1, inclination: 0, repeat: 10, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true } },
+        },
+    ];
+
+    if (!effect.variations) effect.variations = [];
+    effect.variations.push(...roadVariations);
 }
 
 function addRotation(effect) {
