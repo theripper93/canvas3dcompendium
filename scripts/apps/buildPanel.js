@@ -104,6 +104,15 @@ const BUILD_PANEL_BUTTONS = [
         },
     },
     {
+        id: "extrude",
+        name: "levels3dpreview.controls.tile3dPolygon",
+        icon: "fa-duotone fa-draw-polygon",
+        visible: () => false,
+        callback: () => {
+            game.Levels3DPreview.UTILS.extractPointsFromDrawing();
+        },
+    },
+    {
         id: "effects",
         name: "Effects",
         icon: "fa-duotone fa-fire",

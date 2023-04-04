@@ -102,12 +102,12 @@ export class AssetBrowser extends Application {
         const sight = _this.quickPlacementOptions.sight;
         const collision = _this.quickPlacementOptions.collision;
         const cameraCollision = _this.quickPlacementOptions.cameraCollision;
-        const isImage = !randomSrc.toLowerCase().endsWith(".glb");
+        const isImage = !randomSrc.toLowerCase().endsWith(".glb") || !randomSrc.toLowerCase().endsWith(".gltf");
         const dragData = {
             type: "Tile",
             texture: { src: randomSrc },
             tileSize: canvas.dimensions.size / scale,
-            params: { color, sight, collision, cameraCollision, dynaMesh: isImage ? "billboard2" : "default" },
+            params: { color, sight, collision, cameraCollision, dynaMesh: isImage ? "billboard2" : "default", castShadow: !isImage },
             coord3d: currentIntersect?.point ?? null,
             assetBrowser: {
                 grid,
@@ -143,10 +143,10 @@ export class AssetBrowser extends Application {
         fileCache = files;
         for (let file of files) {
             const filename = file.split("/").pop().replaceAll("%20", "_");
-            const cleanName = filename.replaceAll("_", " ").replace(".glb", "");
+            const cleanName = filename.replaceAll("_", " ").replace(".glb", "").replace(".gltf", "")
             materials.push({
                 displayName: cleanName.replace("MZ4250 - ", ""),
-                preview: file.replace(".glb", ".webp"),
+                preview: file.replace(".glb", ".webp").replace(".gltf", ".webp"),
                 output: file,
                 search: file.split("/assets/Tiles/").pop(),
             });
@@ -315,13 +315,14 @@ export class AssetBrowser extends Application {
 
 AssetBrowser.assetPacks = {};
 
-export async function getFiles(root, source = "user", extC = "glb", outerPass = true) {
+export async function getFiles(root, source = "user", extC = ["glb","gltf"], outerPass = true) {
     const files = [];
+    extC = extC instanceof Array ? extC : [extC];
     source = new FilePicker()._inferCurrentDirectory(root)[0];
     const contents = await FilePicker.browse(source, root);
     for (let file of contents.files) {
         const ext = file.split(".").pop();
-        if (ext.toLowerCase() == extC) files.push(file);
+        if (extC.includes(ext.toLowerCase())) files.push(file);
     }
     for (let i = 0; i < contents.dirs.length; i++) {
         let folder = contents.dirs[i];
@@ -343,6 +344,7 @@ async function runScript(id) {
             break;
         case "split":
             game.Levels3DPreview.UTILS.unmergeTiles();
+            break;
         case "lock":
             const tiles = canvas.tiles.controlled;
             if (!tiles.length) return ui.notifications.error("Please select a tile to lock/unlock.");
@@ -352,5 +354,9 @@ async function runScript(id) {
             });
             await canvas.scene.updateEmbeddedDocuments("Tile", updates);
             ui.notifications.info(`Tile/s ${locked ? "unlocked" : "locked"}.`);
+            break;
+        case "extrude":
+            game.Levels3DPreview.UTILS.extractPointsFromDrawing();
+            break;
     }
 }
