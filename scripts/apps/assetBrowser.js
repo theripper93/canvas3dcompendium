@@ -102,7 +102,7 @@ export class AssetBrowser extends Application {
         const sight = _this.quickPlacementOptions.sight;
         const collision = _this.quickPlacementOptions.collision;
         const cameraCollision = _this.quickPlacementOptions.cameraCollision;
-        const isImage = !randomSrc.toLowerCase().endsWith(".glb") || !randomSrc.toLowerCase().endsWith(".gltf");
+        const isImage = !randomSrc.toLowerCase().endsWith(".glb") && !randomSrc.toLowerCase().endsWith(".gltf");
         const dragData = {
             type: "Tile",
             texture: { src: randomSrc },
