@@ -190,8 +190,8 @@
 }
 
 #quick-terrain .window-content, #quick-environment .window-content{
-    background: url(/../ui/denim075.png) repeat;
-    color: var(--color-text-light-primary);
+    background: url(/../ui/denim075.png) repeat !important;
+    color: var(--color-text-light-primary) !important;
 }
 
 #quick-terrain button{

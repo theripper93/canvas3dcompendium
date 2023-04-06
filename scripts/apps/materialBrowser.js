@@ -1,7 +1,7 @@
 export class MaterialBrowser extends Application {
     constructor(input, app, targetTexture) {
         super();
-        this._input = $(input);
+        this._input = input ? $(input) : null;
         this._app = app;
         this._targetTexture = targetTexture || "_NormalGL";
     }
@@ -60,9 +60,23 @@ export class MaterialBrowser extends Application {
         });
         this.element.on("click", "li", (e) => {
             const material = $(e.currentTarget).data("output").replace("_NormalGL", this._targetTexture);
-            this._input.val(material);
-            if (game.settings.get("canvas3dcompendium", "autoApply") && this._targetTexture != "_Color") this._app._onSubmit(e, { preventClose: true, preventRender: true });
-            if (game.settings.get("canvas3dcompendium", "autoClose")) this.close();
+            if (this._input) {                
+                this._input.val(material);
+                if (game.settings.get("canvas3dcompendium", "autoApply") && this._targetTexture != "_Color") this._app._onSubmit(e, { preventClose: true, preventRender: true });
+                if (game.settings.get("canvas3dcompendium", "autoClose")) this.close();
+            } else {
+                const tiles = canvas.tiles.controlled;
+                if (tiles.length) {
+                    const updates = [];
+                    for (let tile of tiles) {
+                        updates.push({_id: tile.id, flags: {"levels-3d-preview": {imageTexture: material}}});
+                    }
+                    canvas.scene.updateEmbeddedDocuments("Tile", updates);
+                    ui.notifications.info("Material applied to " + updates.length + " tiles");
+                } else {
+                    ui.notifications.warn("Please select a tile first.");
+                }
+            }
             $(e.currentTarget)
                 .find(".material-confirm")
                 .fadeIn(300, () => {})

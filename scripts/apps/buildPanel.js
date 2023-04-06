@@ -1,7 +1,8 @@
 import {AssetBrowser} from "./assetBrowser.js";
 import {EffectBrowser} from "./effectBrowser.js";
 import {QuickTerrain} from "./quickTerrain.js";
-import { QuickEnvironment } from "./quickEnvironment.js";
+import {QuickEnvironment} from "./quickEnvironment.js";
+import { MaterialBrowser } from "./materialBrowser.js";
 
 export class BuildPanel extends Application {
     constructor() {
@@ -104,12 +105,12 @@ const BUILD_PANEL_BUTTONS = [
         },
     },
     {
-        id: "extrude",
-        name: "levels3dpreview.controls.tile3dPolygon",
-        icon: "fa-duotone fa-draw-polygon",
-        visible: () => false,
+        id: "materials",
+        name: "Materials",
+        icon: "fa-duotone fa-circle-half-stroke",
+        visible: () => true,
         callback: () => {
-            game.Levels3DPreview.UTILS.extractPointsFromDrawing();
+            new MaterialBrowser().render(true);
         },
     },
     {
