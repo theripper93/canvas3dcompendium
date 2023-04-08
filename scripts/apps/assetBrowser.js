@@ -358,5 +358,8 @@ async function runScript(id) {
         case "extrude":
             game.Levels3DPreview.UTILS.extractPointsFromDrawing();
             break;
+        case "extrude-walls":
+            game.Levels3DPreview.UTILS.extrudeWalls();
+            break;
     }
 }
