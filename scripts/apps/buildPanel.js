@@ -2,7 +2,8 @@ import {AssetBrowser} from "./assetBrowser.js";
 import {EffectBrowser} from "./effectBrowser.js";
 import {QuickTerrain} from "./quickTerrain.js";
 import {QuickEnvironment} from "./quickEnvironment.js";
-import { MaterialBrowser } from "./materialBrowser.js";
+import {MaterialBrowser} from "./materialBrowser.js";
+import { RoomBuilder } from "./roomBuilder.js";
 
 export class BuildPanel extends Application {
     constructor() {
@@ -111,6 +112,15 @@ const BUILD_PANEL_BUTTONS = [
         visible: () => true,
         callback: () => {
             new MaterialBrowser().render(true);
+        },
+    },
+    {
+        id: "roombuilder",
+        name: "Room Builder",
+        icon: "fa-duotone fa-block-brick",
+        visible: () => true,
+        callback: () => {
+            new RoomBuilder().render(true);
         },
     },
     {

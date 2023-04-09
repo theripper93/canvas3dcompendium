@@ -46,11 +46,26 @@ export class MaterialBrowser extends Application {
         materials.sort((a, b) => a.displayName.localeCompare(b.displayName));
         data.materials = materials;
         this._assetCount = materials.length;
+        data.hasInput = this._input ? true : false;
         return data;
     }
     activateListeners(html) {
         super.activateListeners(html);
         this.element.find(".material-confirm").hide();
+        this.element.on("change", `input[type="range"]`, async (e) => { 
+            const value = e.target.value;
+            this.element.find(".range-value").text(value);
+            const tiles = canvas.tiles.controlled;
+            if (tiles.length) {
+                const updates = [];
+                for (let tile of tiles) {
+                    updates.push({_id: tile.id, flags: {"levels-3d-preview": {textureRepeat: e.target.value}}});
+                }
+                canvas.scene.updateEmbeddedDocuments("Tile", updates);
+            } else {
+                ui.notifications.warn("Please select a tile first.");
+            }
+        })
         this.element.on("keyup", "input", (e) => {
             const value = e.target.value;
             this.element.find("li").each((i, el) => {

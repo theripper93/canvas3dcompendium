@@ -189,12 +189,12 @@
     text-align: center;
 }
 
-#quick-terrain .window-content, #quick-environment .window-content{
+#quick-terrain .window-content, #quick-environment .window-content, #room-builder .window-content{
     background: url(/../ui/denim075.png) repeat !important;
     color: var(--color-text-light-primary) !important;
 }
 
-#quick-terrain button{
+#quick-terrain button, #room-builder button{
     color: var(--color-text-light-primary);
     border: none;
     border-top: 1px solid;
