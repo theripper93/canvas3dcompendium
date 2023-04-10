@@ -201,6 +201,10 @@
     border-radius: 0;
 }
 
+#room-builder button.active{
+    background-color: rgb(255 255 255 / 22%);
+}
+
 #quick-terrain select,#quick-environment select, #asset-browser select{
     color: var(--color-text-light-primary);
     border: none;
