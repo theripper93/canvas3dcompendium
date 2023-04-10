@@ -91,6 +91,7 @@ Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => {
 Hooks.on("renderTileConfig", injectMaterialBrowser)
 Hooks.on("renderTokenConfig", injectMaterialBrowser)
 Hooks.on("renderShaderConfig", injectMaterialBrowser);
+Hooks.on("renderRoomBuilder", injectMaterialBrowser);
 
 Hooks.on("renderTokenConfig", async (app, html) => {
     if (!game.modules.get("levels-3d-preview")?.active) return;
@@ -116,6 +117,11 @@ async function injectMaterialBrowser(app, html) {
       MaterialBrowser.create($(el).closest(".form-group"), app, "_Color");
     });
     
+  } else if (app.id == "room-builder") {
+    const filepickers = html.find(`input.image`)
+    filepickers.each((i, el) => { 
+      MaterialBrowser.create($(el).closest(".form-group"), app);
+    });
   } else {
           while (!html.find(`input[name="flags.levels-3d-preview.imageTexture"]`).length) {
               await wait(100);

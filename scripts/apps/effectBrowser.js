@@ -333,7 +333,7 @@ function createRoadVariations(effect) {
         {
             id: "bricks",
             name: "Bricks",
-            shaderData: { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized/Floor%20Tile%2003/Floor_Tile_03_Color.webp", color: "#545454", strength: 1, coveragePercent: 1, inclination: 0, repeat: 10, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true } },
+            shaderData: { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized/Floor%20Tile%2003/floor_tile_03_Color.webp", color: "#545454", strength: 1, coveragePercent: 1, inclination: 0, repeat: 10, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: true } },
         },
         {
             id: "mud",

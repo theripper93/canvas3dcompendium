@@ -2,6 +2,7 @@ export class RoomBuilder extends FormApplication {
     constructor() {
         super();
         this._mode = "union";
+        this._shape = "rectangle";
         this.tileCreateHook = Hooks.on("preCreateTile", this._onTileCreate.bind(this));
         ui.controls.initialize({ control: "tiles", tool: "tile" });
         canvas.tiles.activate({ tool: "tile" });
@@ -22,24 +23,39 @@ export class RoomBuilder extends FormApplication {
         };
     }
 
+    get thickness() { 
+        return 10;
+    }
+
+    get theme() {
+        const selectValue = this.element.find("#theme").val();
+        return themes[selectValue];
+    }
+
     get floorTexture() {
-        return "modules/canvas3dcompendium/assets/Materials/Wood071/Wood071_NormalGL.webp"
+        return this.theme.floor ?? this.element.find("#floorTexture").val();
     }
 
     get wallTexture() { 
-        return "modules/canvas3dcompendium/assets/Materials/_Stylized2/Bricks_04/Bricks_04_NormalGL.webp"
+        return this.theme.wall ?? this.element.find("#wallTexture").val();
     }
 
     get textureRepeat() { 
         return 7
     }
 
-    getWallFloorPolygons(rect, elevation, mode) {
-        let dynaMeshType = "polygon";
-        if (mode === "floor") dynaMeshType = "polygon";
-        if (mode === "wall") dynaMeshType = "polygonbevelsolidify";
+    get wallRepeat() {
+        return this.theme.wallRepeat ?? this.textureRepeat;
+    }
+
+    get floorRepeat() {
+        return this.theme.floorRepeat ?? this.textureRepeat;
+    }
+
+    getIntersectingTiles(rect, elevation, dynaMeshType) {
         const currentSelection = [...rect];
         const toDelete = [];
+        const tiles = [];
         const intersectionTiles = canvas.tiles.placeables.filter((tile) => { 
             try {                
                 if (tile.data.flags["levels-3d-preview"].dynaMesh !== dynaMeshType) return false;
@@ -60,8 +76,18 @@ export class RoomBuilder extends FormApplication {
             if (intersection) {
                 intersectData.push(polygonData);
                 toDelete.push(tile.document.id);
+                tiles.push(tile);
             }
         }
+        return { toDelete, intersectingTiles: tiles, intersectData, currentSelection };
+    }
+
+    getWallFloorPolygons(rect, elevation, mode) {
+        let dynaMeshType = "polygon";
+        if (mode === "floor") dynaMeshType = "polygon";
+        if (mode === "wall") dynaMeshType = "polygonbevelsolidify";
+
+        const { toDelete, intersectingTiles, intersectData, currentSelection } = this.getIntersectingTiles(rect, elevation, dynaMeshType);
 
         canvas.scene.deleteEmbeddedDocuments("Tile", toDelete);
         
@@ -78,19 +104,63 @@ export class RoomBuilder extends FormApplication {
     }
 
     async getData() {
-        return {}
+        const themesSelect = {};
+        for (const [key, value] of Object.entries(themes)) { 
+            themesSelect[key] = value.name;
+        }
+        return {
+            themes: themesSelect,
+        }
     }
 
     _onTileCreate(scene, tileData) {
         if(tileData.flags["levels-3d-preview"].dynaMesh !== "box") return;
         const {x, y, width, height} = tileData;
         const elevation = tileData.flags.levels.rangeBottom;
-        const polygon = [x, y, x + width, y, x + width, y + height, x, y + height, x, y].map((n) => parseInt(n));
+        if (width === 0 || height === 0) {
+            this.createSingleWall(x, y, width, height, elevation);
+            return false;
+        }
+        const polygon = this.getBasicPolygon(x, y, width, height)
+        if (this._mode == "knife") {
+            this.cutWall(polygon, elevation);
+            return false;
+        }
         const floorPolygons = this.getWallFloorPolygons(polygon, elevation, "floor");
         const wallPolygons = this.getWallFloorPolygons(polygon, elevation, "wall");
         this.createFloor(floorPolygons,elevation);
         this.createWall(wallPolygons,elevation);
         return false;
+    }
+
+    async cutWall(polygon, elevation) {
+        const {intersectingTiles, intersectData} = this.getIntersectingTiles(polygon, elevation, "polygonbevelsolidify");
+        const toCreate = [];
+        const toDelete = [];
+        for (let i = 0; i < intersectingTiles.length; i++) { 
+            const tilePolygon = intersectData[i];
+            const tile = intersectingTiles[i];
+            const prevMode = this._mode;
+            this._mode = "subtract";
+            const newPolygons = this.getNewPolygon(polygon, [tilePolygon], false);
+            this._mode = prevMode;
+            if(newPolygons.length > 0) {
+                toCreate.push(...newPolygons);
+                toDelete.push(tile.document.id);
+            }
+        }
+
+        await canvas.scene.deleteEmbeddedDocuments("Tile", toDelete);
+        this.createWall(toCreate, elevation);
+    }
+
+    getBasicPolygon(x, y, width, height) { 
+        switch (this._shape) { 
+            case "rectangle":
+                return [x, y, x + width, y, x + width, y + height, x, y + height, x, y].map((n) => parseInt(n));
+            case "ellipse":
+                return createEllipsePolygon(x,y,width,height);
+        }
     }
 
     async createFloor(polygons, elevation) {
@@ -117,7 +187,7 @@ export class RoomBuilder extends FormApplication {
                         imageTexture: this.floorTexture,
                         autoGround: true,
                         autoCenter: true,
-                        textureRepeat: this.textureRepeat,
+                        textureRepeat: this.floorRepeat,
                     },
                     "levels": {
                         rangeBottom: elevation,
@@ -141,19 +211,19 @@ export class RoomBuilder extends FormApplication {
             const height = maxY - minY;
             polygon = toLocalSpace(polygon, minX, minY);
             const data = {
-                x: minX,
-                y: minY,
-                width,
-                height,
+                x: minX - this.thickness * 2,
+                y: minY - this.thickness * 2,
+                width: width + this.thickness * 4,
+                height: height + this.thickness * 4,
                 flags: {
                     "levels-3d-preview": {
-                        model3d: "10#" + polygon.join(","),
+                        model3d: this.thickness + "#" + polygon.join(","),
                         dynaMesh: "polygonbevelsolidify",
-                        depth: 200,
+                        depth: canvas.scene.grid.size * 2.5,
                         imageTexture: this.wallTexture,
                         autoGround: true,
                         autoCenter: true,
-                        textureRepeat: this.textureRepeat,
+                        textureRepeat: this.wallRepeat,
                     },
                     "levels": {
                         rangeBottom: elevation,
@@ -165,7 +235,52 @@ export class RoomBuilder extends FormApplication {
         await canvas.scene.createEmbeddedDocuments("Tile", tileData);
     }
 
-    getNewPolygon(selectedPolygon, intersectingPolygons) {
+    async createSingleWall(x, y, width, height, elevation) { 
+        let polygon = [];
+        if(width === 0) {
+            polygon = [x, y, x, y + height];
+        } else {
+            polygon = [x, y, x + width, y];
+        }
+        let minX = Math.min(...polygon.filter((_, i) => i % 2 == 0));
+        let minY = Math.min(...polygon.filter((_, i) => i % 2 == 1));
+        const maxX = Math.max(...polygon.filter((_, i) => i % 2 == 0));
+        const maxY = Math.max(...polygon.filter((_, i) => i % 2 == 1));
+        width = maxX - minX;
+        height = maxY - minY;
+        if (width === 0) {
+            width = this.thickness * 2;
+            minX -= this.thickness;
+        }
+        if (height === 0) {
+            height = this.thickness * 2;
+            minY -= this.thickness;
+        }
+        polygon = toLocalSpace(polygon, minX, minY);
+        const data = {
+            x: minX,
+            y: minY,
+            width,
+            height,
+            flags: {
+                "levels-3d-preview": {
+                    model3d: this.thickness + "#" + polygon.join(","),
+                    dynaMesh: "polygonbevelsolidify",
+                    depth: 200,
+                    imageTexture: this.wallTexture,
+                    autoGround: true,
+                    autoCenter: true,
+                    textureRepeat: this.wallRepeat,
+                },
+                "levels": {
+                    rangeBottom: elevation,
+                }
+            }
+        }
+        await canvas.scene.createEmbeddedDocuments("Tile", [data]);
+    }
+
+    getNewPolygon(selectedPolygon, intersectingPolygons, closed = true) {
         if(!intersectingPolygons.length) return [selectedPolygon];
         //Use the clipper library to union or subtract the new polygon from the current one
 
@@ -192,8 +307,7 @@ export class RoomBuilder extends FormApplication {
             if (solutionPaths.length > 0) { 
                 for (let solutionPath of solutionPaths) {
                     const solution = solutionPath.map((point) => [point.X, point.Y]).flat();
-                    const dist = getDistance(solution[0], solution[1], solution[solution.length - 2], solution[solution.length - 1]);
-                    if(dist < 10) solution.push(solution[0], solution[1]);
+                    solution.push(solution[0], solution[1]);
                     solutions.push(solution);
                 }
             }
@@ -212,18 +326,16 @@ export class RoomBuilder extends FormApplication {
                 for (let i = 0; i < polygon.length; i += 2) {
                     pathToAddOrSubtract.push(new ClipperLib.IntPoint(polygon[i], polygon[i + 1]));
                 }
-                clipper.AddPath(pathToAddOrSubtract, ClipperLib.PolyType.ptSubject, true);
+                clipper.AddPath(pathToAddOrSubtract, ClipperLib.PolyType.ptSubject, closed);
             }
     
-            
-            const solutionPaths = new ClipperLib.Paths();
+            const solutionPaths = new ClipperLib.PolyTree();
             clipper.Execute(this._mode == "union" ? ClipperLib.ClipType.ctUnion : this._mode == "subtract" ? ClipperLib.ClipType.ctDifference : ClipperLib.ClipType.ctIntersection, solutionPaths, ClipperLib.PolyFillType.pftNonZero, ClipperLib.PolyFillType.pftNonZero);
             const solutions = [];
-            if (solutionPaths.length > 0) { 
-                for (let solutionPath of solutionPaths) {
-                    const solution = solutionPath.map((point) => [point.X, point.Y]).flat();
-                    const dist = getDistance(solution[0], solution[1], solution[solution.length - 2], solution[solution.length - 1]);
-                    if(dist < 10) solution.push(solution[0], solution[1]);
+            if (solutionPaths?.m_AllPolys.length > 0) { 
+                for (let solutionPath of solutionPaths.m_AllPolys) {
+                    const solution = solutionPath.m_polygon.map((point) => [point.X, point.Y]).flat();
+                    if(closed) solution.push(solution[0], solution[1]);
                     solutions.push(solution);
                 }
             }
@@ -246,12 +358,17 @@ export class RoomBuilder extends FormApplication {
         html.on("click", "button", (e) => {
             e.preventDefault();
             const dataAction = e.currentTarget.dataset.action;
-            if (dataAction == "union" || dataAction == "subtract" || dataAction == "intersect") { 
+            if (dataAction == "union" || dataAction == "subtract" || dataAction == "intersect" || dataAction == "knife") { 
                 this._mode = dataAction;
             }
-            if(e.target.classList.contains("toggle")) {
-                html.find(".toggle").removeClass("active");
-                e.target.classList.add("active");
+            if (dataAction == "rectangle" || dataAction == "ellipse") {
+                this._shape = dataAction;
+            }
+            if (e.currentTarget.classList.contains("toggle")) {
+                for (let child of e.currentTarget.parentElement.children) {
+                    if (child.classList.contains("toggle")) child.classList.remove("active");
+                }
+                e.currentTarget.classList.add("active");
             }
         });
     }
@@ -308,7 +425,10 @@ function getPolygonFromTile(tileDocument) {
     if (flags) {
         if (!flags.includes("#")) return {thickness: null, polygon: flags.split(",").map((s) => parseInt(s))};
         const [thickness, points] = flags.split("#");
-        return {thickness: parseInt(thickness), polygon: points.split(",").map((s) => parseInt(s))};
+        const isWall = tileDocument.getFlag("levels-3d-preview", "dynaMesh") == "polygonbevelsolidify";
+        let mappedPoints = points.split(",").map((s) => parseInt(s));
+        if(isWall) mappedPoints = mappedPoints.map((p) => p + thickness*2)
+        return {thickness: parseInt(thickness), polygon: mappedPoints};
     }
     return null;
 }
@@ -320,3 +440,117 @@ function getDistance(x1, y1, x2, y2) {
 function isPolygonClosed(polygon) {
     return polygon[0] == polygon[polygon.length - 2] && polygon[1] == polygon[polygon.length - 1];
 }
+
+function createEllipsePolygon(x, y, width, height) {
+    const points = [];
+    const step = Math.PI / 16;
+    width /= 2;
+    height /= 2;
+    x += width;
+    y += height;
+    for (let angle = 0; angle < Math.PI * 2; angle += step) {
+        points.push(x + width * Math.cos(angle));
+        points.push(y + height * Math.sin(angle));
+    }
+    points.push(points[0]);
+    points.push(points[1]);
+
+    return points
+}
+
+function getPolygonToPolygonIntersectionPoints(p0, p1) {
+    const p = p0;
+    const q = p1;
+    const pLength = p.length;
+    const qLength = q.length;
+    const points = [];
+    for (let i = 0; i < pLength; i += 2) {
+        const p0x = p[i];
+        const p0y = p[i + 1];
+        const p1x = p[(i + 2) % pLength];
+        const p1y = p[(i + 3) % pLength];
+        for (let j = 0; j < qLength; j += 2) {
+            const q0x = q[j];
+            const q0y = q[j + 1];
+            const q1x = q[(j + 2) % qLength];
+            const q1y = q[(j + 3) % qLength];
+            const intersectionPoint = getLineToLineIntersectionPoint(p0x, p0y, p1x, p1y, q0x, q0y, q1x, q1y);
+            if (intersectionPoint) points.push(intersectionPoint);
+        }
+    }
+    return points;
+}
+
+function getLineToLineIntersectionPoint(p0x, p0y, p1x, p1y, q0x, q0y, q1x, q1y) {
+    const r = (p1y - p0y) * (q1x - q0x) - (p1x - p0x) * (q1y - q0y);
+    if (r == 0) return null;
+    const s = (p1x - p0x) * (q0y - p0y) - (p1y - p0y) * (q0x - p0x);
+    const t = (q1x - q0x) * (q0y - p0y) - (q1y - q0y) * (q0x - p0x);
+    if (s >= 0 && s <= r && t >= 0 && t <= r) {
+        const u = t / r;
+        return {x: p0x + u * (p1x - p0x), y: p0y + u * (p1y - p0y)};
+    }
+    return null;
+}
+
+const themes = {
+    "custom": {
+        name: "Custom",
+    },
+    "bricks1": {
+        name: "Interior (Elegant)",
+        floor: "modules/canvas3dcompendium/assets/Materials/WoodFloor008/WoodFloor008_NormalGL.webp",
+        floorRepeat: 7,
+        wall: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Bricks_04/Bricks_04_NormalGL.webp",
+        wallRepeat: 7,
+    },
+    "bricks2": {
+        name: "Interior (Bricks)",
+        floor: "modules/canvas3dcompendium/assets/Materials/PavingStones079/PavingStones079_NormalGL.webp",
+        floorRepeat: 2,
+        wall: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Bricks_06/Bricks_06_NormalGL.webp",
+        wallRepeat: 7,
+    },
+    "wooden1": {
+        name: "Interior (Wooden)",
+        floor: "modules/canvas3dcompendium/assets/Materials/_Stylized2/WoodPlanks_07/WoodPlanks_07_NormalGL.webp",
+        floorRepeat: 7,
+        wall: "modules/canvas3dcompendium/assets/Materials/_Stylized2/WoodPlanks_08/WoodPlanks_08_NormalGL.webp",
+        wallRepeat: 4,
+    },
+    "modern": {
+        name: "Interior (Modern)",
+        floor: "modules/canvas3dcompendium/assets/Materials/WoodFloor004/WoodFloor004_NormalGL.webp",
+        floorRepeat: 1,
+        wall: "modules/canvas3dcompendium/assets/Materials/Paint004/Paint004_NormalGL.webp",
+        wallRepeat: 2,
+    },
+    "caveDirt": {
+        name: "Cave (Dirt)",
+        floor: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Dirt_06/Dirt_06_NormalGL.webp",
+        floorRepeat: 3,
+        wall: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Cliff_05/Cliff_05_NormalGL.webp",
+        wallRepeat: 1.7,
+    },
+    "caveStone": {
+        name: "Cave (Stone)",
+        floor: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Dirt_09/Dirt_09_NormalGL.webp",
+        floorRepeat: 1.2,
+        wall: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Cliff_04/Cliff_04_NormalGL.webp",
+        wallRepeat: 5,
+    },
+    "caveSand": {
+        name: "Cave (Sand)",
+        floor: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Dirt_01/Dirt_01_NormalGL.webp",
+        floorRepeat: 1.2,
+        wall: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Cliff_01/Cliff_01_NormalGL.webp",
+        wallRepeat: 1,
+    },
+    "sewers": {
+        name: "Sewers",
+        floor: "modules/canvas3dcompendium/assets/Materials/PavingStones089/PavingStones089_NormalGL.webp",
+        floorRepeat: 1,
+        wall: "modules/canvas3dcompendium/assets/Materials/PavingStones084/PavingStones084_NormalGL.webp",
+        wallRepeat: 2,
+    },
+};
