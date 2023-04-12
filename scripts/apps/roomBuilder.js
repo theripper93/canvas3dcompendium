@@ -5,7 +5,8 @@ export class RoomBuilder extends FormApplication {
         this._shape = "rectangle";
         this.tileCreateHook = Hooks.on("preCreateTile", this._onTileCreate.bind(this));
         ui.controls.initialize({ control: "tiles", tool: "tile" });
-        canvas.tiles.activate({ tool: "tile" });
+        canvas.tiles.activate({tool: "tile"});
+        game.Levels3DPreview.CONFIG.UI.windows.RoomBuilder = this;
     }
 
     static get defaultOptions() {
@@ -24,7 +25,11 @@ export class RoomBuilder extends FormApplication {
     }
 
     get thickness() { 
-        return 10;
+        return parseInt(this.element.find("#thickness").val()) || 10;
+    }
+
+    get height() {
+        return parseInt(this.element.find("#height").val()) || canvas.scene.grid.size * 2.5;
     }
 
     get theme() {
@@ -59,9 +64,9 @@ export class RoomBuilder extends FormApplication {
         const intersectionTiles = canvas.tiles.placeables.filter((tile) => { 
             try {                
                 if (tile.data.flags["levels-3d-preview"].dynaMesh !== dynaMeshType) return false;
-                const depth = tile.data.flags["levels-3d-preview"].depth;
+                const depth = Math.max(tile.data.flags["levels-3d-preview"].depth, 50) - 15;
                 const rb = tile.data.flags["levels"].rangeBottom;
-                if (elevation < (rb - 5) || elevation > (rb + toUnits(depth) + 5)) return false;
+                if (elevation < (rb - 5) || elevation > (rb + toUnits(depth))) return false;
                 return true;
             } catch {
                 return false;
@@ -110,6 +115,7 @@ export class RoomBuilder extends FormApplication {
         }
         return {
             themes: themesSelect,
+            height: canvas.scene.grid.size * 2.5,
         }
     }
 
@@ -219,7 +225,7 @@ export class RoomBuilder extends FormApplication {
                     "levels-3d-preview": {
                         model3d: this.thickness + "#" + polygon.join(","),
                         dynaMesh: "polygonbevelsolidify",
-                        depth: canvas.scene.grid.size * 2.5,
+                        depth: this.height,
                         imageTexture: this.wallTexture,
                         autoGround: true,
                         autoCenter: true,
@@ -249,11 +255,11 @@ export class RoomBuilder extends FormApplication {
         width = maxX - minX;
         height = maxY - minY;
         if (width === 0) {
-            width = this.thickness * 2;
+            width = this.thickness * 4;
             minX -= this.thickness;
         }
         if (height === 0) {
-            height = this.thickness * 2;
+            height = this.thickness * 4;
             minY -= this.thickness;
         }
         polygon = toLocalSpace(polygon, minX, minY);
@@ -266,7 +272,7 @@ export class RoomBuilder extends FormApplication {
                 "levels-3d-preview": {
                     model3d: this.thickness + "#" + polygon.join(","),
                     dynaMesh: "polygonbevelsolidify",
-                    depth: 200,
+                    depth: this.height,
                     imageTexture: this.wallTexture,
                     autoGround: true,
                     autoCenter: true,
@@ -376,6 +382,7 @@ export class RoomBuilder extends FormApplication {
     async close() {
         await super.close();
         Hooks.off("preCreateTile", this.tileCreateHook)
+        game.Levels3DPreview.CONFIG.UI.windows.RoomBuilder = null;
     }
 }
 
@@ -433,14 +440,6 @@ function getPolygonFromTile(tileDocument) {
     return null;
 }
 
-function getDistance(x1, y1, x2, y2) {
-    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-}
-
-function isPolygonClosed(polygon) {
-    return polygon[0] == polygon[polygon.length - 2] && polygon[1] == polygon[polygon.length - 1];
-}
-
 function createEllipsePolygon(x, y, width, height) {
     const points = [];
     const step = Math.PI / 16;
@@ -456,41 +455,6 @@ function createEllipsePolygon(x, y, width, height) {
     points.push(points[1]);
 
     return points
-}
-
-function getPolygonToPolygonIntersectionPoints(p0, p1) {
-    const p = p0;
-    const q = p1;
-    const pLength = p.length;
-    const qLength = q.length;
-    const points = [];
-    for (let i = 0; i < pLength; i += 2) {
-        const p0x = p[i];
-        const p0y = p[i + 1];
-        const p1x = p[(i + 2) % pLength];
-        const p1y = p[(i + 3) % pLength];
-        for (let j = 0; j < qLength; j += 2) {
-            const q0x = q[j];
-            const q0y = q[j + 1];
-            const q1x = q[(j + 2) % qLength];
-            const q1y = q[(j + 3) % qLength];
-            const intersectionPoint = getLineToLineIntersectionPoint(p0x, p0y, p1x, p1y, q0x, q0y, q1x, q1y);
-            if (intersectionPoint) points.push(intersectionPoint);
-        }
-    }
-    return points;
-}
-
-function getLineToLineIntersectionPoint(p0x, p0y, p1x, p1y, q0x, q0y, q1x, q1y) {
-    const r = (p1y - p0y) * (q1x - q0x) - (p1x - p0x) * (q1y - q0y);
-    if (r == 0) return null;
-    const s = (p1x - p0x) * (q0y - p0y) - (p1y - p0y) * (q0x - p0x);
-    const t = (q1x - q0x) * (q0y - p0y) - (q1y - q0y) * (q0x - p0x);
-    if (s >= 0 && s <= r && t >= 0 && t <= r) {
-        const u = t / r;
-        return {x: p0x + u * (p1x - p0x), y: p0y + u * (p1y - p0y)};
-    }
-    return null;
 }
 
 const themes = {

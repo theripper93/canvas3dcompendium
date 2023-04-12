@@ -1,38 +1,53 @@
 <form action="submit">
-<p style="color: red;font-size: xx-small;">This tool is still in development, Some features might be missing or not working!</p>
- <fieldset>
-    <legend>Build</legend>
-    <button class="toggle active" data-action="union"><i class="fa-duotone fa-object-union"></i> Add</button>
-    <button class="toggle" data-action="subtract"><i class="fa-solid fa-object-subtract"></i> Subtract</button>
-    <button class="toggle" data-action="knife"><i class="fa-solid fa-cut"></i> Knife</button>
-    <div class="shapes" style="display: grid; grid-template-columns: 1fr 1fr;">
-        <button class="shape toggle active" data-tooltip="Rectangle" data-action="rectangle"><i class="fa-duotone fa-square"></i></button>
-        <button class="shape toggle" data-tooltip="Ellipse" data-action="ellipse"><i class="fa-duotone fa-circle"></i></button>
-    </div>
-</fieldset>
-
- <fieldset>
-    <legend>Theme</legend>
-    
-    <select name="theme" id="theme" style="width: 100%; border:none">
-        {{selectOptions themes localize=false selected="bricks1"}}
-    </select>
-
-    <div class="form-group">
-        <label for="floorTexture">Floor</label>
-        <div class="form-fields">
-            <input class="image" type="text" id="floorTexture" name="floorTexture" placeholder="path/image.png" value="">
-            {{filePicker type="image" target="floorTexture"}}
+    <p style="color: red;font-size: xx-small;">This tool is still in development, Some features might be missing or not
+        working!</p>
+    <fieldset>
+        <legend>Build</legend>
+        <button class="toggle active" data-action="union"><i class="fa-duotone fa-object-union"></i> Add</button>
+        <button class="toggle" data-action="subtract"><i class="fa-solid fa-object-subtract"></i> Subtract</button>
+        <button class="toggle" data-action="knife"><i class="fa-solid fa-cut"></i> Knife</button>
+        <div class="shapes" style="display: grid; grid-template-columns: 1fr 1fr;">
+            <button class="shape toggle active" data-tooltip="Rectangle" data-action="rectangle"><i
+                    class="fa-duotone fa-square"></i></button>
+            <button class="shape toggle" data-tooltip="Ellipse" data-action="ellipse"><i
+                    class="fa-duotone fa-circle"></i></button>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="wallTexture">Wall</label>
-        <div class="form-fields">
-            <input class="image" type="text" id="wallTexture" name="wallTexture" placeholder="path/image.png" value="">
-            {{filePicker type="image" target="wallTexture"}}
+    </fieldset>
+
+    <fieldset>
+        <legend>Theme</legend>
+
+        <select name="theme" id="theme" style="width: 100%; border:none">
+            {{selectOptions themes localize=false selected="bricks1"}}
+        </select>
+
+        <div class="form-group">
+            <label for="floorTexture">Floor</label>
+            <div class="form-fields">
+                <input class="image" type="text" id="floorTexture" name="floorTexture" placeholder="path/image.png"
+                    value="">
+                {{filePicker type="image" target="floorTexture"}}
+            </div>
         </div>
-    </div>
-</fieldset>
+        <div class="form-group">
+            <label for="wallTexture">Wall</label>
+            <div class="form-fields">
+                <input class="image" type="text" id="wallTexture" name="wallTexture" placeholder="path/image.png"
+                    value="">
+                {{filePicker type="image" target="wallTexture"}}
+            </div>
+        </div>
+    </fieldset>
 
-
+    <fieldset>
+        <legend>Dimensions</legend>
+        <div class="form-group">
+            <label for="thickness">Thickness</label>
+            <input class="image" type="number" id="thickness" name="thickness" placeholder="10" value="10">
+        </div>
+        <div class="form-group">
+            <label for="height">Height</label>
+            <input class="image" type="number" id="height" name="height" placeholder="{{height}}" value="{{height}}">
+        </div>
+    </fieldset>
 </form>
