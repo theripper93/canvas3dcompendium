@@ -57,6 +57,14 @@ export class RoomBuilder extends FormApplication {
         return this.theme.floorRepeat ?? this.textureRepeat;
     }
 
+    get useFloors() {
+        return this.element.find("#floor")[0].classList.contains("active");
+    }
+
+    get useWalls() {
+        return this.element.find("#wall")[0].classList.contains("active");
+    }
+
     getIntersectingTiles(rect, elevation, dynaMeshType) {
         const currentSelection = [...rect];
         const toDelete = [];
@@ -132,10 +140,14 @@ export class RoomBuilder extends FormApplication {
             this.cutWall(polygon, elevation);
             return false;
         }
-        const floorPolygons = this.getWallFloorPolygons(polygon, elevation, "floor");
-        const wallPolygons = this.getWallFloorPolygons(polygon, elevation, "wall");
-        this.createFloor(floorPolygons,elevation);
-        this.createWall(wallPolygons,elevation);
+        if (this.useFloors) {
+            const floorPolygons = this.getWallFloorPolygons(polygon, elevation, "floor");
+            this.createFloor(floorPolygons,elevation);    
+        }
+        if (this.useWalls) {
+            const wallPolygons = this.getWallFloorPolygons(polygon, elevation, "wall");
+            this.createWall(wallPolygons,elevation);
+        }
         return false;
     }
 
@@ -370,9 +382,13 @@ export class RoomBuilder extends FormApplication {
             if (dataAction == "rectangle" || dataAction == "ellipse") {
                 this._shape = dataAction;
             }
-            if (e.currentTarget.classList.contains("toggle")) {
+            if (e.currentTarget.classList.contains("toggle") && e.currentTarget.classList.contains("entity")) {
+                const isActive = e.currentTarget.classList.contains("active");
+                if(isActive) e.currentTarget.classList.remove("active");
+                else e.currentTarget.classList.add("active");
+            } else if (e.currentTarget.classList.contains("toggle")) {
                 for (let child of e.currentTarget.parentElement.children) {
-                    if (child.classList.contains("toggle")) child.classList.remove("active");
+                    if (child.classList.contains("toggle") && !child.classList.contains("entity")) child.classList.remove("active");
                 }
                 e.currentTarget.classList.add("active");
             }
