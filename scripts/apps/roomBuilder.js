@@ -128,14 +128,22 @@ export class RoomBuilder extends FormApplication {
     }
 
     _onTileCreate(scene, tileData) {
-        if(tileData.flags["levels-3d-preview"].dynaMesh !== "box") return;
-        const {x, y, width, height} = tileData;
+        const isBox = tileData.flags["levels-3d-preview"].dynaMesh === "box";
+        const isPolygon = tileData.flags["levels-3d-preview"].fromPolygonTool;
+        if (!isBox && !isPolygon) return;
         const elevation = tileData.flags.levels.rangeBottom;
+        const {x, y, width, height} = tileData;
+        const polygonToolPoints = isPolygon ? toWorldSpace(getPolygonFromTile(tileData).polygon, x, y) : null;
+        const isClosed = isPolygon ? polygonToolPoints[0] === polygonToolPoints[polygonToolPoints.length - 2] && polygonToolPoints[1] === polygonToolPoints[polygonToolPoints.length - 1] : false;
         if (width === 0 || height === 0) {
             this.createSingleWall(x, y, width, height, elevation);
             return false;
         }
-        const polygon = this.getBasicPolygon(x, y, width, height)
+        const polygon = isPolygon ? polygonToolPoints : this.getBasicPolygon(x, y, width, height);
+        if (isPolygon && !isClosed) {
+            this.createWall([polygon], elevation);
+            return false;
+        }
         if (this._mode == "knife") {
             this.cutWall(polygon, elevation);
             return false;
@@ -379,8 +387,15 @@ export class RoomBuilder extends FormApplication {
             if (dataAction == "union" || dataAction == "subtract" || dataAction == "intersect" || dataAction == "knife") { 
                 this._mode = dataAction;
             }
-            if (dataAction == "rectangle" || dataAction == "ellipse") {
+            if (dataAction == "rectangle" || dataAction == "ellipse" || dataAction == "polygon") {
                 this._shape = dataAction;
+                if (this._shape == "polygon") {
+                    ui.controls.initialize({ control: "tiles", tool: "tile3dPolygon" });
+                    canvas.tiles.activate({tool: "tile3dPolygon"});
+                } else {
+                    ui.controls.initialize({ control: "tiles", tool: "tile" });
+                    canvas.tiles.activate({tool: "tile"});
+                }
             }
             if (e.currentTarget.classList.contains("toggle") && e.currentTarget.classList.contains("entity")) {
                 const isActive = e.currentTarget.classList.contains("active");
@@ -444,11 +459,11 @@ function toUnits(pixels) {
 }
 
 function getPolygonFromTile(tileDocument) {
-    const flags = tileDocument.getFlag("levels-3d-preview", "model3d");
+    const flags = tileDocument.flags["levels-3d-preview"]?.model3d;
     if (flags) {
         if (!flags.includes("#")) return {thickness: null, polygon: flags.split(",").map((s) => parseInt(s))};
         const [thickness, points] = flags.split("#");
-        const isWall = tileDocument.getFlag("levels-3d-preview", "dynaMesh") == "polygonbevelsolidify";
+        const isWall = tileDocument.flags["levels-3d-preview"]?.dynaMesh == "polygonbevelsolidify";
         let mappedPoints = points.split(",").map((s) => parseInt(s));
         if(isWall) mappedPoints = mappedPoints.map((p) => p + thickness*2)
         return {thickness: parseInt(thickness), polygon: mappedPoints};
