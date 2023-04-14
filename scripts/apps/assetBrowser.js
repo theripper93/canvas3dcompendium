@@ -1,3 +1,5 @@
+import { toWorldSpace, getPolygonFromTile } from "./roomBuilder.js";
+
 let fileCache = null;
 let dataCache = null;
 
@@ -12,6 +14,7 @@ export class AssetBrowser extends Application {
         this.lastPlacementPosition = new game.Levels3DPreview.THREE.Vector3();
         game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick, false);
         game.Levels3DPreview.renderer.domElement.addEventListener("mousemove", this._on3DCanvasMove, false);
+        this.tilePreCrateHookId = Hooks.on("preCreateTile", this._onTileCreate.bind(this));
         _this = this;
     }
 
@@ -73,8 +76,34 @@ export class AssetBrowser extends Application {
         game.Levels3DPreview.interactionManager._onDrop(event, dragData);
     }
 
-    buildTileData(src) {
-        const currentIntersect = _this.currentPoint;
+    _onTileCreate(tile, tileData) {
+        if (!this.quickPlacementOptions.paint) return;
+        const isBox = tileData.flags["levels-3d-preview"].dynaMesh === "box";
+        const isPolygon = tileData.flags["levels-3d-preview"].fromPolygonTool;
+        if (!isBox && !isPolygon) return;
+        const depth = tileData.flags["levels-3d-preview"].depth;
+        const elevation = tileData.flags.levels.rangeBottom + (depth * canvas.scene.dimensions.distance) / canvas.scene.dimensions.size;
+        const {x, y, width, height} = tileData;
+        const approxArea = width * height;
+        const pointCount = (approxArea / Math.pow(canvas.grid.size, 2)) * AssetBrowser.density * 0.3;
+        const polygonToolPoints = isPolygon ? toWorldSpace(getPolygonFromTile(tileData).polygon, x, y) : [x, y, x + width, y, x + width, y + height, x, y + height, x, y].map((n) => parseInt(n));
+        const randomPoints = getRandomPointsInsidePolygon(polygonToolPoints, pointCount);
+        const pos3D = (...args) => game.Levels3DPreview.CONFIG.entityClass.Ruler3D.posCanvasTo3d(...args);
+        const collisionPoints = [];
+        for (const point of randomPoints) {
+            const origin = pos3D({x: point.x, y: point.y, z: elevation + canvas.scene.dimensions.distance});
+            const target = pos3D({x: point.x, y: point.y, z: elevation -1000});
+            const collision = game.Levels3DPreview.interactionManager.computeSightCollisionFrom3DPositions(origin, target, "collision", false, false, false, true);
+            if (collision){
+                const dragData = _this.buildTileData(null, collision[0]);
+                game.Levels3DPreview.interactionManager._onDrop(new Event("click"), dragData);
+            }
+        }
+        return false;
+    }
+
+    buildTileData(src, collisionPoint) {
+        const currentIntersect = collisionPoint ?? _this.currentPoint;
         if (currentIntersect?.point) _this.lastPlacementPosition.copy(currentIntersect.point);
         const srcs = [];
         src ? srcs.push(src) : _this.element.find("li.selected").each((i, el) => srcs.push(el.dataset.output));
@@ -288,6 +317,7 @@ export class AssetBrowser extends Application {
 
     async close(...args) {
         super.close(...args);
+        Hooks.off("preCreateTile", this.tilePreCrateHookId);
         game.Levels3DPreview.renderer.domElement.removeEventListener("mouseup", this._on3DCanvasClick, false);
         game.Levels3DPreview.renderer.domElement.removeEventListener("mousemove", this._on3DCanvasMove, false);
         game.Levels3DPreview.CONFIG.UI.windows.assetBrowser = null;
@@ -362,4 +392,25 @@ async function runScript(id) {
             game.Levels3DPreview.UTILS.extrudeWalls();
             break;
     }
+}
+
+function getRandomPointsInsidePolygon(polygon, nPoints) {
+    const pointPolygon = [];
+    for (let i = 0; i < polygon.length; i += 2) {
+        const x = polygon[i];
+        const y = polygon[i + 1];
+        pointPolygon.push({x, y});
+    }
+    const minX = Math.min(...pointPolygon.map(p => p.x));
+    const maxX = Math.max(...pointPolygon.map(p => p.x));
+    const minY = Math.min(...pointPolygon.map(p => p.y));
+    const maxY = Math.max(...pointPolygon.map(p => p.y));
+    polygon = new PIXI.Polygon(polygon)
+    const points = [];
+    while (points.length < nPoints) {
+        const point = {x: Math.random() * (maxX - minX) + minX, y: Math.random() * (maxY - minY) + minY};
+        if (polygon.contains(point.x,point.y)) points.push(point);
+    }
+
+    return points;
 }

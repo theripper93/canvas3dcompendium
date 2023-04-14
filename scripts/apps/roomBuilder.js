@@ -450,7 +450,7 @@ function toLocalSpace(polygon, x, y) {
     return polygon.map((n, index) => index % 2 == 0 ? n - x : n - y);
 }
 
-function toWorldSpace(polygon, x, y) {
+export function toWorldSpace(polygon, x, y) {
     return polygon.map((n, index) => index % 2 == 0 ? n + x : n + y);
 }
 
@@ -458,7 +458,7 @@ function toUnits(pixels) {
     return (pixels * canvas.scene.dimensions.distance) / canvas.scene.dimensions.size;
 }
 
-function getPolygonFromTile(tileDocument) {
+export function getPolygonFromTile(tileDocument) {
     const flags = tileDocument.flags["levels-3d-preview"]?.model3d;
     if (flags) {
         if (!flags.includes("#")) return {thickness: null, polygon: flags.split(",").map((s) => parseInt(s))};
