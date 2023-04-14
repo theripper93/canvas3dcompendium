@@ -87,7 +87,8 @@ export class AssetBrowser extends Application {
         const approxArea = width * height;
         const pointCount = (approxArea / Math.pow(canvas.grid.size, 2)) * AssetBrowser.density * 0.3;
         const polygonToolPoints = isPolygon ? toWorldSpace(getPolygonFromTile(tileData).polygon, x, y) : [x, y, x + width, y, x + width, y + height, x, y + height, x, y].map((n) => parseInt(n));
-        const randomPoints = getRandomPointsInsidePolygon(polygonToolPoints, pointCount);
+        const isClosed = isPolygon ? polygonToolPoints[0] === polygonToolPoints[polygonToolPoints.length - 2] && polygonToolPoints[1] === polygonToolPoints[polygonToolPoints.length - 1] : true;
+        const randomPoints = getRandomPointsInsidePolygon(polygonToolPoints, pointCount, isClosed);
         const pos3D = (...args) => game.Levels3DPreview.CONFIG.entityClass.Ruler3D.posCanvasTo3d(...args);
         const collisionPoints = [];
         for (const point of randomPoints) {
@@ -320,7 +321,7 @@ export class AssetBrowser extends Application {
         Hooks.off("preCreateTile", this.tilePreCrateHookId);
         game.Levels3DPreview.renderer.domElement.removeEventListener("mouseup", this._on3DCanvasClick, false);
         game.Levels3DPreview.renderer.domElement.removeEventListener("mousemove", this._on3DCanvasMove, false);
-        game.Levels3DPreview.CONFIG.UI.windows.assetBrowser = null;
+        game.Levels3DPreview.CONFIG.UI.windows.AssetBrowser = null;
     }
 
     static registerPack(packId, packName, assetPacks = [], options = {}) {
@@ -394,23 +395,36 @@ async function runScript(id) {
     }
 }
 
-function getRandomPointsInsidePolygon(polygon, nPoints) {
+function getRandomPointsInsidePolygon(polygon, nPoints, isClosed = true) {
     const pointPolygon = [];
     for (let i = 0; i < polygon.length; i += 2) {
         const x = polygon[i];
         const y = polygon[i + 1];
         pointPolygon.push({x, y});
     }
-    const minX = Math.min(...pointPolygon.map(p => p.x));
-    const maxX = Math.max(...pointPolygon.map(p => p.x));
-    const minY = Math.min(...pointPolygon.map(p => p.y));
-    const maxY = Math.max(...pointPolygon.map(p => p.y));
-    polygon = new PIXI.Polygon(polygon)
-    const points = [];
-    while (points.length < nPoints) {
-        const point = {x: Math.random() * (maxX - minX) + minX, y: Math.random() * (maxY - minY) + minY};
-        if (polygon.contains(point.x,point.y)) points.push(point);
+    if (isClosed) {        
+        const minX = Math.min(...pointPolygon.map(p => p.x));
+        const maxX = Math.max(...pointPolygon.map(p => p.x));
+        const minY = Math.min(...pointPolygon.map(p => p.y));
+        const maxY = Math.max(...pointPolygon.map(p => p.y));
+        polygon = new PIXI.Polygon(polygon)
+        const points = [];
+        while (points.length < nPoints) {
+            const point = {x: Math.random() * (maxX - minX) + minX, y: Math.random() * (maxY - minY) + minY};
+            if (polygon.contains(point.x,point.y)) points.push(point);
+        }
+    
+        return points;
+    } else {
+        const THREE = game.Levels3DPreview.THREE;
+        const v2Array = pointPolygon.map(p => new THREE.Vector2(p.x, p.y));
+        const curve = new THREE.SplineCurve(v2Array);
+        const points = [];
+        for (let i = 0; i < nPoints; i++) {
+            const t = Math.random();
+            const point = curve.getPoint(t);
+            points.push(point);
+        }
+        return points;
     }
-
-    return points;
 }
