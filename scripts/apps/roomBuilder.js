@@ -225,6 +225,9 @@ export class RoomBuilder extends FormApplication {
                 y: minY,
                 width,
                 height,
+                texture: {
+                    src: "modules/levels-3d-preview/assets/blank.webp",
+                },
                 flags: {
                     "levels-3d-preview": {
                         model3d: polygon.join(","),
@@ -261,6 +264,9 @@ export class RoomBuilder extends FormApplication {
                 y: minY - this.thickness * 2,
                 width: width + this.thickness * 4,
                 height: height + this.thickness * 4,
+                texture: {
+                    src: "modules/levels-3d-preview/assets/blank.webp",
+                },
                 flags: {
                     "levels-3d-preview": {
                         model3d: this.thickness + "#" + polygon.join(","),
@@ -308,6 +314,9 @@ export class RoomBuilder extends FormApplication {
             y: minY,
             width,
             height,
+            texture: {
+                src: "modules/levels-3d-preview/assets/blank.webp",
+            },
             flags: {
                 "levels-3d-preview": {
                     model3d: this.thickness + "#" + polygon.join(","),
