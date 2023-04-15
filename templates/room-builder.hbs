@@ -1,18 +1,21 @@
 <form action="submit">
-    <p style="color: red;font-size: xx-small;">This tool is still in development, Some features might be missing or not
-        working!</p>
     <fieldset>
         <legend>Build</legend>
         <button class="toggle active" data-action="union"><i class="fa-duotone fa-object-union"></i> Add</button>
         <button class="toggle" data-action="subtract"><i class="fa-solid fa-object-subtract"></i> Subtract</button>
         <button class="toggle" data-action="knife"><i class="fa-solid fa-cut"></i> Knife</button>
-        <div class="shapes" style="display: grid; grid-template-columns: 1fr 1fr 1fr;">
+        <div class="shapes" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
             <button class="shape toggle active" data-tooltip="Rectangle" data-action="rectangle"><i
                     class="fa-duotone fa-square"></i></button>
             <button class="shape toggle" data-tooltip="Ellipse" data-action="ellipse"><i
                     class="fa-duotone fa-circle"></i></button>
             <button class="shape toggle" data-tooltip="Polygon" data-action="polygon"><i
                     class="fa-duotone fa-draw-polygon"></i></button>
+                    <button class="shape toggle" data-tooltip="Spline" data-action="spline"><i class="fa-duotone fa-bezier-curve"></i></button>
+        </div>
+        <div class="roughness" style="display: grid; grid-template-columns: 1fr 1fr;">
+            <button class="roughness toggle active" data-tooltip="Smooth" data-action="smooth"><i class="fa-duotone fa-grip-lines"></i></button>
+            <button class="roughness toggle" data-tooltip="Rough" data-action="rough"><i class="fa-duotone fa-wave-square"></i></button>
         </div>
         <div class="entity" style="display: grid; grid-template-columns: 1fr 1fr;">
             <button class="entity toggle active" data-tooltip="Floors" id="floor" data-action="floor"><i

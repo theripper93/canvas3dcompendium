@@ -3,6 +3,7 @@ export class RoomBuilder extends FormApplication {
         super();
         this._mode = "union";
         this._shape = "rectangle";
+        this._smooth = true;
         this.tileCreateHook = Hooks.on("preCreateTile", this._onTileCreate.bind(this));
         ui.controls.initialize({ control: "tiles", tool: "tile" });
         canvas.tiles.activate({tool: "tile"});
@@ -22,6 +23,10 @@ export class RoomBuilder extends FormApplication {
             left: window.innerWidth - 550,
             resizable: false,
         };
+    }
+
+    get solidifyType() {
+        return this._smooth ? "polygonbevelsolidify" : "polygonbevelsolidifyjagged";
     }
 
     get thickness() { 
@@ -64,14 +69,15 @@ export class RoomBuilder extends FormApplication {
     get useWalls() {
         return this.element.find("#wall")[0].classList.contains("active");
     }
-
+    
     getIntersectingTiles(rect, elevation, dynaMeshType) {
+        dynaMeshType instanceof Array ? dynaMeshType : [dynaMeshType];
         const currentSelection = [...rect];
         const toDelete = [];
         const tiles = [];
         const intersectionTiles = canvas.tiles.placeables.filter((tile) => { 
             try {                
-                if (tile.data.flags["levels-3d-preview"].dynaMesh !== dynaMeshType) return false;
+                if (!dynaMeshType.includes(tile.data.flags["levels-3d-preview"].dynaMesh)) return false;
                 const depth = Math.max(tile.data.flags["levels-3d-preview"].depth, 50) - 15;
                 const rb = tile.data.flags["levels"].rangeBottom;
                 if (elevation < (rb - 5) || elevation > (rb + toUnits(depth))) return false;
@@ -98,7 +104,7 @@ export class RoomBuilder extends FormApplication {
     getWallFloorPolygons(rect, elevation, mode) {
         let dynaMeshType = "polygon";
         if (mode === "floor") dynaMeshType = "polygon";
-        if (mode === "wall") dynaMeshType = "polygonbevelsolidify";
+        if (mode === "wall") dynaMeshType = ["polygonbevelsolidify", "polygonbevelsolidifyjagged"];
 
         const { toDelete, intersectingTiles, intersectData, currentSelection } = this.getIntersectingTiles(rect, elevation, dynaMeshType);
 
@@ -139,7 +145,7 @@ export class RoomBuilder extends FormApplication {
             this.createSingleWall(x, y, width, height, elevation);
             return false;
         }
-        const polygon = isPolygon ? polygonToolPoints : this.getBasicPolygon(x, y, width, height);
+        const polygon = this.getBasicPolygon(x, y, width, height, polygonToolPoints);
         if (isPolygon && !isClosed) {
             this.createWall([polygon], elevation);
             return false;
@@ -160,7 +166,7 @@ export class RoomBuilder extends FormApplication {
     }
 
     async cutWall(polygon, elevation) {
-        const {intersectingTiles, intersectData} = this.getIntersectingTiles(polygon, elevation, "polygonbevelsolidify");
+        const {intersectingTiles, intersectData} = this.getIntersectingTiles(polygon, elevation, ["polygonbevelsolidify", "polygonbevelsolidifyjagged"]);
         const toCreate = [];
         const toDelete = [];
         for (let i = 0; i < intersectingTiles.length; i++) { 
@@ -180,12 +186,26 @@ export class RoomBuilder extends FormApplication {
         this.createWall(toCreate, elevation);
     }
 
-    getBasicPolygon(x, y, width, height) { 
+    getBasicPolygon(x, y, width, height, polygon) { 
         switch (this._shape) { 
             case "rectangle":
                 return [x, y, x + width, y, x + width, y + height, x, y + height, x, y].map((n) => parseInt(n));
             case "ellipse":
-                return createEllipsePolygon(x,y,width,height);
+                return createEllipsePolygon(x, y, width, height);
+            case "polygon":
+                return polygon;
+            case "spline":
+                const vec2Points = [];
+                for (let i = 0; i < polygon.length; i += 2) { 
+                    vec2Points.push(new game.Levels3DPreview.THREE.Vector2(polygon[i], polygon[i + 1]));
+                }
+                const spline = new game.Levels3DPreview.THREE.SplineCurve(vec2Points);
+                const points = spline.getPoints(polygon.length * 2);
+                const newPolygon = [];
+                for (let point of points) {
+                    newPolygon.push(point.x, point.y);
+                }
+                return newPolygon;
         }
     }
 
@@ -244,7 +264,7 @@ export class RoomBuilder extends FormApplication {
                 flags: {
                     "levels-3d-preview": {
                         model3d: this.thickness + "#" + polygon.join(","),
-                        dynaMesh: "polygonbevelsolidify",
+                        dynaMesh: this.solidifyType,
                         depth: this.height,
                         imageTexture: this.wallTexture,
                         autoGround: true,
@@ -291,7 +311,7 @@ export class RoomBuilder extends FormApplication {
             flags: {
                 "levels-3d-preview": {
                     model3d: this.thickness + "#" + polygon.join(","),
-                    dynaMesh: "polygonbevelsolidify",
+                    dynaMesh: this.solidifyType,
                     depth: this.height,
                     imageTexture: this.wallTexture,
                     autoGround: true,
@@ -387,15 +407,18 @@ export class RoomBuilder extends FormApplication {
             if (dataAction == "union" || dataAction == "subtract" || dataAction == "intersect" || dataAction == "knife") { 
                 this._mode = dataAction;
             }
-            if (dataAction == "rectangle" || dataAction == "ellipse" || dataAction == "polygon") {
+            if (dataAction == "rectangle" || dataAction == "ellipse" || dataAction == "polygon" || dataAction == "spline") {
                 this._shape = dataAction;
-                if (this._shape == "polygon") {
+                if (this._shape == "polygon" || this._shape == "spline") {
                     ui.controls.initialize({ control: "tiles", tool: "tile3dPolygon" });
                     canvas.tiles.activate({tool: "tile3dPolygon"});
                 } else {
                     ui.controls.initialize({ control: "tiles", tool: "tile" });
                     canvas.tiles.activate({tool: "tile"});
                 }
+            }
+            if (dataAction == "smooth" || dataAction == "rough") { 
+                this._smooth = dataAction == "smooth";
             }
             if (e.currentTarget.classList.contains("toggle") && e.currentTarget.classList.contains("entity")) {
                 const isActive = e.currentTarget.classList.contains("active");
@@ -463,7 +486,7 @@ export function getPolygonFromTile(tileDocument) {
     if (flags) {
         if (!flags.includes("#")) return {thickness: null, polygon: flags.split(",").map((s) => parseInt(s))};
         const [thickness, points] = flags.split("#");
-        const isWall = tileDocument.flags["levels-3d-preview"]?.dynaMesh == "polygonbevelsolidify";
+        const isWall = tileDocument.flags["levels-3d-preview"]?.dynaMesh == "polygonbevelsolidify" || tileDocument.flags["levels-3d-preview"]?.dynaMesh == "polygonbevelsolidifyjagged";
         let mappedPoints = points.split(",").map((s) => parseInt(s));
         if(isWall) mappedPoints = mappedPoints.map((p) => p + thickness*2)
         return {thickness: parseInt(thickness), polygon: mappedPoints};
@@ -540,6 +563,13 @@ const themes = {
         floorRepeat: 1.2,
         wall: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Cliff_01/Cliff_01_NormalGL.webp",
         wallRepeat: 1,
+    },
+    "caveRealistic": {
+        name: "Cave (Realistic)",
+        floor: "modules/canvas3dcompendium/assets/Materials/Rock010/Rock010_NormalGL.webp",
+        floorRepeat: 2,
+        wall: "modules/canvas3dcompendium/assets/Materials/Rock010/Rock010_NormalGL.webp",
+        wallRepeat: 2.5,
     },
     "sewers": {
         name: "Sewers",
