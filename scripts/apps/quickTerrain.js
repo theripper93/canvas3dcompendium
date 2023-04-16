@@ -21,6 +21,7 @@ export class QuickTerrain extends FormApplication {
             ...super.defaultOptions,
             title: "Terrain Panel",
             id: "quick-terrain",
+            classes: ["three-canvas-compendium-app-slim"],
             template: `modules/canvas3dcompendium/templates/quick-terrain.hbs`,
             width: 200,
             height: "auto",

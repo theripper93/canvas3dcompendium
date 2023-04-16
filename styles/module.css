@@ -151,7 +151,7 @@
     border-style: inset;
 }
 
-#quick-terrain fieldset button:last-child{
+.three-canvas-compendium-app-slim fieldset button:last-child{
     border-bottom: 1px solid;
 }
 
@@ -160,12 +160,34 @@
 }
 
 
-.three-canvas-compendium-app .tab-container, #quick-terrain fieldset, #quick-environment fieldset, #room-builder fieldset{
+.three-canvas-compendium-app .tab-container, .three-canvas-compendium-app-slim fieldset, #quick-environment fieldset, #room-builder fieldset{
     border: 1px inset;
     border-radius: 5px;
     padding: 0.3rem;
     border-color: #ffffff42;
 }
+
+.three-canvas-compendium-app-slim ul{
+    margin: 0;
+    padding: 0;
+    gap: 0.2rem;
+    list-style: none;
+}
+
+.three-canvas-compendium-app-slim input{
+    border: none;
+    background: none;
+    box-shadow: none;
+    color: var(--color-text-light-heading);
+}
+
+.three-canvas-compendium-app-slim input:focus{
+    outline: none;
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
 
 .three-canvas-compendium-app .tab-buttons{
         border-bottom: 1px solid;
@@ -189,12 +211,12 @@
     text-align: center;
 }
 
-#quick-terrain .window-content, #quick-environment .window-content, #room-builder .window-content{
+.three-canvas-compendium-app-slim .window-content, #quick-environment .window-content, #room-builder .window-content{
     background: url(/../ui/denim075.png) repeat !important;
     color: var(--color-text-light-primary) !important;
 }
 
-#quick-terrain button, #room-builder button{
+.three-canvas-compendium-app-slim button, #room-builder button{
     color: var(--color-text-light-primary);
     border: none;
     border-top: 1px solid;
@@ -205,18 +227,18 @@
     background-color: rgb(255 255 255 / 22%);
 }
 
-#quick-terrain select,#quick-environment select, #asset-browser select, #room-builder select{
+.three-canvas-compendium-app-slim select,#quick-environment select, #asset-browser select, #room-builder select{
     color: var(--color-text-light-primary);
     border: none;
     border-bottom: 1px solid;
     border-radius: 0;
 }
 
-#quick-terrain option,#quick-environment option, #asset-browser option, #effect-browser option, #room-builder option{
+.three-canvas-compendium-app-slim option,#quick-environment option, #asset-browser option, #effect-browser option, #room-builder option{
     background: var(--color-text-dark-secondary);
 }
 
-#quick-terrain optgroup,#quick-environment optgroup, #asset-browser optgroup, #effect-browser optgroup{
+.three-canvas-compendium-app-slim optgroup,#quick-environment optgroup, #asset-browser optgroup, #effect-browser optgroup{
     background: var(--color-text-dark-header);
 }
 
@@ -237,4 +259,16 @@
     max-height: 300px;
     overflow-y: scroll;
     justify-items: center;
+}
+
+#cutscene-panel button{
+    border: none !important;
+}
+
+#cutscene-panel button i{
+    margin: 0;
+}
+
+fieldset.clip{
+    margin-top: 0.5rem;
 }

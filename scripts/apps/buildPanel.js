@@ -3,7 +3,8 @@ import {EffectBrowser} from "./effectBrowser.js";
 import {QuickTerrain} from "./quickTerrain.js";
 import {QuickEnvironment} from "./quickEnvironment.js";
 import {MaterialBrowser} from "./materialBrowser.js";
-import { RoomBuilder } from "./roomBuilder.js";
+import {RoomBuilder} from "./roomBuilder.js";
+import { CutscenePanel } from "./cutscenePanel.js";
 
 export class BuildPanel extends Application {
     constructor() {
@@ -19,6 +20,7 @@ export class BuildPanel extends Application {
         return {
             ...super.defaultOptions,
             id: "build-panel",
+            classes: ["three-canvas-compendium-app-slim"],
             template: `modules/canvas3dcompendium/templates/build-panel.hbs`,
             resizable: false,
             popOut: false,
@@ -130,6 +132,15 @@ const BUILD_PANEL_BUTTONS = [
         visible: () => true,
         callback: () => {
             new EffectBrowser().render(true);
+        },
+    },
+    {
+        id: "cutscenes",
+        name: "Cutscenes",
+        icon: "fa-duotone fa-clapperboard-play",
+        visible: () => true,
+        callback: () => {
+            new CutscenePanel().render(true);
         },
     },
     {

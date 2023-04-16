@@ -17,6 +17,7 @@ export class QuickEnvironment extends Application {
             ...super.defaultOptions,
             title: "Environment Panel",
             id: "quick-environment",
+            classes: ["three-canvas-compendium-app-slim"],
             template: `modules/canvas3dcompendium/templates/quick-environment.hbs`,
             width: 200,
             height: "auto",
