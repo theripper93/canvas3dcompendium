@@ -42,6 +42,13 @@ Hooks.once('init', async function() {
           type: Boolean,
           default: false,
       });
+    
+      game.settings.register("canvas3dcompendium", "assetbrowserpainttour", {
+        scope: "world",
+        config: false,
+        type: Boolean,
+        default: false,
+    });
 });
 
 Hooks.once('ready', async function() {

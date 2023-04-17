@@ -118,7 +118,7 @@ const BUILD_PANEL_BUTTONS = [
     },
     {
         id: "roombuilder",
-        name: "Room Builder",
+        name: "Dungeons & Interiors",
         icon: "fa-duotone fa-block-brick",
         visible: () => true,
         callback: () => {

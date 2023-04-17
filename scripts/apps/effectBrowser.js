@@ -9,9 +9,6 @@ export class EffectBrowser extends Application {
         super();
         game.Levels3DPreview.CONFIG.UI.windows.EffectBrowser = this;
         game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick, false);
-        this.hookid = Hooks.on("controlTile", (tile, control) => {
-            if (this._hasSelected) canvas.tiles.releaseAll();
-        });
         _this = this;
     }
 
@@ -33,6 +30,21 @@ export class EffectBrowser extends Application {
 
     get title() {
         return "Effect Browser: " + this._assetCount + " effects available";
+    }
+
+    _getHeaderButtons() {
+        const buttons = super._getHeaderButtons();
+        buttons.unshift(
+            {
+                label: "",
+                class: "tour",
+                icon: "fas fa-question",
+                onclick: () => {
+                    const tour = game.tours.get(`levels-3d-preview.${this.id}`);
+                    tour ? tour.start() : ui.notifications.warn("No tour found for this panel.");
+                }
+            })
+        return buttons;
     }
 
     _onDragStart(event) {

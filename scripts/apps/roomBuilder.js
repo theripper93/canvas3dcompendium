@@ -13,7 +13,7 @@ export class RoomBuilder extends FormApplication {
     static get defaultOptions() {
         return {
             ...super.defaultOptions,
-            title: "Room Builder",
+            title: "Dungeons & Interiors Panel",
             id: "room-builder",
             classes: ["three-canvas-compendium-app"],
             template: `modules/canvas3dcompendium/templates/room-builder.hbs`,
@@ -406,7 +406,20 @@ export class RoomBuilder extends FormApplication {
         return this.getNewPolygon(this.wallPolygon, points);
     }
 
-
+    _getHeaderButtons() {
+        const buttons = super._getHeaderButtons();
+        buttons.unshift(
+            {
+                label: "",
+                class: "tour",
+                icon: "fas fa-question",
+                onclick: () => {
+                    const tour = game.tours.get(`levels-3d-preview.${this.id}`);
+                    tour ? tour.start() : ui.notifications.warn("No tour found for this panel.");
+                }
+            })
+        return buttons;
+    }
 
     activateListeners(html) {
         super.activateListeners(html);

@@ -11,7 +11,7 @@
             <button data-action="play" data-tooltip="Play Clip"><i class="fa-duotone fa-circle-play"></i></button>
         </div>
         {{#if editing}}
-        <button data-action="add-keyframe"><i class="fa-duotone fa-plus"></i> Add Keyframe</button>
+        
         <ul>
             {{#each keyframes}}
             <li data-index="{{@index}}">
@@ -46,7 +46,7 @@
             </li>
             {{/each}}
         </ul>
-
+<button data-action="add-keyframe"><i class="fa-duotone fa-plus"></i> Add Keyframe</button>
         {{/if}}
     </fieldset>
     {{/each}}

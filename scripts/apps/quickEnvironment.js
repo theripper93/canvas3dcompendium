@@ -49,6 +49,21 @@ export class QuickEnvironment extends Application {
         return files;
     }
 
+    _getHeaderButtons() {
+        const buttons = super._getHeaderButtons();
+        buttons.unshift(
+            {
+                label: "",
+                class: "tour",
+                icon: "fas fa-question",
+                onclick: () => {
+                    const tour = game.tours.get(`levels-3d-preview.${this.id}`);
+                    tour ? tour.start() : ui.notifications.warn("No tour found for this panel.");
+                }
+            })
+        return buttons;
+    }
+
     async getData() {
         const files = fileCache ?? (await this.getSources());
         fileCache = files;

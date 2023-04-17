@@ -4,6 +4,9 @@ import {TokenBrowser} from "./apps/tokenBrowser.js";
 import {QuickTerrain} from "./apps/quickTerrain.js";
 import {EffectBrowser} from "./apps/effectBrowser.js";
 import {BuildPanel} from "./apps/buildPanel.js";
+import {QuickEnvironment} from "./apps/quickEnvironment.js";
+import {CutscenePanel} from "./apps/cutscenePanel.js";
+import { RoomBuilder } from "./apps/roomBuilder.js";
 
 BuildPanel.setHook();
 
@@ -15,6 +18,9 @@ Hooks.on("3DCanvasConfig", (config) => {
   UI.QuickTerrain = QuickTerrain;
   UI.EffectBrowser = EffectBrowser;
   UI.BuildPanel = BuildPanel;
+  UI.QuickEnvironment = QuickEnvironment;
+  UI.CutscenePanel = CutscenePanel;
+  UI.RoomBuilder = RoomBuilder;
   Hooks.callAll("3DCanvasMapmakingPackRegisterAssetPacks", UI.AssetBrowser);
 })
 

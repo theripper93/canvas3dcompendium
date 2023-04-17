@@ -8,6 +8,7 @@ let _this = null;
 export class AssetBrowser extends Application {
     constructor() {
         super();
+        canvas.tiles.activate();
         game.Levels3DPreview.CONFIG.UI.windows.AssetBrowser = this;
         this._maxCount = 400;
         this._hasSelected = false;
@@ -15,6 +16,7 @@ export class AssetBrowser extends Application {
         game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", this._on3DCanvasClick, false);
         game.Levels3DPreview.renderer.domElement.addEventListener("mousemove", this._on3DCanvasMove, false);
         this.tilePreCrateHookId = Hooks.on("preCreateTile", this._onTileCreate.bind(this));
+        this._paintTourDone = game.settings.get("canvas3dcompendium", "assetbrowserpainttour");
         _this = this;
     }
 
@@ -260,6 +262,13 @@ export class AssetBrowser extends Application {
         this.element.on("change", "#asset-packs", this.onSearch.bind(this));
         this.element.on("click", ".quick-placement-toggle", (e) => {
             e.currentTarget.classList.toggle("active");
+            if (!this._paintTourDone && e.currentTarget.dataset.action == "paint") {                
+                game.settings.set("canvas3dcompendium", "assetbrowserpainttour", true);
+                this._paintTourDone = true;
+                setTimeout(() => {
+                    game.tours.get("levels-3d-preview.asset-browser-paint").start();
+                }, 2000);
+            }
         });
         this.element.on("click", ".utility-button", (e) => { 
             const action = e.currentTarget.dataset.action;
@@ -291,14 +300,31 @@ export class AssetBrowser extends Application {
         });
     }
 
-    startTour() {
+    startTour(force = false) {
         const done = game.settings.get("canvas3dcompendium", "assetbrowsertour");
-        if (done) return;
+        if (done && !force) return;
         game.settings.set("canvas3dcompendium", "assetbrowsertour", true);
         setTimeout(() => {
             game.tours.get("levels-3d-preview.asset-browser").start();
         }, 2000);
     }
+
+    _getHeaderButtons() {
+        const buttons = super._getHeaderButtons();
+        buttons.unshift(
+            {
+                label: "",
+                class: "tour",
+                icon: "fas fa-question",
+                onclick: () => {
+                    const tour = game.tours.get(`levels-3d-preview.${this.id}`);
+                    tour ? tour.start() : ui.notifications.warn("No tour found for this panel.");
+                }
+            })
+        return buttons;
+    }
+
+
 
     get quickPlacementOptions() {
         const options = {};
