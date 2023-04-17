@@ -1,7 +1,4 @@
 <form action="submit">
-
-    <button data-action="add-clip"><i class="fa-duotone fa-video-plus"></i> Add Clip</button>
-
     {{#each clips}}
     <fieldset class="clip" data-index="{{@index}}">
         <div style="display: grid; grid-template-columns: 5fr 1fr 1fr 1fr;align-items: center;">
@@ -11,7 +8,11 @@
             <button data-action="play" data-tooltip="Play Clip"><i class="fa-duotone fa-circle-play"></i></button>
         </div>
         {{#if editing}}
-        
+        <div class="form-group">
+            <label for="immersive">Immersive Mode</label>
+            <input type="checkbox" id="immersive" name="immersive" {{#if immersive}}checked{{/if}}>
+        </div>
+        <button data-action="macro"><i class="fa-duotone fa-code"></i> Save to Macro</button>
         <ul>
             {{#each keyframes}}
             <li data-index="{{@index}}">
@@ -21,6 +22,10 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr;align-items: center;">
                         <button data-action="delete-keyframe" data-tooltip="Delete Keyframe"><i class="fa-duotone fa-trash"></i></button>
                         <button data-action="capture" data-tooltip="Capture Camera Position"><i class="fa-duotone fa-camera"></i></button>
+                    </div>
+                                        <div class="form-group">
+                        <label for="time">Caption</label>
+                        <input class="keyframe" placeholder="caption text" type="text" id="caption" name="caption" value="{{caption}}">
                     </div>
                     <div class="form-group">
                         <label for="time">Duration <span class="units">(sec)</span></label>
@@ -50,4 +55,5 @@
         {{/if}}
     </fieldset>
     {{/each}}
+    <button style="margin-top: 0.5rem;" data-action="add-clip"><i class="fa-duotone fa-video-plus"></i> Add Clip</button>
 </form>

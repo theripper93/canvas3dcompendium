@@ -52,12 +52,20 @@ export class CutscenePanel extends Application {
             if (action == "edit") this.editClip(index);
             if (action == "add-keyframe") this.addKeyframe(index);
             if (action == "capture") this.captureKeyframe(index, keyframeIndex);
-            if(action == "delete-keyframe") this.deleteKeyframe(index, keyframeIndex);
+            if (action == "delete-keyframe") this.deleteKeyframe(index, keyframeIndex);
+            if(action == "macro") this.exportToMacro(index);
         });
         html.on("change", "input[name='name']", async (e) => {
             const clipIndex = parseInt(e.currentTarget.closest("fieldset").dataset.index);
             const sceneFlag = canvas.scene.getFlag("levels-3d-preview", "cutscenes") ?? [];
             sceneFlag[clipIndex].name = e.currentTarget.value;
+            await canvas.scene.setFlag("levels-3d-preview", "cutscenes", sceneFlag);
+            this.render(true);
+        });
+        html.on("change", "input[name='immersive']", async (e) => {
+            const clipIndex = parseInt(e.currentTarget.closest("fieldset").dataset.index);
+            const sceneFlag = canvas.scene.getFlag("levels-3d-preview", "cutscenes") ?? [];
+            sceneFlag[clipIndex].immersive = e.currentTarget.checked;
             await canvas.scene.setFlag("levels-3d-preview", "cutscenes", sceneFlag);
             this.render(true);
         });
@@ -69,11 +77,13 @@ export class CutscenePanel extends Application {
             const hold = parseFloat(keyframeListItem.querySelector("input[name='hold']").value);
             const easing = keyframeListItem.querySelector("select[name='easing']").value;
             const transition = keyframeListItem.querySelector("select[name='transition']").value;
+            const caption = keyframeListItem.querySelector("input[name='caption']").value;
             const sceneFlag = canvas.scene.getFlag("levels-3d-preview", "cutscenes") ?? [];
             sceneFlag[clipIndex].keyframes[keyframeIndex].time = time;
             sceneFlag[clipIndex].keyframes[keyframeIndex].hold = hold;
             sceneFlag[clipIndex].keyframes[keyframeIndex].easing = easing;
             sceneFlag[clipIndex].keyframes[keyframeIndex].transition = transition;
+            sceneFlag[clipIndex].keyframes[keyframeIndex].caption = caption;
             await canvas.scene.setFlag("levels-3d-preview", "cutscenes", sceneFlag);
             this.render(true);
         });
@@ -191,6 +201,19 @@ export class CutscenePanel extends Application {
                 game.Levels3DPreview.cutsceneEngine.playCutscene(index, userIds);
             },
         })        
+    }
+
+    exportToMacro(index) {
+        const sceneFlag = canvas.scene.getFlag("levels-3d-preview", "cutscenes") ?? [];
+        const clip = sceneFlag[index];
+        const macroData = {
+            name: "3D Canvas: Play Cutscene - " + clip.name,
+            type: "script",
+            img: "icons/svg/video.svg",
+            command: `game.Levels3DPreview.cutsceneEngine.playCutscene(${index});`,
+        }
+        Macro.create(macroData);
+        ui.notifications.info("Cutscene exported to macro! (" + "3D Canvas: Play Cutscene - " + clip.name + ")");
     }
 }
 
