@@ -48,7 +48,11 @@ Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => {
             {
                 name: "Nature",
                 query: "nature",
-            },
+          },
+          {
+            name: "Rock Formations",
+            query: "Rocks_highend",
+          },
             {
                 name: "Sci-Fi",
                 query: "scifi,cyberpunk,space",
