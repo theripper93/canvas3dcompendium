@@ -35,7 +35,7 @@ export class AssetBrowser extends Application {
 
     static scale = 1;
 
-    static density = 10;
+    static density = 1;
 
     static get defaultOptions() {
         return {
@@ -105,6 +105,199 @@ export class AssetBrowser extends Application {
         return false;
     }
 
+    async _autoScatterOnTile(tile) {
+        const THREE = game.Levels3DPreview.THREE;
+        const options = await this.autoScatterDialog();
+        if (!options) return;
+        const scatterEdges = options.edges;
+        const scatterSurface = options.surfaces;
+        const count = options.count;
+        const tile3d = game.Levels3DPreview.tiles[tile.id];
+        const mesh = game.Levels3DPreview.tiles[tile.id].mesh.children[0];
+
+        const elevation = tile.document.flags.levels.rangeBottom;
+        const depth = tile.document.flags["levels-3d-preview"].depth;
+        const rect = [tile.data.x, tile.data.y, tile.data.width, tile.data.height];
+        const nPointsMax = count || Math.max(1, Math.floor(rect[2] * rect[3] * AssetBrowser.density * 0.001));
+
+        if (scatterEdges) {
+            
+            const points = [];
+            const segments = [];
+            const tempSegments = [];
+
+
+            mesh.traverse((child) => {
+                if (child.isMesh && child.visible) {
+                    const positions = [];
+                    const geometry = child.geometry;
+                    const positionAttribute = geometry.attributes.position;
+                    const normalAttribute = geometry.attributes.normal;
+
+                    const faces = [];
+
+                    const indexAttribute = geometry.index;
+
+                    if (indexAttribute) {
+                        for (let i = 0; i < indexAttribute.count; i += 3) {
+                            const face = new THREE.Vector3(indexAttribute.getX(i), indexAttribute.getX(i + 1), indexAttribute.getX(i + 2));
+                            faces.push(face);
+                        }
+                    }
+
+                    for (let i = 0; i < positionAttribute.count; i++) {
+                        const position = new THREE.Vector3();
+                        position.fromBufferAttribute(positionAttribute, i);
+                        const originalPosition = position.clone();
+                        position.applyMatrix4(child.matrixWorld);
+                        const normal = new THREE.Vector3();
+                        normal.fromBufferAttribute(normalAttribute, i);
+                        normal.transformDirection(child.matrixWorld);
+                        //game.Levels3DPreview.scene.add(new THREE.ArrowHelper( normal, position, 0.1, new THREE.Color(normal.x,normal.y,normal.z) ));
+                        positions.push({position: originalPosition, worldPosition: position, normal, faces: faces.filter((face) => face.x === i || face.y === i || face.z === i)});
+                    }
+
+                    //group positions that share a face into segments
+                    let positionsToCheck = [...positions];
+                    for (const position of positions) {
+                        const currentPosition = position;
+                        positionsToCheck = positionsToCheck.filter((p) => p !== currentPosition);
+                        const currentSegments = [];
+                        for (const positionToCheck of positionsToCheck) {
+                            const normalDistance = currentPosition.normal.distanceTo(positionToCheck.normal);
+                            const yDistance = Math.abs(currentPosition.worldPosition.y - positionToCheck.worldPosition.y);
+                            if (normalDistance < 0.1 && yDistance < 0.05) {
+                                currentSegments.push({start: currentPosition, end: positionToCheck});
+                            }
+                        }
+                        tempSegments.push(...currentSegments);
+                    }
+
+
+                }
+            });
+
+            for (const segment of tempSegments) {
+                //calculate segment normal
+                const normal1 = segment.start.normal;
+                const normal2 = segment.end.normal;
+                const avgNormal = new THREE.Vector3((normal1.x + normal2.x) / 2, (normal1.y + normal2.y) / 2, (normal1.z + normal2.z) / 2);
+                avgNormal.normalize();
+                if (avgNormal.y > 0.2 && avgNormal.y < 0.8) segments.push(segment);
+
+            }
+
+            const density = AssetBrowser.density;
+            for (const segment of segments) {
+                let invalid = false;
+                const line3 = new THREE.LineCurve3(segment.start.worldPosition, segment.end.worldPosition);
+                const length = line3.v1.distanceTo(line3.v2);
+                const nPoints = Math.max(1, Math.floor(length * density));
+                const linePoints = [];
+                for (let i = 0; i < nPoints; i++) {
+                    linePoints.push(line3.getPoint(Math.random()));
+                }
+                for (const point of linePoints) {
+                    if (invalid) break;
+                    const origin = point.clone();
+                    const target = point.clone();
+                    target.y -= 1000;
+                    const collision = game.Levels3DPreview.interactionManager.computeSightCollisionFrom3DPositions(origin, target, "collision", false, false, false, true);
+                    if (collision?.length && Math.abs(collision[0].point.y - origin.y) > 0.01) invalid = true;
+                }
+                if (invalid) continue;
+                for (const point of linePoints) {
+                    points.push({point, face: {normal: segment.start.normal}});
+                }
+            }
+            if (points.length > (count || nPointsMax * 0.1)) {
+                //randomly remove points until we have the desired amount
+                while (points.length > (count || nPointsMax * 0.1)) {
+                    const index = Math.floor(Math.random() * points.length);
+                    points.splice(index, 1);
+                }
+            }
+            for (const point of points) {
+                const origin = point.point.clone();
+                const target = point.point.clone();
+                target.y -= 1000;
+                origin.y += 0.05;
+                const collision = game.Levels3DPreview.interactionManager.computeSightCollisionFrom3DPositions(origin, target, "collision", false, false, false, true);
+                if (collision?.length) point.point = collision[0].point;
+                const dragData = this.buildTileData(null, point);
+                game.Levels3DPreview.interactionManager._onDrop(new Event("click"), dragData);
+            }
+
+        }
+
+        if (scatterSurface) {
+            const noise3D = new game.Levels3DPreview.UTILS.NOISE.ImprovedNoise();
+            const randomOffset = new THREE.Vector3(Math.random(), Math.random(), Math.random());
+            const randomScale = Math.random() + 0.5;
+            const nPoints = nPointsMax;
+            const points = [];
+            const pos3D = (...args) => game.Levels3DPreview.CONFIG.entityClass.Ruler3D.posCanvasTo3d(...args);
+            for (let i = 0; i < nPoints; i++) { 
+                const x = Math.random() * rect[2] + rect[0];
+                const y = Math.random() * rect[3] + rect[1];
+                const origin = pos3D({x, y, z:elevation});
+                origin.y += depth / 1000 + 0.1;
+                const noiseVector = new THREE.Vector3(origin.x + randomOffset.x, origin.y + randomOffset.y, origin.z + randomOffset.z);
+                noiseVector.multiplyScalar(randomScale);
+                const noise = noise3D.noise(noiseVector.x, noiseVector.y, noiseVector.z);
+                if(Math.random() > noise) continue;
+                const target = origin.clone();
+                target.y -= 1000;
+                const collision = game.Levels3DPreview.interactionManager.computeSightCollisionFrom3DPositions(origin, target, "collision", false, false, false, true);
+                if (collision?.length) {
+                    let isCorrectTile = collision[0].object.userData?.entity3D == tile3d;
+                    collision[0].object.traverseAncestors((obj) => {
+                        if (obj.userData?.entity3D == tile3d) isCorrectTile = true;
+                    });
+                    const isFlatSurface = Math.abs(collision[0].face.normal.y) > 0.5;
+                    if(isFlatSurface && isCorrectTile) points.push(collision[0]);
+                }
+            }
+            for (const point of points) {
+                const dragData = this.buildTileData(null, point);
+                game.Levels3DPreview.interactionManager._onDrop(new Event("click"), dragData);
+            }
+        }
+
+    }
+
+    async autoScatterDialog() {
+        let edges, surfaces;
+        const res = await Dialog.prompt({
+            title: "Smart Scatter",
+            content: `<p>Do you wish to scatter tiles on Edges, Surfaces or Both?</p>
+            <hr>
+            <div style="display: grid; grid-template-columns: 1fr 1fr;">
+            <div class="form-group" style="display: flex;align-items: center;">
+            <input type="checkbox" id="edges" name="edges" checked>
+                <label for="edges">Edges</label>
+            </div>
+            <div class="form-group" style="display: flex;align-items: center;">
+            <input type="checkbox" id="surfaces" name="surfaces" checked>
+                <label for="surfaces">Surfaces</label>
+            </div>
+            </div>
+            <hr>
+            `,
+            callback: (html) => { 
+                edges = html.find("#edges").is(":checked");
+                surfaces = html.find("#surfaces").is(":checked");
+            },
+            rejectClose: true,
+
+        })
+        if (res == "ok") {
+            return {edges, surfaces};
+        } else {
+            return null;
+        }
+    }
+
     buildTileData(src, collisionPoint) {
         const currentIntersect = collisionPoint ?? _this.currentPoint;
         if (currentIntersect?.point) _this.lastPlacementPosition.copy(currentIntersect.point);
@@ -166,7 +359,7 @@ export class AssetBrowser extends Application {
         if (dataCache) {
             this._assetCount = dataCache.materials.length;
             dataCache.scale = AssetBrowser.scale || 1;
-            dataCache.density = AssetBrowser.density || 10;
+            dataCache.density = AssetBrowser.density || 1;
             dataCache.angle = AssetBrowser.angle || 0;
             return dataCache;
         }
@@ -187,7 +380,7 @@ export class AssetBrowser extends Application {
         data.materials = materials;
         data.isAssetBrowser = true;
         data.scale = AssetBrowser.scale || 1;
-        data.density = AssetBrowser.density || 10;
+        data.density = AssetBrowser.density || 1;
         data.angle = AssetBrowser.angle || 0;
         this._assetCount = materials.length;
         dataCache = data;
@@ -272,7 +465,7 @@ export class AssetBrowser extends Application {
         });
         this.element.on("click", ".utility-button", (e) => { 
             const action = e.currentTarget.dataset.action;
-            runScript(action);
+            runScript.bind(this)(action);
         });
         this.element.on("change", "#scale", (e) => {
             AssetBrowser.scale = parseFloat(e.target.value);
@@ -418,6 +611,14 @@ async function runScript(id) {
         case "extrude-walls":
             game.Levels3DPreview.UTILS.extrudeWalls();
             break;
+        case "smart-scatter":
+            if(!canvas.tiles.controlled.length || !this.element.find("li.selected").length) return ui.notifications.error("Please select a tile to scatter assets on and one or more assets to scatter.");
+            ui.notifications.info("Scattering assets...The canvas will freeze for a few seconds.");
+            await wait(1000);
+            for (let tile of canvas.tiles.controlled) {
+                this._autoScatterOnTile(tile);
+            }
+
     }
 }
 

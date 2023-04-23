@@ -197,7 +197,7 @@ export class CutscenePanel extends Application {
             title: "Play Cutscene",
             content: dialogHtml,
             callback: async (html) => {
-                const userIds = html.find("input[name='user']").map((i, el) => el.value).get();
+                const userIds = html.find("input[name='user']").filter((i, el) => el.checked).map((i, el) => el.value).get();
                 game.Levels3DPreview.cutsceneEngine.playCutscene(index, userIds);
             },
         })        
