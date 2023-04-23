@@ -60,6 +60,7 @@ export class TokenBrowser extends Application {
         }
         materials.sort((a, b) => a.displayName.localeCompare(b.displayName));
         data.materials = materials;
+        data.hasInput = true;
         this._assetCount = materials.length;
         dataCache = data;
         return data;
