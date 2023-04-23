@@ -411,11 +411,11 @@ export class AssetBrowser extends Application {
         super.activateListeners(html);
         this.element.find(`.tab[data-tab="options"]`).show();
         this.element.find(".tab-button").on("click", (e) => { 
-            const tab = $(e.target).data("tab");
+            const tab = $(e.currentTarget).data("tab");
             this.element.find(".tab").hide();
             this.element.find(`.tab[data-tab="${tab}"]`).show();
             this.element.find(".tab-button").removeClass("active");
-            $(e.target).addClass("active");
+            $(e.currentTarget).addClass("active");
         });
         this.element.find("#toggle-tabs").on("click", (e) => { 
             this.element.find(".tab").toggleClass("hidden");
@@ -618,8 +618,9 @@ async function runScript(id) {
             for (let tile of canvas.tiles.controlled) {
                 this._autoScatterOnTile(tile);
             }
-
+            break;
     }
+    if(id.includes("overlay")) overlayPresets[id.replace("overlay-", "")]();
 }
 
 function getRandomPointsInsidePolygon(polygon, nPoints, isClosed = true) {
@@ -653,5 +654,168 @@ function getRandomPointsInsidePolygon(polygon, nPoints, isClosed = true) {
             points.push(point);
         }
         return points;
+    }
+}
+
+const overlayPresets = {
+    "grassy": () => { 
+        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+                    const updates = [];
+                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/canvas3dcompendium/assets/Materials/_Stylized2/Grass_04/Grass_04_Color.webp","color":"#ffffff","strength":1,"coveragePercent":1,"inclination":0.6,"repeat":9,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
+                    canvas.activeLayer.controlled.forEach(obj => {
+                        updates.push({
+                            _id: obj.id,
+                            flags: {
+                                "levels-3d-preview": {
+                                    "shaders": shaderData
+                                }
+                            }
+                        });
+                    })
+                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    },
+    "icy": () => { 
+        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+                    const updates = [];
+                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/canvas3dcompendium/assets/Materials/_Stylized2/Ice_02/Ice_02_Color.webp","color":"#ffffff","strength":1,"coveragePercent":1,"inclination":0.6,"repeat":8,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
+                    canvas.activeLayer.controlled.forEach(obj => {
+                        updates.push({
+                            _id: obj.id,
+                            flags: {
+                                "levels-3d-preview": {
+                                    "shaders": shaderData
+                                }
+                            }
+                        });
+                    })
+                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    },
+    "dirty": () => { 
+        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+                    const updates = [];
+                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/canvas3dcompendium/assets/Materials/Ground045/Ground045_Color.webp","color":"#61451f","strength":1,"coveragePercent":1,"inclination":0.3,"repeat":8,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
+                    canvas.activeLayer.controlled.forEach(obj => {
+                        updates.push({
+                            _id: obj.id,
+                            flags: {
+                                "levels-3d-preview": {
+                                    "shaders": shaderData
+                                }
+                            }
+                        });
+                    })
+                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    },
+    "sandy": () => { 
+        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+                    const updates = [];
+                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/canvas3dcompendium/assets/Materials/_Stylized2/Sand_04/Sand_04_Color.webp","color":"#fbb05b","strength":1,"coveragePercent":1,"inclination":0.45,"repeat":8,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
+                    canvas.activeLayer.controlled.forEach(obj => {
+                        updates.push({
+                            _id: obj.id,
+                            flags: {
+                                "levels-3d-preview": {
+                                    "shaders": shaderData
+                                }
+                            }
+                        });
+                    })
+                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    },
+    "leafy": () => { 
+        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+                    const updates = [];
+                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/canvas3dcompendium/assets/Materials/ScatteredLeaves007/ScatteredLeaves007_Color.webp","color":"#ff7b00","strength":1,"coveragePercent":1,"inclination":0.58,"repeat":15,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":true,"mult_blend":false}};
+                    canvas.activeLayer.controlled.forEach(obj => {
+                        updates.push({
+                            _id: obj.id,
+                            flags: {
+                                "levels-3d-preview": {
+                                    "shaders": shaderData
+                                }
+                            }
+                        });
+                    })
+                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    },
+    "dusty": () => { 
+        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+                    const updates = [];
+                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-grunge-dust-02.webp","color":"#d17a00","strength":0.75,"coveragePercent":1,"inclination":0.3,"repeat":15,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
+                    canvas.activeLayer.controlled.forEach(obj => {
+                        updates.push({
+                            _id: obj.id,
+                            flags: {
+                                "levels-3d-preview": {
+                                    "shaders": shaderData
+                                }
+                            }
+                        });
+                    })
+                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    },
+    "cobwebs": () => {
+        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+                    const updates = [];
+                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-biological-webs-04.webp","color":"#ffffff","strength":0.75,"coveragePercent":1,"inclination":0.3,"repeat":15,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
+                    canvas.activeLayer.controlled.forEach(obj => {
+                        updates.push({
+                            _id: obj.id,
+                            flags: {
+                                "levels-3d-preview": {
+                                    "shaders": shaderData
+                                }
+                            }
+                        });
+                    })
+                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    },
+    "bloody": () => {
+        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+                    const updates = [];
+                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-blood-02.webp","color":"#8d3f3f","strength":1,"coveragePercent":1,"inclination":0.3,"repeat":5,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
+                    canvas.activeLayer.controlled.forEach(obj => {
+                        updates.push({
+                            _id: obj.id,
+                            flags: {
+                                "levels-3d-preview": {
+                                    "shaders": shaderData
+                                }
+                            }
+                        });
+                    })
+                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    },
+    "cracked": () => {
+        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+                    const updates = [];
+                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-cracks-02.webp","color":"#000000","strength":1,"coveragePercent":1,"inclination":0.3,"repeat":3,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
+                    canvas.activeLayer.controlled.forEach(obj => {
+                        updates.push({
+                            _id: obj.id,
+                            flags: {
+                                "levels-3d-preview": {
+                                    "shaders": shaderData
+                                }
+                            }
+                        });
+                    })
+                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    },
+    "vines": () => { 
+        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+                    const updates = [];
+                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-nature-vines-01.webp","color":"#ffffff","strength":1,"coveragePercent":1,"inclination":-0.63,"repeat":10,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
+                    canvas.activeLayer.controlled.forEach(obj => {
+                        updates.push({
+                            _id: obj.id,
+                            flags: {
+                                "levels-3d-preview": {
+                                    "shaders": shaderData
+                                }
+                            }
+                        });
+                    })
+                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
     }
 }
