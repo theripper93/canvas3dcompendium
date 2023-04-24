@@ -133,9 +133,26 @@ export class RoomBuilder extends FormApplication {
         }
     }
 
-    _onTileCreate(scene, tileData) {
+    _onTileCreate(tileDocument, tileData) {
         const isBox = tileData.flags["levels-3d-preview"].dynaMesh === "box";
         const isPolygon = tileData.flags["levels-3d-preview"].fromPolygonTool;
+        if (this._mode == "stair" && isBox) {
+            tileDocument.updateSource({
+                flags: {
+                    "levels-3d-preview": {
+                        dynaMesh: "stairs",
+                        imageTexture: this.floorTexture,
+                        textureRepeat: this.floorRepeat,
+                        depth: this.height,
+                    }
+                }
+            })
+            return;
+        }
+        if (this._mode == "stair") {
+            ui.notifications.warn("Stairs can only be created from a box");
+            return false;
+        }
         if (!isBox && !isPolygon) return;
         const elevation = tileData.flags.levels.rangeBottom;
         const {x, y, width, height} = tileData;
@@ -426,7 +443,7 @@ export class RoomBuilder extends FormApplication {
         html.on("click", "button", (e) => {
             e.preventDefault();
             const dataAction = e.currentTarget.dataset.action;
-            if (dataAction == "union" || dataAction == "subtract" || dataAction == "intersect" || dataAction == "knife") { 
+            if (dataAction == "union" || dataAction == "subtract" || dataAction == "intersect" || dataAction == "knife" || dataAction == "stair") { 
                 this._mode = dataAction;
             }
             if (dataAction == "rectangle" || dataAction == "ellipse" || dataAction == "polygon" || dataAction == "spline") {
