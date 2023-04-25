@@ -619,6 +619,35 @@ async function runScript(id) {
                 this._autoScatterOnTile(tile);
             }
             break;
+        case "vines":
+            let radius;
+            const res = await Dialog.prompt({
+                title: "Vines",
+                content: `<p>Please confirm the vines propagation radius. Using values higher than 1000 is NOT suggested</p>
+                <hr>
+                <form>
+                <div class="form-group">
+                    <label for="radius">Radius <span class="units">(Pixels)</span></label>
+                    <div class="form-fields">
+                        <input type="number" value="500" max="1000" min="100" step="1" name="radius">
+                    </div>
+                </div>
+                </form>
+                <hr>
+                `,
+                callback: (html) => { 
+                    radius = parseInt(html.find('[name="radius"]').val());
+                },
+                rejectClose: true,
+    
+            })
+            if (res !== "ok") return
+            ui.notifications.info("Click on the canvas to create vines. Right click to cancel.");
+            const onClickHandler = (event) => {
+                game.Levels3DPreview.renderer.domElement.removeEventListener("mouseup", onClickHandler, false);
+                if (event.button === 0) game.Levels3DPreview.CONFIG.entityClass.ProceduralVines.createVinesTile(1,radius / 1000)
+            }
+            game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", onClickHandler, false);
     }
     if(id.includes("overlay")) overlayPresets[id.replace("overlay-", "")]();
 }
