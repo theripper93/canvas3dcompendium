@@ -39,7 +39,7 @@ export class RoomBuilder extends FormApplication {
 
     get theme() {
         const selectValue = this.element.find("#theme").val();
-        return themes[selectValue];
+        return themes[selectValue] ?? themes["custom"];
     }
 
     get floorTexture() {
@@ -440,9 +440,16 @@ export class RoomBuilder extends FormApplication {
 
     activateListeners(html) {
         super.activateListeners(html);
+        this.updateSelect();
         html.on("click", "button", (e) => {
             e.preventDefault();
             const dataAction = e.currentTarget.dataset.action;
+            if (dataAction == "savetheme") {
+                this.saveTheme();
+            }
+            if (dataAction == "deletetheme") {
+                this.deleteTheme();
+            }
             if (dataAction == "union" || dataAction == "subtract" || dataAction == "intersect" || dataAction == "knife" || dataAction == "stair") { 
                 this._mode = dataAction;
             }
@@ -470,6 +477,77 @@ export class RoomBuilder extends FormApplication {
                 e.currentTarget.classList.add("active");
             }
         });
+        html.on("change", "select", (e) => {
+            e.preventDefault();
+            const value = e.currentTarget.value;
+            if (themes[value]) return;
+            const theme = game.settings.get("canvas3dcompendium", "roombuildeercustomthemes").find(t => t.name == value);
+            if (!theme) return;
+            const floorTextureInput = this.element.find("#floorTexture")[0];
+            const wallTextureInput = this.element.find("#wallTexture")[0];
+            
+            floorTextureInput.value = theme.floor;
+            wallTextureInput.value = theme.wall;
+
+            const themenameInput = this.element.find("#customthemename")[0];
+            themenameInput.value = theme.name;
+        });
+    }
+
+    async saveTheme() {
+        const themeName = this.element.find("#customthemename")[0].value;
+        if (!themeName) return ui.notifications.error("Please enter a name for your theme.");
+        const theme = {
+            name: themeName,
+            floor: this.floorTexture,
+            floorRepeat: this.floorRepeat,
+            wall: this.wallTexture,
+            wallRepeat: this.wallRepeat,
+        }
+        const themes = game.settings.get("canvas3dcompendium", "roombuildeercustomthemes");
+        //update existing theme
+        if (themes.find(t => t.name == themeName)) {
+            const index = themes.indexOf(themes.find(t => t.name == themeName));
+            themes[index] = theme;
+        } else {
+            themes.push(theme);
+        }
+        await game.settings.set("canvas3dcompendium", "roombuildeercustomthemes", themes);
+        this.updateSelect(themeName);
+    }
+
+    async deleteTheme() {
+        const themeName = this.element.find("#customthemename")[0].value;
+        if (!themeName) return ui.notifications.error("Please enter a name for your theme.");
+        const themes = game.settings.get("canvas3dcompendium", "roombuildeercustomthemes");
+        const theme = themes.find(t => t.name == themeName);
+        if (!theme) return ui.notifications.error("No theme found with that name.");
+        const index = themes.indexOf(theme);
+        themes.splice(index, 1);
+        await game.settings.set("canvas3dcompendium", "roombuildeercustomthemes", themes);
+        this.element.find("#customthemename")[0].value = "";
+        this.updateSelect();
+    }
+
+    updateSelect(selected = null) {
+        const select = this.element.find("#theme")[0];
+        selected = selected || select.value;
+        //remove all elements inside the optgroup
+        const optgroup = select.querySelector("optgroup");
+        while (optgroup.firstChild) {
+            optgroup.removeChild(optgroup.firstChild);
+        }
+        //add all themes to the optgroup
+        const themes = game.settings.get("canvas3dcompendium", "roombuildeercustomthemes").sort((a, b) => a.name.localeCompare(b.name));
+        for (let theme of themes) {
+            const option = document.createElement("option");
+            option.value = theme.name;
+            option.innerHTML = theme.name;
+            optgroup.appendChild(option);
+        }
+        //select the selected theme
+        select.value = selected;
+        select.dispatchEvent(new Event("change"));
     }
 
     async close() {

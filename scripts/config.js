@@ -43,6 +43,13 @@ Hooks.once('init', async function() {
           default: false,
       });
     
+      game.settings.register("canvas3dcompendium", "roombuildeercustomthemes", {
+        scope: "world",
+        config: false,
+        type: Array,
+        default: [],
+    });
+    
       game.settings.register("canvas3dcompendium", "assetbrowserpainttour", {
         scope: "world",
         config: false,

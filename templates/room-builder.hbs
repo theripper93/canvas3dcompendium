@@ -31,6 +31,7 @@
 
         <select name="theme" id="theme" style="width: 100%; border:none">
             {{selectOptions themes localize=false selected="bricks1"}}
+            <optgroup label="Custom"></optgroup>
         </select>
 
         <div class="form-group">
@@ -48,6 +49,11 @@
                     value="">
                 {{filePicker type="image" target="wallTexture"}}
             </div>
+        </div>
+        <div class="form-group">
+            <input type="text" id="customthemename" placeholder="Theme Name">
+            <button style="flex: 0 0 24px; line-height: 24px; margin: -1px 0 -1px 4px;" data-tooltip="Save Custom Theme" data-action="savetheme"><i class="fa-duotone fa-floppy-disk"></i></button>
+            <button style="flex: 0 0 24px; line-height: 24px; margin: -1px 0 -1px 4px;" data-tooltip="Delete Custom Theme" data-action="deletetheme"><i class="fa-duotone fa-trash"></i></button>
         </div>
     </fieldset>
 
