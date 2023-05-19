@@ -1,0 +1,11 @@
+Model Information:
+* title:	Stone Pack
+* source:	https://sketchfab.com/3d-models/stone-pack-f3e0a67b9ca243b09119177649f21e17
+* author:	ashkan.fancy (https://sketchfab.com/ashkan.fancy)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Stone Pack" (https://sketchfab.com/3d-models/stone-pack-f3e0a67b9ca243b09119177649f21e17) by ashkan.fancy (https://sketchfab.com/ashkan.fancy) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

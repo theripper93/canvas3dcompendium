@@ -1,0 +1,11 @@
+Model Information:
+* title:	Sword Test
+* source:	https://sketchfab.com/3d-models/sword-test-ef52c640195b4735a01411ad3d6a45da
+* author:	JoseDiaz (https://sketchfab.com/JoseDiaz)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Sword Test" (https://sketchfab.com/3d-models/sword-test-ef52c640195b4735a01411ad3d6a45da) by JoseDiaz (https://sketchfab.com/JoseDiaz) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -1,0 +1,11 @@
+Model Information:
+* title:	Desert | Rocks | Stones | Pack
+* source:	https://sketchfab.com/3d-models/desert-rocks-stones-pack-c2208f5ccc004f1681d27de67fe75799
+* author:	Erroratten (https://sketchfab.com/erroratten)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Desert | Rocks | Stones | Pack" (https://sketchfab.com/3d-models/desert-rocks-stones-pack-c2208f5ccc004f1681d27de67fe75799) by Erroratten (https://sketchfab.com/erroratten) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

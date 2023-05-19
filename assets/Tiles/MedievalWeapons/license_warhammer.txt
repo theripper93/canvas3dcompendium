@@ -1,0 +1,11 @@
+Model Information:
+* title:	Dwarven Hammer
+* source:	https://sketchfab.com/3d-models/dwarven-hammer-6237aaf3b7884fddb553f9454a07ab74
+* author:	MattDonlan (https://sketchfab.com/MattDonlan)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Dwarven Hammer" (https://sketchfab.com/3d-models/dwarven-hammer-6237aaf3b7884fddb553f9454a07ab74) by MattDonlan (https://sketchfab.com/MattDonlan) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

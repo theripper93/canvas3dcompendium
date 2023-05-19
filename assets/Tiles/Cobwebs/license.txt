@@ -1,0 +1,11 @@
+Model Information:
+* title:	Cobwebs Asset Pack
+* source:	https://sketchfab.com/3d-models/cobwebs-asset-pack-2dd4798676d84bc7af5d2a8f5834563a
+* author:	Em Marshall (https://sketchfab.com/emarshall)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Cobwebs Asset Pack" (https://sketchfab.com/3d-models/cobwebs-asset-pack-2dd4798676d84bc7af5d2a8f5834563a) by Em Marshall (https://sketchfab.com/emarshall) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

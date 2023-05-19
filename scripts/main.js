@@ -51,7 +51,7 @@ Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => {
           },
           {
             name: "Rock Formations",
-            query: "Rocks_highend",
+            query: "Rocks_highend,Rocks_desert,Rocks_runic",
           },
             {
                 name: "Sci-Fi",
