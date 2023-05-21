@@ -22,6 +22,7 @@ Hooks.on("3DCanvasConfig", (config) => {
   UI.CutscenePanel = CutscenePanel;
   UI.RoomBuilder = RoomBuilder;
   Hooks.callAll("3DCanvasMapmakingPackRegisterAssetPacks", UI.AssetBrowser);
+  Hooks.callAll("3DCanvasMapmakingPackRegisterTokenPacks", UI.TokenBrowser);
 })
 
 Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => {

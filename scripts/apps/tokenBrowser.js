@@ -76,7 +76,7 @@ export class TokenBrowser extends Application {
             source = "forge-bazaar";
         }
         const files = [];
-        for (let target of this.sources) {
+        for (let target of TokenBrowser.defaultSources.concat(this.sources)) {
             let sourceFiles;
             try {
                 sourceFiles = await getFiles(target, source);
@@ -130,4 +130,26 @@ export class TokenBrowser extends Application {
             new TokenBrowser(input, app).render(true);
         });
     }
+
+    static registerPack(packId, packName, assetPacks = [], options = {}) {
+        let packPath = `modules/${packId}`;
+        if(options.subfolder) packPath += `/${options.subfolder}`;
+        if (!TokenBrowser.defaultSources.includes(packPath)) TokenBrowser.defaultSources.push(packPath);
+        if(!assetPacks.length) return;
+        assetPacks.map((p) => {
+            p.query = packId + "," + p.query;
+            p.query = p.query.toLowerCase();
+            p.query.replaceAll(" ", "%20");
+            return p;
+        });
+        assetPacks.sort((a, b) => a.name.localeCompare(b.name));
+        if (!TokenBrowser.assetPacks[packId]) {
+            TokenBrowser.assetPacks[packId] = { name: packName, packs: assetPacks };
+        } else {
+            TokenBrowser.assetPacks[packId].packs.push(...assetPacks);
+        }
+    }
 }
+
+TokenBrowser.defaultSources = [];
+TokenBrowser.assetPacks = {};
