@@ -25,6 +25,10 @@ export class RoomBuilder extends FormApplication {
         };
     }
 
+    get sameThemeOnly() {
+        return this.element.find("#merge-theme")[0].classList.contains("active");
+    }
+
     get solidifyType() {
         return this._smooth ? "polygonbevelsolidify" : "polygonbevelsolidifyjagged";
     }
@@ -72,15 +76,18 @@ export class RoomBuilder extends FormApplication {
     
     getIntersectingTiles(rect, elevation, dynaMeshType) {
         dynaMeshType instanceof Array ? dynaMeshType : [dynaMeshType];
+        const useSameTheme = this.sameThemeOnly;
         const currentSelection = [...rect];
         const toDelete = [];
         const tiles = [];
         const intersectionTiles = canvas.tiles.placeables.filter((tile) => { 
             try {                
-                if (!dynaMeshType.includes(tile.data.flags["levels-3d-preview"].dynaMesh)) return false;
-                const depth = Math.max(tile.data.flags["levels-3d-preview"].depth, 50) - 15;
+                if (!dynaMeshType.includes(tile.document.flags["levels-3d-preview"].dynaMesh)) return false;
+                const depth = Math.max(tile.document.flags["levels-3d-preview"].depth, 50) - 15;
                 const rb = tile.data.flags["levels"].rangeBottom;
                 if (elevation < (rb - 5) || elevation > (rb + toUnits(depth))) return false;
+                const texture = tile.document.flags["levels-3d-preview"].imageTexture;
+                if (useSameTheme && texture !== this.wallTexture && texture !== this.floorTexture) return false;
                 return true;
             } catch {
                 return false;
