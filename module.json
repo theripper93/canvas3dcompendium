@@ -47,9 +47,7 @@
     ]
   },
   "compatibility": {
-    "minimum": "0.8.6",
-    "verified": "10"
-  },
-  "name": "canvas3dcompendium",
-  "minimumCoreVersion": "0.8.6"
+    "minimum": "11",
+    "verified": "11"
+  }
 }
