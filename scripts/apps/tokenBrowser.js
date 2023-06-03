@@ -110,7 +110,7 @@ export class TokenBrowser extends Application {
         this.element.on("click", "li", (e) => {
             const output = $(e.currentTarget).data("output");
             this.input.val(output);
-            if (game.settings.get("canvas3dcompendium", "autoApply")) this._app._onSubmit(e, { preventClose: true, preventRender: true });
+            if (game.settings.get("canvas3dcompendium", "autoApply")) this._app.object.setFlag("levels-3d-preview", "model3d", output)//this._app._onSubmit(e, { preventClose: true, preventRender: true });
             if (game.settings.get("canvas3dcompendium", "autoClose")) this.close();
         });
     }
