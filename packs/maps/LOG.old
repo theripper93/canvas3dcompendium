@@ -1,7 +1,0 @@
-2023/06/03-15:52:50.534 3b88 Recovering log #18
-2023/06/03-15:52:50.541 3b88 Delete type=0 #18
-2023/06/03-15:52:50.541 3b88 Delete type=3 #16
-2023/06/03-15:53:36.747 1b90 Level-0 table #23: started
-2023/06/03-15:53:36.747 1b90 Level-0 table #23: 0 bytes OK
-2023/06/03-15:53:36.748 1b90 Delete type=0 #21
-2023/06/03-15:53:36.748 1b90 Manual compaction at level-0 from '!scenes!448zRp3iAzExedir' @ 72057594037927935 : 1 .. '!scenes.tiles!UpAclVmX19k9Ayfr.wNvDPHOpjJ29xTQf' @ 0 : 0; will stop at (end)

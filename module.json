@@ -29,14 +29,6 @@
     "styles/build-panel.css"
   ],
   "packs": [
-    {
-      "name": "maps",
-      "label": "3D Maps",
-      "path": "/packs/maps.db",
-      "type": "Scene",
-      "private": false,
-      "flags": {}
-    }
   ],
   "url": "https://github.com/theripper93/canvas3dcompendium",
   "manifest": "https://github.com/theripper93/canvas3dcompendium/releases/latest/download/module.json",

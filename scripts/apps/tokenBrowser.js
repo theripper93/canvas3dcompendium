@@ -41,6 +41,7 @@ export class TokenBrowser extends Application {
 
     async getData() {
         const data = super.getData();
+        data.isTokenBrowser = true;
         if (dataCache) {
             this._assetCount = dataCache.materials.length;
             return dataCache;
