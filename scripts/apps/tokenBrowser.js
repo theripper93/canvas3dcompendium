@@ -5,6 +5,8 @@ let dataCache = null;
 
 let _this = null;
 
+let _new = null;
+
 export class TokenBrowser extends Application {
     constructor(input, app) {
         super();
@@ -41,6 +43,7 @@ export class TokenBrowser extends Application {
 
     async getData() {
         const data = super.getData();
+        if (!_new) await getNew();
         data.isTokenBrowser = true;
         if (dataCache) {
             this._assetCount = dataCache.materials.length;
@@ -50,6 +53,7 @@ export class TokenBrowser extends Application {
         const files = fileCache ?? (await this.getSources());
         fileCache = files;
         for (let file of files) {
+            const cleanedName = decodeURIComponent(file.split("/").pop().split(".").shift());
             const filename = file.split("/").pop().replaceAll("%20", "_");
             const cleanName = filename.replaceAll("_", " ").replace(".glb", "").replace("MZ4250 - ", "");
             materials.push({
@@ -57,9 +61,15 @@ export class TokenBrowser extends Application {
                 preview: file.replace(".glb", ".webp"),
                 output: file,
                 search: file.split("/canvas3dtokencompendium/miniatures/_Colorized").pop(),
+                isNew: _new.includes(cleanedName),
             });
         }
         materials.sort((a, b) => a.displayName.localeCompare(b.displayName));
+        materials.sort((a, b) => {
+            if (a.isNew && !b.isNew) return -1;
+            if (!a.isNew && b.isNew) return 1;
+            return 0;
+        });
         data.materials = materials;
         data.hasInput = true;
         this._assetCount = materials.length;
@@ -154,3 +164,12 @@ export class TokenBrowser extends Application {
 
 TokenBrowser.defaultSources = [];
 TokenBrowser.assetPacks = {};
+
+async function getNew() {
+    try {
+        _new = await fetchJsonWithTimeout("modules/canvas3dtokencompendium/miniatures/_Colorized/new.json");
+    } catch (e) {
+        _new = [];
+    }
+    return _new;
+}

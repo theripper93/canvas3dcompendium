@@ -242,6 +242,17 @@
     background: var(--color-text-dark-header);
 }
 
+.three-canvas-compendium-app .new{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: red;
+    border-radius: 5px;
+    margin: 0.2rem;
+    padding: 0.05rem 0.2rem;
+    font-size: xx-small;
+}
+
 #quick-environment .environment{
     width: 70px;
     height: 70px;
