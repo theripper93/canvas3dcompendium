@@ -46,7 +46,7 @@ export class TokenBrowser extends Application {
     }
 
     static findByName(name, {async = false, returnFirst = false} = {}) {
-        if (async && !dataCache) return this.constructor.getData().then((data) => this.findByName(name, returnFirst));
+        if (async && !dataCache) return this.constructor.getData().then((data) => this.findByName(name, {async: false, returnFirst}));
         if (!dataCache) return ui.notifications.error("Token Browser data is not yet loaded. Please, use the game.canvas3d.CONFIG.UI.TokenBrowser.preloadData() function before using this function or run this search with {async: true}.");
         const slugName = name.slugify({strict: true});
         const results = dataCache.materials.filter((m) => m.slug.includes(slugName) || slugName.includes(m.slug));
