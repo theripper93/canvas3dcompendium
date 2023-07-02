@@ -41,6 +41,18 @@ export class TokenBrowser extends Application {
         return "Token Browser: " + this._assetCount + " tokens available";
     }
 
+    static async preloadData() {
+        await this.constructor.getData();
+    }
+
+    static findByName(name, returnFirst = false) {
+        if (!dataCache) return ui.notifications.error("Token Browser data is not yet loaded. Please, use the game.canvas3d.CONFIG.UI.TokenBrowser.preloadData() function before using this function.");
+        const slugName = name.slugify({strict: true});
+        const results = dataCache.materials.filter((m) => m.slug.includes(slugName) || slugName.includes(m.slug));
+        if (returnFirst) return results[0]?.output ?? "";
+        return results;
+    }
+
     async getData() {
         const data = super.getData();
         if (!_new) await getNew();
@@ -62,6 +74,7 @@ export class TokenBrowser extends Application {
                 output: file,
                 search: file.split("/canvas3dtokencompendium/miniatures/_Colorized").pop(),
                 isNew: _new.includes(cleanedName),
+                slug: cleanName.slugify({strict: true})
             });
         }
         materials.sort((a, b) => a.displayName.localeCompare(b.displayName));
