@@ -245,4 +245,36 @@ function generatePermutations(words) {
   
     permute(words);
     return permutations;
-  }
+}
+  
+async function quickMatch(tokenDocument) {
+    tokenDocument = tokenDocument.document ?? tokenDocument;
+    const closestMatch = await TokenBrowser.findByName(tokenDocument.name, {returnFirst: true, async: true});
+    if (closestMatch) {
+        await tokenDocument.setFlag("levels-3d-preview", "model3d", closestMatch);
+        return closestMatch;
+    }
+    return false;
+}
+
+export function setHudHook() {
+    Hooks.on("renderTokenHUD", async (hud, html, data) => {
+        if(!game.canvas3D?._active) return;
+        const model3d = hud.object.document.getFlag("levels-3d-preview", "model3d");
+        if (model3d) return;
+        const colRight = html.find(".col.left");
+        const quickMatchBtn = $(`
+        <div class="control-icon" data-action="quickmatch">
+            <img src="icons/tools/scribal/magnifying-glass.webp" width="36" height="36" title="Quick-Match 3D Token">
+        </div>
+        `);
+        quickMatchBtn.on("click", async (e) => {
+            for (const token of canvas.tokens.controlled) {
+                const tokenModel3d = token.document.getFlag("levels-3d-preview", "model3d");
+                if (tokenModel3d) continue;
+                await quickMatch(token);
+            }
+        });
+        colRight.append(quickMatchBtn);
+    });
+}

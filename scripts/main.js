@@ -1,6 +1,6 @@
 import {MaterialBrowser} from "./apps/materialBrowser.js";
 import {AssetBrowser} from "./apps/assetBrowser.js";
-import {TokenBrowser} from "./apps/tokenBrowser.js";
+import {TokenBrowser, setHudHook} from "./apps/tokenBrowser.js";
 import {QuickTerrain} from "./apps/quickTerrain.js";
 import {EffectBrowser} from "./apps/effectBrowser.js";
 import {BuildPanel} from "./apps/buildPanel.js";
@@ -9,6 +9,8 @@ import {CutscenePanel} from "./apps/cutscenePanel.js";
 import { RoomBuilder } from "./apps/roomBuilder.js";
 
 BuildPanel.setHook();
+
+setHudHook();
 
 Hooks.on("3DCanvasConfig", (config) => {
   const UI = config.UI;
