@@ -12,8 +12,8 @@ async function initFuse(data) {
     const Fuse = (await import("../lib/fuse.js")).default;
     const options = {
         includeScore: true,
-        keys: ["displayName", "search", "slug"],
-        threshold: 0.3,
+        keys: ["slug"],
+        threshold: 0.5,
     };
     fuseSearch = new Fuse(data.materials, options);
 }
@@ -59,12 +59,24 @@ export class TokenBrowser extends Application {
     static findByName(name, {async = false, returnFirst = false, fuzzy = true} = {}) {
         if (async && !dataCache) return this.preloadData().then((data) => this.findByName(name, {async: false, returnFirst}));
         if (!dataCache) return ui.notifications.error("Token Browser data is not yet loaded. Please, use the game.canvas3d.CONFIG.UI.TokenBrowser.preloadData() function before using this function or run this search with {async: true}.");
+        const slugName = name.slugify({strict: true});
         if (fuzzy) {
-            const matches = fuseSearch.search(name);
-            if (returnFirst) return matches[0]?.item?.output ?? "";
+            const words = slugName.split("-");
+            const permutations = generatePermutations(words);
+            const matches = fuseSearch.search(slugName);
+            if (returnFirst) {
+                //find best possible result
+                const multiMatchesArrays = [];
+                for (let permutation of permutations) {
+                    const multiMatches = fuseSearch.search(permutation);
+                    multiMatchesArrays.push(multiMatches);
+                }
+                const multiMatches = multiMatchesArrays.flat();
+                multiMatches.sort((a, b) => a.score - b.score);
+                return multiMatches[0]?.item?.output ?? "";
+            }
             return matches.map((m) => m.item);
         }
-        const slugName = name.slugify({strict: true});
         const results = dataCache.materials.filter((m) => m.slug.includes(slugName) || slugName.includes(m.slug));
         if (returnFirst) return results[0]?.output ?? "";
         return results;
@@ -104,7 +116,7 @@ export class TokenBrowser extends Application {
         data.hasInput = true;
         this._assetCount = materials.length;
         dataCache = data;
-        initFuse(dataCache)
+        await initFuse(dataCache)
         return data;
     }
 
@@ -167,9 +179,20 @@ export class TokenBrowser extends Application {
         const input = fpFG.find("input").first();
         const fpButton = fpFG.find("button").first();
         fpButton.before(button);
-        button.on("click", (e) => {
+        button.on("mouseup", async (e) => {
             e.preventDefault();
-            new TokenBrowser(input, app).render(true);
+            const isLeftClick = e.button === 0;
+            const isRightClick = e.button === 2;
+            const isCtrlClick = e.ctrlKey;
+            if (isLeftClick && !isCtrlClick) new TokenBrowser(input, app).render(true);
+            if (isRightClick || isCtrlClick) {
+                const name = app.object.name;
+                const closestMatch = await this.findByName(name, {returnFirst: true, async: true});
+                if (closestMatch) {
+                    input.val(closestMatch);
+                    if (game.settings.get("canvas3dcompendium", "autoApply")) app.object.setFlag("levels-3d-preview", "model3d", closestMatch)//app._onSubmit(e, { preventClose: true, preventRender: true });
+                }
+            }
         });
     }
 
@@ -204,3 +227,22 @@ async function getNew() {
     }
     return _new;
 }
+
+function generatePermutations(words) {
+    const permutations = [];
+  
+    function permute(arr, prefix = []) {
+      if (arr.length === 0) {
+        permutations.push(prefix.join(' '));
+      } else {
+        for (let i = 0; i < arr.length; i++) {
+          const current = arr.slice();
+          const word = current.splice(i, 1);
+          permute(current, prefix.concat(word));
+        }
+      }
+    }
+  
+    permute(words);
+    return permutations;
+  }
