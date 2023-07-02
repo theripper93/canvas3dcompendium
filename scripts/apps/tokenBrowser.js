@@ -1,11 +1,22 @@
-import { getFiles } from "./assetBrowser.js";
+import {getFiles} from "./assetBrowser.js";
 
 let fileCache = null;
 let dataCache = null;
+let fuseSearch = null;
 
 let _this = null;
 
 let _new = null;
+
+async function initFuse(data) {
+    const Fuse = (await import("../lib/fuse.js")).default;
+    const options = {
+        includeScore: true,
+        keys: ["displayName", "search", "slug"],
+        threshold: 0.3,
+    };
+    fuseSearch = new Fuse(data.materials, options);
+}
 
 export class TokenBrowser extends Application {
     constructor(input, app) {
@@ -45,9 +56,14 @@ export class TokenBrowser extends Application {
         await this.prototype.getData();
     }
 
-    static findByName(name, {async = false, returnFirst = false} = {}) {
+    static findByName(name, {async = false, returnFirst = false, fuzzy = true} = {}) {
         if (async && !dataCache) return this.preloadData().then((data) => this.findByName(name, {async: false, returnFirst}));
         if (!dataCache) return ui.notifications.error("Token Browser data is not yet loaded. Please, use the game.canvas3d.CONFIG.UI.TokenBrowser.preloadData() function before using this function or run this search with {async: true}.");
+        if (fuzzy) {
+            const matches = fuseSearch.search(name);
+            if (returnFirst) return matches[0]?.item?.output ?? "";
+            return matches.map((m) => m.item);
+        }
         const slugName = name.slugify({strict: true});
         const results = dataCache.materials.filter((m) => m.slug.includes(slugName) || slugName.includes(m.slug));
         if (returnFirst) return results[0]?.output ?? "";
@@ -88,6 +104,7 @@ export class TokenBrowser extends Application {
         data.hasInput = true;
         this._assetCount = materials.length;
         dataCache = data;
+        initFuse(dataCache)
         return data;
     }
 
