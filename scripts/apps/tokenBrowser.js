@@ -15,7 +15,8 @@ async function initFuse(data) {
         keys: ["slug"],
         threshold: 0.5,
     };
-    fuseSearch = new Fuse(data.materials, options);
+    const heroforgeList = game.threeportrait?.HFBrowser?.getHeroList?.() ?? [];
+    fuseSearch = new Fuse(data.materials.concat(heroforgeList), options);
 }
 
 export class TokenBrowser extends Application {
