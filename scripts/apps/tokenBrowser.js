@@ -56,7 +56,7 @@ export class TokenBrowser extends Application {
         await this.prototype.getData();
     }
 
-    static findByName(name, {async = false, returnFirst = false, fuzzy = true} = {}) {
+    static findByName(name, {async = false, returnFirst = false, fuzzy = true, wildcard = true} = {}) {
         if (async && !dataCache) return this.preloadData().then((data) => this.findByName(name, {async: false, returnFirst}));
         if (!dataCache) return ui.notifications.error("Token Browser data is not yet loaded. Please, use the game.canvas3d.CONFIG.UI.TokenBrowser.preloadData() function before using this function or run this search with {async: true}.");
         const slugName = name.slugify({strict: true});
@@ -73,6 +73,11 @@ export class TokenBrowser extends Application {
                 }
                 const multiMatches = multiMatchesArrays.flat();
                 multiMatches.sort((a, b) => a.score - b.score);
+                if (wildcard && multiMatches[0].score < 0.1) {
+                    const bestScore = multiMatches[0].score;
+                    const multiMatchesFiltered = multiMatches.filter((m) => m.score <= bestScore + 0.01);
+                    return multiMatchesFiltered[Math.floor(Math.random() * multiMatchesFiltered.length)]?.item?.output ?? "";
+                }
                 return multiMatches[0]?.item?.output ?? "";
             }
             return matches.map((m) => m.item);
