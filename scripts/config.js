@@ -26,6 +26,15 @@ Hooks.once('init', async function() {
           default: false,
       });
   
+      game.settings.register("canvas3dcompendium", "autoAssignToken", {
+        name: "Auto Assign 3D Model",
+        hint: "When placing an Unlinked token on the canvas, automatically assign a 3D model to it if none is assigned.",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+    });
+  
       game.settings.register("canvas3dcompendium", "assetBrowserCustomPath", {
           name: "Custom Asset Path",
           hint: "If you want to use a custom path for the asset browser, set it here.",

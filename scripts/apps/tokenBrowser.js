@@ -82,6 +82,10 @@ export class TokenBrowser extends Application {
         return results;
     }
 
+    static get ready() {
+        return !!dataCache;
+    }
+
     async getData() {
         const data = super.getData();
         if (!_new) await getNew();
@@ -251,7 +255,31 @@ async function quickMatch(tokenDocument) {
     tokenDocument = tokenDocument.document ?? tokenDocument;
     const closestMatch = await TokenBrowser.findByName(tokenDocument.name, {returnFirst: true, async: true});
     if (closestMatch) {
-        await tokenDocument.setFlag("levels-3d-preview", "model3d", closestMatch);
+        await tokenDocument.update({
+            flags: {
+                "levels-3d-preview": {
+                    model3d: closestMatch,
+                    scale: (tokenDocument.texture.scaleX + tokenDocument.texture.scaleY) / 2,
+                }
+            }
+        });
+        return closestMatch;
+    }
+    return false;
+}
+
+function quickMatchSync(tokenDocument) {
+    tokenDocument = tokenDocument.document ?? tokenDocument;
+    const closestMatch = TokenBrowser.findByName(tokenDocument.name, {returnFirst: true, async: false});
+    if (closestMatch) {
+        tokenDocument.updateSource({
+            flags: {
+                "levels-3d-preview": {
+                    model3d: closestMatch,
+                    scale: (tokenDocument.texture.scaleX + tokenDocument.texture.scaleY) / 2,
+                }
+            }
+        });
         return closestMatch;
     }
     return false;
@@ -277,4 +305,18 @@ export function setHudHook() {
         });
         colRight.append(quickMatchBtn);
     });
+    Hooks.on("preCreateToken", (tokenDocument, data, options, userId) => {
+        if (!game.canvas3D?._active) return;
+        if (tokenDocument.actorLink) return;
+        const autoAssignToken = game.settings.get("canvas3dcompendium", "autoAssignToken");
+        if (!autoAssignToken) return;
+        const model3d = tokenDocument.getFlag("levels-3d-preview", "model3d");
+        if (model3d) return;
+        if (TokenBrowser.ready) quickMatchSync(tokenDocument);
+        else {
+            const hookId = Hooks.once("createToken", async (tD) => {
+                    await quickMatch(tD);
+            });
+        }
+    })
 }
