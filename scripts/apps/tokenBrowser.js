@@ -257,7 +257,7 @@ function generatePermutations(words) {
     return permutations;
 }
   
-async function quickMatch(tokenDocument) {
+async function quickMatch(tokenDocument, topDown = false) {
     tokenDocument = tokenDocument.document ?? tokenDocument;
     const closestMatch = await TokenBrowser.findByName(tokenDocument.name, {returnFirst: true, async: true});
     if (closestMatch) {
@@ -269,12 +269,19 @@ async function quickMatch(tokenDocument) {
                 }
             }
         });
+        if (topDown) await tokenDocument.update({
+            texture: {
+                src: closestMatch.replace(".glb", "-topdown.webp"),
+                scaleX: tokenDocument.texture.scaleX * 2,
+                scaleY: tokenDocument.texture.scaleY * 2,
+            }
+        })
         return closestMatch;
     }
     return false;
 }
 
-function quickMatchSync(tokenDocument) {
+function quickMatchSync(tokenDocument, topDown = false) {
     tokenDocument = tokenDocument.document ?? tokenDocument;
     const closestMatch = TokenBrowser.findByName(tokenDocument.name, {returnFirst: true, async: false});
     if (closestMatch) {
@@ -286,6 +293,13 @@ function quickMatchSync(tokenDocument) {
                 }
             }
         });
+        if (topDown) tokenDocument.updateSource({
+            texture: {
+                src: closestMatch.replace(".glb", "-topdown.webp"),
+                scaleX: tokenDocument.texture.scaleX * 2,
+                scaleY: tokenDocument.texture.scaleY * 2,
+            }
+        })
         return closestMatch;
     }
     return false;
@@ -312,16 +326,16 @@ export function setHudHook() {
         colRight.append(quickMatchBtn);
     });
     Hooks.on("preCreateToken", (tokenDocument, data, options, userId) => {
-        if (!game.canvas3D?._active) return;
-        if (tokenDocument.actorLink) return;
         const autoAssignToken = game.settings.get("canvas3dcompendium", "autoAssignToken");
+        if (!game.canvas3D?._active && autoAssignToken < 2) return;
+        if (tokenDocument.actorLink) return;
         if (!autoAssignToken) return;
         const model3d = tokenDocument.getFlag("levels-3d-preview", "model3d");
         if (model3d) return;
-        if (TokenBrowser.ready) quickMatchSync(tokenDocument);
+        if (TokenBrowser.ready) quickMatchSync(tokenDocument, autoAssignToken == 2);
         else {
             const hookId = Hooks.once("createToken", async (tD) => {
-                    await quickMatch(tD);
+                    await quickMatch(tD, autoAssignToken == 2);
             });
         }
     })

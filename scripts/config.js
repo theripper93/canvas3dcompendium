@@ -31,8 +31,13 @@ Hooks.once('init', async function() {
         hint: "When placing an Unlinked token on the canvas, automatically assign a 3D model to it if none is assigned.",
         scope: "world",
         config: true,
-        type: Boolean,
-        default: true,
+        choices: {
+          0: "Disabled",
+          1: "3D Model Only",
+          2: "3D Model and Top Down Token",
+        },
+        type: Number,
+        default: 1,
     });
   
       game.settings.register("canvas3dcompendium", "assetBrowserCustomPath", {
