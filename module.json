@@ -36,6 +36,33 @@
   "id": "canvas3dcompendium",
   "relationships": {
     "requires": [
+      {
+        "id": "lib-wrapper",
+        "type": "module",
+        "compatibility": {}
+      },
+      {
+        "id": "levels",
+        "type": "module",
+        "compatibility": {}
+      },
+      {
+        "id": "wall-height",
+        "type": "module",
+        "compatibility": {}
+      },
+      {
+        "id": "socketlib",
+        "type": "module",
+        "compatibility": {}
+      }
+    ],
+    "recommends": [
+      {
+        "id": "canvas3dtokencompendium",
+        "type": "module",
+        "compatibility": {}
+      }
     ]
   },
   "compatibility": {
