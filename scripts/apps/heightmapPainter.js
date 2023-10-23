@@ -86,6 +86,16 @@ export class HeightmapPainter extends Application {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         this.updateBrushPreview(x, y, false);
+
+        this.updateTilePreview();
+    }
+
+    updateTilePreview() {
+        const tile = canvas.tiles.get(this.document.id);
+        game.Levels3DPreview.tiles[tile.id]?.destroy(true);
+        const newTile = new game.Levels3DPreview.CONFIG.entityClass.Tile3D(tile, game.Levels3DPreview, true, this.canvas);
+        game.Levels3DPreview.tiles[tile.id] = newTile;
+        newTile.load();
     }
 
     updateBrushPreview(x, y, hidden) {
