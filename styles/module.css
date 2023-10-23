@@ -283,3 +283,28 @@
 fieldset.clip{
     margin-top: 0.5rem;
 }
+
+#terrain-painter .terrain-painter-grid{
+    display: grid;
+    grid-template-rows: 50px 1fr;
+}
+
+#terrain-painter .terrain-painter-controls{
+    display: grid;
+    grid-template-columns: 1rem 1fr 1rem 1fr 1rem 1fr 1rem 1fr 2rem;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+#terrain-painter  .terrain-painter-canvas-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    position: relative;
+}
+
+#terrain-painter #terrain-painter-canvas{
+    position:relative;
+}
+

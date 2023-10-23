@@ -1,8 +1,10 @@
+import { HeightmapPainter } from "./heightmapPainter.js";
 export class MatrixEditor extends FormApplication {
     constructor(tile) {
         super();
         tile ??= canvas.tiles.controlled[0];
-        if(!tile) return ui.notifications.error("Please select a tile first");
+        if (!tile) return ui.notifications.error("Please select a tile first");
+        this.tile = tile;
         this.document = tile.document ?? tile;
     }
 
@@ -54,6 +56,11 @@ export class MatrixEditor extends FormApplication {
     activateListeners(html) {
         super.activateListeners(html);
         html.on("change", "input", this.updateMatrix.bind(this));
+        html[0].querySelector("#open-terrain-painter").addEventListener("click", (e) => {
+            e.preventDefault();
+            new HeightmapPainter(this.tile, this.heightmap, this.matrix).render(true);
+            this.close();
+        });
         this.updateMatrixVisualizer();
     }
 

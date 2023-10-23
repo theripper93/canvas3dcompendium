@@ -97,7 +97,6 @@ Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => {
             subfolder: "assets/Tiles",
         },
     );
-    ab.registerPack("baileywiki-3d", "Baileywiki 3D");
 });
 
 
