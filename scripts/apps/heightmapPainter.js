@@ -40,6 +40,7 @@ export class HeightmapPainter extends Application {
         this.ctx.fillStyle = "#000000";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         const image = new Image();
+        image.crossOrigin = "anonymous";
         image.src = this.texturePath;
         image.onload = () => {
             //draw image
