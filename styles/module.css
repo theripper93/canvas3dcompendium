@@ -308,3 +308,18 @@ fieldset.clip{
     position:relative;
 }
 
+.heigtmap-container .matrix-visualizer{
+    position: absolute; border: 2px solid red; cursor: move;
+}
+
+.heigtmap-container .matrix-visualizer .matrix-visualizer-handle{
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    cursor: nwse-resize;
+    border: 2px solid #642525;
+}
