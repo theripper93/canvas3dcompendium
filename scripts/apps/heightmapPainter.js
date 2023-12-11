@@ -199,10 +199,13 @@ export class HeightmapPainter extends Application {
 
         await this.document.setFlag("levels-3d-preview", "displacementMatrix", "0,0,1,1");
 
+        this._saved = true;
+
         this.close();
     }
 
     async close(...args) {
+        if(this._saved) return super.close(...args);
         const res = await Dialog.confirm({
             title: "Close without saving?",
             content: "Are you sure you want to close without saving? Any changes will be lost.",
