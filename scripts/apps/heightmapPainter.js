@@ -201,4 +201,23 @@ export class HeightmapPainter extends Application {
 
         this.close();
     }
+
+    async close(...args) {
+        const res = await Dialog.confirm({
+            title: "Close without saving?",
+            content: "Are you sure you want to close without saving? Any changes will be lost.",
+            yes: () => {
+                return true;
+            },
+            no: () => {
+                return false;
+            },
+            defaultYes: false,
+            close: () => {
+                return false;
+            },
+        })
+        if(!res) return;
+        return super.close(...args);
+    }
 }

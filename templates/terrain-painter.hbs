@@ -1,13 +1,13 @@
 <form class="terrain-painter-grid">
     <div class="terrain-painter-controls">
         <i class="fa-duotone fa-arrow-up-small-big"></i>
-        <input type="range" id="brush-size" step="0.01" min="0.1" max="100" value="50">
+        <input type="range" id="brush-size" step="0.01" min="0.1" max="100" value="50" data-tooltip-direction="UP" data-tooltip="Brush Size">
         <i class="fa-duotone fa-circle-half"></i>
-        <input type="range" id="brush-opacity" step="0.01" min="0.01" max="1" value="0.35">
+        <input type="range" id="brush-opacity" step="0.01" min="0.01" max="1" value="0.35" data-tooltip-direction="UP" data-tooltip="Brush Opacity">
         <i class="fa-duotone fa-feather"></i>
-        <input type="range" id="brush-hardness" step="0.01" min="0" max="1" value="0.1">
+        <input type="range" id="brush-hardness" step="0.01" min="0" max="1" value="0.1" data-tooltip-direction="UP" data-tooltip="Brush Hardness">
         <i class="fa-duotone fa-droplet"></i>
-        <input type="range" id="brush-color" step="0.01" min="0" max="1" value="255">
+        <input type="range" id="brush-color" step="0.01" min="0" max="1" value="255" data-tooltip-direction="UP" data-tooltip="Brush Color">
         <button id="save-heightmap"><i class="fa-duotone fa-floppy-disk-circle-arrow-right"></i></button>
     </div>
     <div class="terrain-painter-canvas-container">
