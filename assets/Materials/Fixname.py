@@ -9,7 +9,7 @@ def rename_files(folder_path):
         for filename in files:
             file_path = os.path.join(root, filename)
             new_filename = capitalize_keywords(filename)
-            new_filename = capitalize_after_underscore(new_filename)
+            new_filename = capitalize_after_underscore(new_filename, root)
             
             if new_filename != filename:
                 new_file_path = os.path.join(root, new_filename)
@@ -28,7 +28,10 @@ def capitalize_keywords(filename):
                 filename = filename.replace(lowercase_keyword, keyword)
     return filename
 
-def capitalize_after_underscore(filename):
+def capitalize_after_underscore(filename, full_path):
+    last_folder_name = os.path.basename(full_path)
+    if last_folder_name in filename:
+        return filename
     parts = filename.split("_")
     capitalized_parts = []
     for part in parts:
