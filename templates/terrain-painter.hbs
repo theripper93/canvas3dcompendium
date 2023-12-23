@@ -7,8 +7,19 @@
         <i class="fa-duotone fa-feather"></i>
         <input type="range" id="brush-hardness" step="0.01" min="0" max="1" value="0.1" data-tooltip-direction="UP" data-tooltip="Brush Hardness">
         <i class="fa-duotone fa-droplet"></i>
-        <input type="range" id="brush-color" step="0.01" min="0" max="1" value="255" data-tooltip-direction="UP" data-tooltip="Brush Color">
-        <button id="save-heightmap"><i class="fa-duotone fa-floppy-disk-circle-arrow-right"></i></button>
+        <input type="range" id="brush-color" step="1" min="0" max="255" value="255" data-tooltip-direction="UP" data-tooltip="Brush Color">
+    </div>
+    <div class="input-info">
+        <input type="number" class="brush-size"></input>
+        <input type="number" class="brush-opacity"></input>
+        <input type="number" class="brush-hardness"></input>
+        <input type="number" class="brush-color"></input>
+    </div>
+    <div class="form-group">
+        <label for="">File Name</label>
+        <input type="text" id="heightmap-file-name" value="{{fileName}}">
+        <button style="line-height: calc(var(--form-field-height) - 4px); flex: 0" id="save-heightmap"><i class="fa-duotone fa-floppy-disk-circle-arrow-right"></i></button>
+
     </div>
     <div class="terrain-painter-canvas-container">
     <div id="terrain-painter-brush" style="position: absolute;z-index: 999; pointer-events: none;"></div>

@@ -17,9 +17,9 @@ export class HeightmapPainter extends Application {
             title: "Heightmap Painter",
             id: "terrain-painter",
             template: `modules/canvas3dcompendium/templates/terrain-painter.hbs`,
-            width: 600,
-            height: 650,
-            resizable: true,
+            width: 540,
+            //height: 670,
+            resizable: false,
         };
     }
 
@@ -59,11 +59,33 @@ export class HeightmapPainter extends Application {
 
         html.querySelector("#save-heightmap").addEventListener("click", this.saveHeightmap.bind(this));
 
-        this.element.on("change", "input", this.updateBrushData.bind(this));
+        html.querySelectorAll(".terrain-painter-controls input").forEach((input) => {
+            input.addEventListener("change", this.updateBrushData.bind(this));
+        });
+
+        html.querySelectorAll(".input-info input").forEach((input) => {
+            input.addEventListener("change", this.updateRangeInputs.bind(this));
+        });
+    }
+
+    getData() {
+        return {
+            fileName: `${window.canvas.scene.name.slugify()}-heightmap-${randomID()}`
+        }
     }
 
     getBrushData() {
         return this.brushData;
+    }
+
+    updateRangeInputs(e) {
+        e.preventDefault();
+        const input = e.currentTarget;
+        const value = parseFloat(input.value);
+        const className = input.classList[0];
+        const rangeInput = this.element[0].querySelector(`#${className}`);
+        rangeInput.value = value;
+        this.updateBrushData();
     }
 
     updateBrushData() {
@@ -72,8 +94,14 @@ export class HeightmapPainter extends Application {
             size: parseFloat(html.querySelector("#brush-size").value),
             opacity: parseFloat(html.querySelector("#brush-opacity").value),
             hardness: parseFloat(html.querySelector("#brush-hardness").value),
-            color: parseFloat(html.querySelector("#brush-color").value) * 255,
+            color: parseInt(html.querySelector("#brush-color").value),
         };
+        html.querySelector(".brush-size").value = this.brushData.size;
+        html.querySelector(".brush-opacity").value = this.brushData.opacity;
+        html.querySelector(".brush-hardness").value = this.brushData.hardness;
+        html.querySelector(".brush-color").style.backgroundColor = `rgba(${this.brushData.color}, ${this.brushData.color}, ${this.brushData.color}, 1)`;
+        html.querySelector(".brush-color").style.color = this.brushData.color > 127 ? "#000000" : "#ffffff";
+        html.querySelector(".brush-color").value = this.brushData.color;
     }
 
     onMouseDown(e) {
@@ -168,13 +196,14 @@ export class HeightmapPainter extends Application {
 
         const path = await new Promise((resolve, reject) => {
             const fp = new FilePicker({
+                type: "folder",
                 callback: (path, fp) => {
                     resolve({ path, fp });
                 },
             }).render(true);
         });
 
-        const fn = path.path.split("/").pop();
+        const fn = this.element[0].querySelector("#heightmap-file-name").value;
         const filenameNoExtension = fn.split(".").shift();
 
         const filename = `${filenameNoExtension}.jpg`;
