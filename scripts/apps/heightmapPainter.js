@@ -12,6 +12,9 @@ export class HeightmapPainter extends Application {
         this.texturePath = texture;
         this.matrix = matrix;
         this.input = input;
+        if (this.input) {
+            this.shaderConfig = Object.values(ui.windows).find(w => w.id == "levels-3d-preview-shader-config");
+        }
         this.useRGB = useRGB;
         this.color = "bw";
     }
@@ -35,6 +38,9 @@ export class HeightmapPainter extends Application {
         this.brushElement = html.querySelector("#terrain-painter-brush");
         this.canvasContainer = html.querySelector(".terrain-painter-canvas-container");
         this.canvas = html.querySelector("#terrain-painter-canvas");
+        if (this.input) {
+            game.Levels3DPreview._heightmapPainter = this;
+        }
         this.ctx = this.canvas.getContext("2d");
 
         //set canvas size
@@ -139,10 +145,9 @@ export class HeightmapPainter extends Application {
     }
 
     updateTilePreview() {
-        if(!this.tile) return;
-        const tile = canvas.tiles.get(this.document.id);
+        const tile = canvas.tiles.get(this.document?.id) ?? this.shaderConfig?.document?.object;
         game.Levels3DPreview.tiles[tile.id]?.destroy(true);
-        const newTile = new game.Levels3DPreview.CONFIG.entityClass.Tile3D(tile, game.Levels3DPreview, true, this.canvas);
+        const newTile = new game.Levels3DPreview.CONFIG.entityClass.Tile3D(tile, game.Levels3DPreview, true, this.input ? null : this.canvas);
         game.Levels3DPreview.tiles[tile.id] = newTile;
         newTile.load();
     }
@@ -269,7 +274,10 @@ export class HeightmapPainter extends Application {
     }
 
     async close(...args) {
-        if(this._saved) return super.close(...args);
+        if (this._saved) {
+            game.Levels3DPreview._heightmapPainter = null;
+            return super.close(...args)
+        };
         const res = await Dialog.confirm({
             title: "Close without saving?",
             content: "Are you sure you want to close without saving? Any changes will be lost.",
@@ -284,7 +292,8 @@ export class HeightmapPainter extends Application {
                 return false;
             },
         })
-        if(!res) return;
+        if (!res) return;
+        game.Levels3DPreview._heightmapPainter = null;
         return super.close(...args);
     }
 
