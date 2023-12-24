@@ -303,6 +303,7 @@ fieldset.clip{
     gap: 0.3rem;
     align-items: center;
     height: 100%;
+    position: relative;
 }
 
 #terrain-painter .input-info input{
@@ -323,6 +324,19 @@ fieldset.clip{
 
 #terrain-painter #terrain-painter-canvas{
     position:relative;
+}
+
+#terrain-painter .input-info #cycle-color{
+    position: absolute;
+    right: 0;
+    width: 2rem;
+    background: transparent;
+    border: none;
+}
+
+#terrain-painter .input-info #cycle-color:focus, #terrain-painter .input-info #cycle-color:hover{
+    outline: none;
+    box-shadow: none;
 }
 
 .heigtmap-container .matrix-visualizer{

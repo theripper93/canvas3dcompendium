@@ -1,5 +1,7 @@
+const COLOR_MODES = ["bw", "r", "g", "b"]
+
 export class HeightmapPainter extends Application {
-    constructor(tile, texture, matrix, input) {
+    constructor(tile, texture, matrix, input, useRGB = false) {
         super();
         tile ??= canvas.tiles.controlled[0];
         if (!tile && !input) return ui.notifications.error("Please select a tile first");
@@ -10,6 +12,8 @@ export class HeightmapPainter extends Application {
         this.texturePath = texture;
         this.matrix = matrix;
         this.input = input;
+        this.useRGB = useRGB;
+        this.color = "bw";
     }
 
     static get defaultOptions() {
@@ -69,11 +73,21 @@ export class HeightmapPainter extends Application {
         html.querySelectorAll(".input-info input").forEach((input) => {
             input.addEventListener("change", this.updateRangeInputs.bind(this));
         });
+
+        if (this.useRGB) {            
+            html.querySelector("#cycle-color").addEventListener("click", (e) => {
+                e.preventDefault();
+                const index = COLOR_MODES.indexOf(this.color);
+                this.color = COLOR_MODES[index + 1] ?? COLOR_MODES[0];
+                this.updateBrushData();
+            });
+        }
     }
 
     getData() {
         return {
-            fileName: `${window.canvas.scene.name.slugify()}-heightmap-${randomID()}`
+            fileName: `${window.canvas.scene.name.slugify()}-heightmap-${randomID()}`,
+            useRGB: this.useRGB,
         }
     }
 
@@ -102,8 +116,10 @@ export class HeightmapPainter extends Application {
         html.querySelector(".brush-size").value = this.brushData.size;
         html.querySelector(".brush-opacity").value = this.brushData.opacity;
         html.querySelector(".brush-hardness").value = this.brushData.hardness;
-        html.querySelector(".brush-color").style.backgroundColor = `rgba(${this.brushData.color}, ${this.brushData.color}, ${this.brushData.color}, 1)`;
-        html.querySelector(".brush-color").style.color = this.brushData.color > 127 ? "#000000" : "#ffffff";
+        const color = [this.brushData.color, this.brushData.color, this.brushData.color, 1];
+        this.mutateVec4Color(color);
+        html.querySelector(".brush-color").style.backgroundColor = `rgba(${color.join(",")})`;
+        html.querySelector(".brush-color").style.color = this.brushData.color > 127 && this.color !== "b" ? "#000000" : "#ffffff";
         html.querySelector(".brush-color").value = this.brushData.color;
     }
 
@@ -131,6 +147,14 @@ export class HeightmapPainter extends Application {
         newTile.load();
     }
 
+    mutateVec4Color(brushColorVec4) {
+        if (this.color !== "bw") {
+            brushColorVec4[0] = this.color === "r" ? brushColorVec4[0] : 0;
+            brushColorVec4[1] = this.color === "g" ? brushColorVec4[1] : 0;
+            brushColorVec4[2] = this.color === "b" ? brushColorVec4[2] : 0;
+        }
+    }
+
     updateBrushPreview(x, y, hidden) {
         if (hidden) {
             this.brushElement.style.display = "none";
@@ -143,7 +167,7 @@ export class HeightmapPainter extends Application {
         const brushOpacity = brush.opacity;
         const brushColor = brush.color;
         const brushColorVec4 = [brushColor, brushColor, brushColor, brushOpacity];
-
+        this.mutateVec4Color(brushColorVec4);
         const canvasRect = this.canvas.getBoundingClientRect();
         const containerRect = this.canvasContainer.getBoundingClientRect();
         const deltaX = canvasRect.left - containerRect.left;
@@ -170,10 +194,11 @@ export class HeightmapPainter extends Application {
         const brush = this.getBrushData();
         const brushSize = brush.size;
         const brushOpacity = brush.opacity;
-        const brushHardness = brush.hardness;
+        const brushHardness = Math.min(brush.hardness, 0.99);
         const brushColor = brush.color;
         const brushColorVec4 = [brushColor, brushColor, brushColor, brushOpacity];
-        const brushColorVec4ExteriorGradient = [brushColor, brushColor, brushColor, 0];
+        this.mutateVec4Color(brushColorVec4);
+        const brushColorVec4ExteriorGradient = [brushColorVec4[0], brushColorVec4[1], brushColorVec4[2], 0];
 
         const brushRadius = brushSize / 2;
 
@@ -263,14 +288,15 @@ export class HeightmapPainter extends Application {
         return super.close(...args);
     }
 
-    static async create(input) {
+    static async create(input, useRGB = false) {
+        useRGB = input.name === "splatMap.textureSplatMap" ? true : useRGB;
         const button = document.createElement("button");
         button.innerHTML = `<i class="fas fa-paint-brush"></i>`;
         button.style.order = 98;
         input.after(button);
         button.addEventListener("click", (e) => {
             e.preventDefault();
-            const app = new HeightmapPainter(null, input.value, {offsetX:0, offsetY:0, scaleX:1, scaleY:1}, input);
+            const app = new HeightmapPainter(null, input.value, {offsetX:0, offsetY:0, scaleX:1, scaleY:1}, input, useRGB);
             app.render(true);
         });
     }

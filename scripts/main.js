@@ -127,7 +127,7 @@ async function injectMaterialBrowser(app, html) {
   if (app.id == "levels-3d-preview-shader-config") {
     const filepickers = html.find(`input.image`)
     filepickers.each((i, el) => { 
-      if (el.name == "mask.textureMask") {
+      if (el.name == "mask.textureMask" || el.name == "splatMap.textureSplatMap") {
         HeightmapPainter.create(el)
       } else {
         MaterialBrowser.create($(el).closest(".form-group"), app, "_Color");
