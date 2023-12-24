@@ -254,7 +254,7 @@ export class HeightmapPainter extends Application {
         
         const outputPath = response.path;
 
-        if (this.document) {            
+        if (!this.input) {            
             //update tile
     
             await this.document.setFlag("levels-3d-preview", "displacementMap", outputPath);
