@@ -1,14 +1,15 @@
 export class HeightmapPainter extends Application {
-    constructor(tile, texture, matrix) {
+    constructor(tile, texture, matrix, input) {
         super();
         tile ??= canvas.tiles.controlled[0];
-        if (!tile) return ui.notifications.error("Please select a tile first");
-        this.document = tile.document ?? tile;
+        if (!tile && !input) return ui.notifications.error("Please select a tile first");
+        this.document = tile?.document ?? tile;
         this.tile = tile;
         this.leftDown = false;
         this.rightDown = false;
         this.texturePath = texture;
         this.matrix = matrix;
+        this.input = input;
     }
 
     static get defaultOptions() {
@@ -39,19 +40,21 @@ export class HeightmapPainter extends Application {
         //black fill
         this.ctx.fillStyle = "#000000";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        const image = new Image();
-        image.crossOrigin = "anonymous";
-        image.src = this.texturePath;
-        image.onload = () => {
-            //draw image
-            const offsetX = this.matrix.offsetX * image.width;
-            const offsetY = this.matrix.offsetY * image.height;
-            const scaleX = this.matrix.scaleX;
-            const scaleY = this.matrix.scaleY;
-            //this.ctx.setTransform(scaleX, 0, 0, scaleY, offsetX, offsetY);
-            this.ctx.drawImage(image, offsetX, offsetY, image.width / scaleX, image.height / scaleY, 0, 0, this.canvas.width, this.canvas.height);
-            //this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-        };
+        if (this.texturePath) {            
+            const image = new Image();
+            image.crossOrigin = "anonymous";
+            image.src = this.texturePath;
+            image.onload = () => {
+                //draw image
+                const offsetX = this.matrix.offsetX * image.width;
+                const offsetY = this.matrix.offsetY * image.height;
+                const scaleX = this.matrix.scaleX;
+                const scaleY = this.matrix.scaleY;
+                //this.ctx.setTransform(scaleX, 0, 0, scaleY, offsetX, offsetY);
+                this.ctx.drawImage(image, offsetX, offsetY, image.width / scaleX, image.height / scaleY, 0, 0, this.canvas.width, this.canvas.height);
+                //this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+            };
+        }
 
         this.canvas.addEventListener("mousedown", this.onMouseDown.bind(this));
         this.canvas.addEventListener("mousemove", this.onMouseMove.bind(this));
@@ -120,6 +123,7 @@ export class HeightmapPainter extends Application {
     }
 
     updateTilePreview() {
+        if(!this.tile) return;
         const tile = canvas.tiles.get(this.document.id);
         game.Levels3DPreview.tiles[tile.id]?.destroy(true);
         const newTile = new game.Levels3DPreview.CONFIG.entityClass.Tile3D(tile, game.Levels3DPreview, true, this.canvas);
@@ -220,15 +224,21 @@ export class HeightmapPainter extends Application {
         
         const outputPath = response.path;
 
-        //update tile
-
-        await this.document.setFlag("levels-3d-preview", "displacementMap", outputPath);
-
-        //reset matrix
-
-        await this.document.setFlag("levels-3d-preview", "displacementMatrix", "0,0,1,1");
-
-        this._saved = true;
+        if (this.document) {            
+            //update tile
+    
+            await this.document.setFlag("levels-3d-preview", "displacementMap", outputPath);
+    
+            //reset matrix
+    
+            await this.document.setFlag("levels-3d-preview", "displacementMatrix", "0,0,1,1");
+    
+            this._saved = true;
+        } else {
+            this.input.value = outputPath;
+            this.input.dispatchEvent(new Event("change"));
+            this._saved = true;
+        }
 
         this.close();
     }
@@ -251,5 +261,17 @@ export class HeightmapPainter extends Application {
         })
         if(!res) return;
         return super.close(...args);
+    }
+
+    static async create(input) {
+        const button = document.createElement("button");
+        button.innerHTML = `<i class="fas fa-paint-brush"></i>`;
+        button.style.order = 98;
+        input.after(button);
+        button.addEventListener("click", (e) => {
+            e.preventDefault();
+            const app = new HeightmapPainter(null, input.value, {offsetX:0, offsetY:0, scaleX:1, scaleY:1}, input);
+            app.render(true);
+        });
     }
 }

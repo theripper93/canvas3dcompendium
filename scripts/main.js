@@ -6,7 +6,8 @@ import {EffectBrowser} from "./apps/effectBrowser.js";
 import {BuildPanel} from "./apps/buildPanel.js";
 import {QuickEnvironment} from "./apps/quickEnvironment.js";
 import {CutscenePanel} from "./apps/cutscenePanel.js";
-import { RoomBuilder } from "./apps/roomBuilder.js";
+import {RoomBuilder} from "./apps/roomBuilder.js";
+import { HeightmapPainter } from "./apps/heightmapPainter.js";
 
 BuildPanel.setHook();
 
@@ -126,7 +127,11 @@ async function injectMaterialBrowser(app, html) {
   if (app.id == "levels-3d-preview-shader-config") {
     const filepickers = html.find(`input.image`)
     filepickers.each((i, el) => { 
-      MaterialBrowser.create($(el).closest(".form-group"), app, "_Color");
+      if (el.name == "mask.textureMask") {
+        HeightmapPainter.create(el)
+      } else {
+        MaterialBrowser.create($(el).closest(".form-group"), app, "_Color");
+      }
     });
     
   } else if (app.id == "room-builder") {
