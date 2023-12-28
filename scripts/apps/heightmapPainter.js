@@ -14,9 +14,9 @@ export class HeightmapPainter extends Application {
         this.input = input;
         if (this.input) {
             this.shaderConfig = Object.values(ui.windows).find(w => w.id == "levels-3d-preview-shader-config");
-            game.Levels3DPreview.CONFIG.UI.windows.HeightmapPainter = this;
-            this.isPainting = true;
         }
+        game.Levels3DPreview.CONFIG.UI.windows.HeightmapPainter = this;
+        this.isPainting = true;
         this.useRGB = useRGB;
         this.color = "bw";
     }
@@ -42,9 +42,9 @@ export class HeightmapPainter extends Application {
         this.canvas = html.querySelector("#terrain-painter-canvas");
         if (this.input) {
             game.Levels3DPreview._heightmapPainter = this;
-            document.querySelector("#levels3d").addEventListener("mousemove", this._on3DMouseMove.bind(this));
-            document.querySelector("#levels3d").addEventListener("mouseup", this.onMouseUp.bind(this));
         }
+        document.querySelector("#levels3d").addEventListener("mousemove", this._on3DMouseMove.bind(this));
+        document.querySelector("#levels3d").addEventListener("mouseup", this.onMouseUp.bind(this));
         this.ctx = this.canvas.getContext("2d");
 
         //set canvas size
@@ -97,8 +97,8 @@ export class HeightmapPainter extends Application {
     _on3DMouseMove(e) {
         this.update3DBrush();
         const mouse = {...game.Levels3DPreview.interactionManager.canvas2dMousePosition}
-        const {width, height} = this.shaderConfig.document;
-        const {x, y} = this.shaderConfig.document;
+        const {width, height} = this.shaderConfig?.document ?? this.document;
+        const {x, y} = this.shaderConfig?.document ?? this.document;
         //if outside tile bounds, return
         if (mouse.x < x || mouse.x > x + width || mouse.y < y || mouse.y > y + height) return;
         const xPercent = (mouse.x - x) / width;
@@ -164,7 +164,7 @@ export class HeightmapPainter extends Application {
         if (this.brush3D) {
             const brushData = this.getBrushData();
             const brushSize = brushData.size;
-            const {width, height} = this.shaderConfig.document;
+            const {width, height} = this.shaderConfig?.document ?? this.document;
             const avg = (width + height) / 2;
             const canvasWidthHeight = this.canvas.width;
             const brushScale = ((brushSize * avg) / canvasWidthHeight) / game.Levels3DPreview.factor;
@@ -180,6 +180,8 @@ export class HeightmapPainter extends Application {
     }
 
     onMouseUp(e) {
+        const isLeft = e.button === 0;
+        if(!isLeft) return;
         this.updateBrushData();
         const rect = this.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
