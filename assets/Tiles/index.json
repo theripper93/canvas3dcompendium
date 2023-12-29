@@ -1,0 +1,10 @@
+{
+    "INFO": "This is the index containing all tags for the 3d files included in the Mapmaking Pack, to contribute, send a pull request to the github repo with your added filenames and tags. When possible use the existing tags included in the ALLTAGS array, if you need to add a new tag, add it to the ALLTAGS array as well.",
+    "ALLTAGS": ["wall", "scifi", "corner", "medieval", "brick"],
+    "fileName": {
+        "tags": ["wall", "scifi", "corner"]
+    },
+    "otherFileName": {
+        "tags": ["wall", "medieval", "brick"]
+    }
+}
