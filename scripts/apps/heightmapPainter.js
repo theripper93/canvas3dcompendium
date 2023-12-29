@@ -193,7 +193,7 @@ export class HeightmapPainter extends Application {
 
     updateTilePreview() {
         if(this.CanvasTexture) return;
-        const tile = canvas.tiles.get(this.document?.id) ?? this.shaderConfig?.document?.object;
+        const tile = canvas.tiles.get(this.document?.id) ?? canvas.tiles.get(this.shaderConfig?.document?.id);
         game.Levels3DPreview.tiles[tile.id]?.destroy(true);
         const newTile = new game.Levels3DPreview.CONFIG.entityClass.Tile3D(tile, game.Levels3DPreview, true, this.input ? null : this.canvas);
         game.Levels3DPreview.tiles[tile.id] = newTile;
@@ -325,6 +325,11 @@ export class HeightmapPainter extends Application {
     async close(...args) {
         if (this._saved) {
             game.Levels3DPreview._heightmapPainter = null;
+            game.Levels3DPreview.scene.remove(this.brush3D);
+            document.querySelector("#levels3d").removeEventListener("mousemove", this._on3DMouseMove.bind(this));
+            document.querySelector("#levels3d").removeEventListener("mouseup", this.onMouseUp.bind(this));
+            game.Levels3DPreview.CONFIG.UI.windows.HeightmapPainter = null;
+            this.isPainting = false;
             return super.close(...args)
         };
         const res = await Dialog.confirm({
