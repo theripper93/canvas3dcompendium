@@ -61,6 +61,7 @@ export class BuildPanel extends Application {
             const btn = [...BUILD_PANEL_BUTTONS, ...game.Levels3DPreview.CONFIG.UI.CLIP_NAVIGATION.BUTTONS].find((b) => b.id === action);
             btn.callback(event);
         });
+        if(game.Levels3DPreview.sharing.apps.MapBrowser?.contest?.active) html.find(`i[data-action="community-maps"]`).addClass("contest-active");
     }
 
     static setHook() {
