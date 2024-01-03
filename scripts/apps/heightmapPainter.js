@@ -360,7 +360,6 @@ export class HeightmapPainter extends Application {
             class: "compact-mode",
             icon: "fas fa-expand-arrows-alt",
             onclick: this.toggleCompactMode.bind(this),
-            title: "Toggle compact mode",
         });
         return buttons;
     }
