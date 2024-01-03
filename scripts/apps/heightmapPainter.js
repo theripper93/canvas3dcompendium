@@ -17,6 +17,7 @@ export class HeightmapPainter extends Application {
         }
         game.Levels3DPreview.CONFIG.UI.windows.HeightmapPainter = this;
         this.isPainting = true;
+        this._compact = false;
         this.useRGB = useRGB;
         this.color = "bw";
     }
@@ -45,6 +46,7 @@ export class HeightmapPainter extends Application {
         }
         document.querySelector("#levels3d").addEventListener("mousemove", this._on3DMouseMove.bind(this));
         document.querySelector("#levels3d").addEventListener("mouseup", this.onMouseUp.bind(this));
+        document.querySelector("#levels3d").addEventListener("mousedown", this._on3DMouseDown.bind(this));
         this.ctx = this.canvas.getContext("2d");
 
         //set canvas size
@@ -104,6 +106,11 @@ export class HeightmapPainter extends Application {
         const xPercent = (mouse.x - x) / width;
         const yPercent = (mouse.y - y) / height;
         this.onMouseMove(e, xPercent, yPercent);
+    }
+
+    _on3DMouseDown(e) {
+        this.updateBrushData();
+        this._on3DMouseMove(e);
     }
 
     update3DBrush() {
@@ -236,12 +243,37 @@ export class HeightmapPainter extends Application {
 
     onMouseMove(e, xPercent, yPercent) {
         const rect = this.canvas.getBoundingClientRect();
-        const x = xPercent ? xPercent * rect.width : e.clientX - rect.left;
-        const y = yPercent ? yPercent * rect.height : e.clientY - rect.top;
+        const x = xPercent ? xPercent * this.canvas.width : e.clientX - rect.left;
+        const y = yPercent ? yPercent * this.canvas.height : e.clientY - rect.top;
         
         const isLeftDown = e.buttons === 1;
         const isRightDown = e.buttons === 2;
         this.updateBrushPreview(x, y, isLeftDown || isRightDown);
+
+        if (isRightDown) {
+            //pick the color from the canvas and set it as the brush color
+            const imageData = this.ctx.getImageData(x, y, 1, 1);
+            const pixel = imageData.data;
+            //detect if the color is grayscale
+            const isGrayscale = pixel[0] === pixel[1] && pixel[1] === pixel[2];
+
+            if (isGrayscale) {
+                this.brushData.color = pixel[0];
+                this.color = "bw";
+            } else {
+                const biggestColor = Math.max(pixel[0], pixel[1], pixel[2]);
+                const colorKey = ["r", "g", "b"][pixel.indexOf(biggestColor)];
+                this.brushData.color = biggestColor;
+                this.color = colorKey;
+            }
+
+            //set input value
+            const html = this.element[0];
+            html.querySelector("#brush-color").value = this.brushData.color;
+            this.updateBrushData();
+
+        }
+
         if(!isLeftDown) return;
 
         const brush = this.getBrushData();
@@ -322,6 +354,23 @@ export class HeightmapPainter extends Application {
         this.close();
     }
 
+    _getHeaderButtons() {
+        let buttons = super._getHeaderButtons();
+        buttons.unshift({
+            class: "compact-mode",
+            icon: "fas fa-expand-arrows-alt",
+            onclick: this.toggleCompactMode.bind(this),
+            title: "Toggle compact mode",
+        });
+        return buttons;
+    }
+
+    toggleCompactMode() {
+        this.element[0].querySelector(".terrain-painter-canvas-container").style.display = this._compact ? null : "none";
+        this._compact = !this._compact;
+        this.setPosition({height: "auto"});
+    }
+
     async close(...args) {
         if (this._saved) {
             game.Levels3DPreview._heightmapPainter = null;
@@ -351,6 +400,7 @@ export class HeightmapPainter extends Application {
         game.Levels3DPreview.scene.remove(this.brush3D);
         document.querySelector("#levels3d").removeEventListener("mousemove", this._on3DMouseMove.bind(this));
         document.querySelector("#levels3d").removeEventListener("mouseup", this.onMouseUp.bind(this));
+        document.querySelector("#levels3d").removeEventListener("mousedown", this._on3DMouseDown.bind(this));
         game.Levels3DPreview.CONFIG.UI.windows.HeightmapPainter = null;
         this.isPainting = false;
         return super.close(...args);
