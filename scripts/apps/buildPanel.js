@@ -61,7 +61,22 @@ export class BuildPanel extends Application {
             const btn = [...BUILD_PANEL_BUTTONS, ...game.Levels3DPreview.CONFIG.UI.CLIP_NAVIGATION.BUTTONS].find((b) => b.id === action);
             btn.callback(event);
         });
-        if(game.Levels3DPreview.sharing.apps.MapBrowser?.contest?.active) html.find(`i[data-action="community-maps"]`).addClass("contest-active");
+        if (game.Levels3DPreview.sharing.apps.MapBrowser?.contest?.active) {
+            html.find(`i[data-action="community-maps"]`).addClass("contest-active");
+            const trophyIcon = $(`<i class="fa-duotone fa-trophy-star"></i>`);
+            const li = html.find(`i[data-action="community-maps"]`).closest("li");
+            li.css("position", "relative");
+            trophyIcon.css({
+                position: "absolute",
+                left: "-3px",
+                top: "2px",
+                "font-size": "0.8rem",
+                color: "#ffc200",
+                "pointer-events": "none",
+                "text-shadow": "0 0 3px black"
+            })
+            li.append(trophyIcon);
+        }
     }
 
     static setHook() {
