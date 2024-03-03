@@ -1,4 +1,4 @@
-import {getFiles} from "./assetBrowser.js";
+import { getFiles } from "./assetBrowser.js";
 
 let fileCache = null;
 let dataCache = null;
@@ -27,7 +27,7 @@ export class TokenBrowser extends Application {
         this._app = app;
     }
 
-    get sources() { 
+    get sources() {
         const allTokens = game.settings.get("canvas3dcompendium", "allTokens");
         return allTokens ? ["modules/canvas3dtokencompendium/miniatures"] : ["modules/canvas3dtokencompendium/miniatures/_Colorized"];
     }
@@ -46,6 +46,7 @@ export class TokenBrowser extends Application {
             width: 400,
             height: window.innerHeight * 0.8,
             resizable: true,
+            dragDrop: [{ dragSelector: "li", dropSelector: "" }],
         };
     }
 
@@ -57,10 +58,10 @@ export class TokenBrowser extends Application {
         await this.prototype.getData();
     }
 
-    static findByName(name, {async = false, returnFirst = false, fuzzy = true, wildcard = true} = {}) {
-        if (async && !dataCache) return this.preloadData().then((data) => this.findByName(name, {async: false, returnFirst}));
+    static findByName(name, { async = false, returnFirst = false, fuzzy = true, wildcard = true } = {}) {
+        if (async && !dataCache) return this.preloadData().then((data) => this.findByName(name, { async: false, returnFirst }));
         if (!dataCache) return ui.notifications.error("Token Browser data is not yet loaded. Please, use the game.canvas3d.CONFIG.UI.TokenBrowser.preloadData() function before using this function or run this search with {async: true}.");
-        const slugName = name.slugify({strict: true});
+        const slugName = name.slugify({ strict: true });
         if (fuzzy) {
             const words = slugName.split("-");
             const permutations = generatePermutations(words);
@@ -113,7 +114,7 @@ export class TokenBrowser extends Application {
                 output: file,
                 search: file.split("/canvas3dtokencompendium/miniatures/_Colorized").pop(),
                 isNew: _new.includes(cleanedName),
-                slug: cleanName.slugify({strict: true})
+                slug: cleanName.slugify({ strict: true }),
             });
         }
         materials.sort((a, b) => a.displayName.localeCompare(b.displayName));
@@ -126,11 +127,11 @@ export class TokenBrowser extends Application {
         data.hasInput = true;
         this._assetCount = materials.length;
         dataCache = data;
-        await initFuse(dataCache)
+        await initFuse(dataCache);
         return data;
     }
 
-    get usingTheForge() { 
+    get usingTheForge() {
         return typeof ForgeVTT !== "undefined" && ForgeVTT.usingTheForge;
     }
 
@@ -174,9 +175,22 @@ export class TokenBrowser extends Application {
         this.element.on("click", "li", (e) => {
             const output = $(e.currentTarget).data("output");
             this.input.val(output);
-            if (game.settings.get("canvas3dcompendium", "autoApply")) this._app.object.setFlag("levels-3d-preview", "model3d", output)//this._app._onSubmit(e, { preventClose: true, preventRender: true });
+            if (this._app.isPrototype) return;
+            if (game.settings.get("canvas3dcompendium", "autoApply")) this._app.object.setFlag("levels-3d-preview", "model3d", output); //this._app._onSubmit(e, { preventClose: true, preventRender: true });
             if (game.settings.get("canvas3dcompendium", "autoClose")) this.close();
         });
+        this.element.on("dragstart", "li", this._onDragStart);
+    }
+
+    _onDragStart(event) {
+        canvas.tiles.releaseAll();
+        const src = event.currentTarget.dataset.output;
+        const dragData = {
+            type: "Tile",
+            texture: { src: src },
+            tileSize: canvas.dimensions.size,
+        };
+        event.dataTransfer.setData("text/plain", JSON.stringify(dragData));
     }
 
     static create(filepicker, app) {
@@ -197,10 +211,10 @@ export class TokenBrowser extends Application {
             if (isLeftClick && !isCtrlClick) new TokenBrowser(input, app).render(true);
             if (isRightClick || isCtrlClick) {
                 const name = app.object.name;
-                const closestMatch = await this.findByName(name, {returnFirst: true, async: true});
+                const closestMatch = await this.findByName(name, { returnFirst: true, async: true });
                 if (closestMatch) {
                     input.val(closestMatch);
-                    if (game.settings.get("canvas3dcompendium", "autoApply")) app.object.setFlag("levels-3d-preview", "model3d", closestMatch)//app._onSubmit(e, { preventClose: true, preventRender: true });
+                    if (game.settings.get("canvas3dcompendium", "autoApply")) app.object.setFlag("levels-3d-preview", "model3d", closestMatch); //app._onSubmit(e, { preventClose: true, preventRender: true });
                 }
             }
         });
@@ -208,9 +222,9 @@ export class TokenBrowser extends Application {
 
     static registerPack(packId, packName, assetPacks = [], options = {}) {
         let packPath = `modules/${packId}`;
-        if(options.subfolder) packPath += `/${options.subfolder}`;
+        if (options.subfolder) packPath += `/${options.subfolder}`;
         if (!TokenBrowser.defaultSources.includes(packPath)) TokenBrowser.defaultSources.push(packPath);
-        if(!assetPacks.length) return;
+        if (!assetPacks.length) return;
         assetPacks.map((p) => {
             p.query = packId + "," + p.query;
             p.query = p.query.toLowerCase();
@@ -240,42 +254,43 @@ async function getNew() {
 
 function generatePermutations(words) {
     const permutations = [];
-  
+
     function permute(arr, prefix = []) {
-      if (arr.length === 0) {
-        permutations.push(prefix.join(' '));
-      } else {
-        for (let i = 0; i < arr.length; i++) {
-          const current = arr.slice();
-          const word = current.splice(i, 1);
-          permute(current, prefix.concat(word));
+        if (arr.length === 0) {
+            permutations.push(prefix.join(" "));
+        } else {
+            for (let i = 0; i < arr.length; i++) {
+                const current = arr.slice();
+                const word = current.splice(i, 1);
+                permute(current, prefix.concat(word));
+            }
         }
-      }
     }
-  
+
     permute(words);
     return permutations;
 }
-  
+
 async function quickMatch(tokenDocument, topDown = false) {
     tokenDocument = tokenDocument.document ?? tokenDocument;
-    const closestMatch = await TokenBrowser.findByName(tokenDocument.name, {returnFirst: true, async: true});
+    const closestMatch = await TokenBrowser.findByName(tokenDocument.name, { returnFirst: true, async: true });
     if (closestMatch) {
         await tokenDocument.update({
             flags: {
                 "levels-3d-preview": {
                     model3d: closestMatch,
                     scale: (tokenDocument.texture.scaleX + tokenDocument.texture.scaleY) / 2,
-                }
-            }
+                },
+            },
         });
-        if (topDown) await tokenDocument.update({
-            texture: {
-                src: closestMatch.replace(".glb", "-topdown.webp"),
-                scaleX: tokenDocument.texture.scaleX * 2,
-                scaleY: tokenDocument.texture.scaleY * 2,
-            }
-        })
+        if (topDown)
+            await tokenDocument.update({
+                texture: {
+                    src: closestMatch.replace(".glb", "-topdown.webp"),
+                    scaleX: tokenDocument.texture.scaleX * 2,
+                    scaleY: tokenDocument.texture.scaleY * 2,
+                },
+            });
         return closestMatch;
     }
     return false;
@@ -283,23 +298,24 @@ async function quickMatch(tokenDocument, topDown = false) {
 
 function quickMatchSync(tokenDocument, topDown = false) {
     tokenDocument = tokenDocument.document ?? tokenDocument;
-    const closestMatch = TokenBrowser.findByName(tokenDocument.name, {returnFirst: true, async: false});
+    const closestMatch = TokenBrowser.findByName(tokenDocument.name, { returnFirst: true, async: false });
     if (closestMatch) {
         tokenDocument.updateSource({
             flags: {
                 "levels-3d-preview": {
                     model3d: closestMatch,
                     scale: (tokenDocument.texture.scaleX + tokenDocument.texture.scaleY) / 2,
-                }
-            }
+                },
+            },
         });
-        if (topDown) tokenDocument.updateSource({
-            texture: {
-                src: closestMatch.replace(".glb", "-topdown.webp"),
-                scaleX: tokenDocument.texture.scaleX * 2,
-                scaleY: tokenDocument.texture.scaleY * 2,
-            }
-        })
+        if (topDown)
+            tokenDocument.updateSource({
+                texture: {
+                    src: closestMatch.replace(".glb", "-topdown.webp"),
+                    scaleX: tokenDocument.texture.scaleX * 2,
+                    scaleY: tokenDocument.texture.scaleY * 2,
+                },
+            });
         return closestMatch;
     }
     return false;
@@ -307,7 +323,7 @@ function quickMatchSync(tokenDocument, topDown = false) {
 
 export function setHudHook() {
     Hooks.on("renderTokenHUD", async (hud, html, data) => {
-        if(!game.canvas3D?._active) return;
+        if (!game.canvas3D?._active) return;
         const model3d = hud.object.document.getFlag("levels-3d-preview", "model3d");
         if (model3d) return;
         const colRight = html.find(".col.left");
@@ -335,8 +351,8 @@ export function setHudHook() {
         if (TokenBrowser.ready) quickMatchSync(tokenDocument, autoAssignToken == 2);
         else {
             const hookId = Hooks.once("createToken", async (tD) => {
-                    await quickMatch(tD, autoAssignToken == 2);
+                await quickMatch(tD, autoAssignToken == 2);
             });
         }
-    })
+    });
 }
