@@ -1,4 +1,4 @@
-const COLOR_MODES = ["bw", "r", "g", "b"]
+const COLOR_MODES = ["bw", "r", "g", "b"];
 
 export class HeightmapPainter extends Application {
     constructor(tile, texture, matrix, input, useRGB = false) {
@@ -13,7 +13,7 @@ export class HeightmapPainter extends Application {
         this.matrix = matrix;
         this.input = input;
         if (this.input) {
-            this.shaderConfig = Object.values(ui.windows).find(w => w.id == "levels-3d-preview-shader-config");
+            this.shaderConfig = Object.values(ui.windows).find((w) => w.id == "levels-3d-preview-shader-config");
         }
         game.Levels3DPreview.CONFIG.UI.windows.HeightmapPainter = this;
         this.isPainting = true;
@@ -56,7 +56,7 @@ export class HeightmapPainter extends Application {
         //black fill
         this.ctx.fillStyle = "#000000";
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        if (this.texturePath) {            
+        if (this.texturePath) {
             const image = new Image();
             image.crossOrigin = "anonymous";
             image.src = this.texturePath;
@@ -86,7 +86,7 @@ export class HeightmapPainter extends Application {
             input.addEventListener("change", this.updateRangeInputs.bind(this));
         });
 
-        if (this.useRGB) {            
+        if (this.useRGB) {
             html.querySelector("#cycle-color").addEventListener("click", (e) => {
                 e.preventDefault();
                 const index = COLOR_MODES.indexOf(this.color);
@@ -98,9 +98,9 @@ export class HeightmapPainter extends Application {
 
     _on3DMouseMove(e) {
         this.update3DBrush();
-        const mouse = {...game.Levels3DPreview.interactionManager.canvas2dMousePosition}
-        const {width, height} = this.shaderConfig?.document ?? this.document;
-        const {x, y} = this.shaderConfig?.document ?? this.document;
+        const mouse = { ...game.Levels3DPreview.interactionManager.canvas2dMousePosition };
+        const { width, height } = this.shaderConfig?.document ?? this.document;
+        const { x, y } = this.shaderConfig?.document ?? this.document;
         //if outside tile bounds, return
         if (mouse.x < x || mouse.x > x + width || mouse.y < y || mouse.y > y + height) return;
         const xPercent = (mouse.x - x) / width;
@@ -116,10 +116,7 @@ export class HeightmapPainter extends Application {
     update3DBrush() {
         if (!this.brush3D) {
             const THREE = game.Levels3DPreview.THREE;
-            const brush = new THREE.Mesh(
-                new THREE.SphereGeometry(0.5, 32, 32),
-                new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.5})
-            );
+            const brush = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 }));
             this.brush3D = brush;
             this.brush3D.userData.ignoreHover = true;
             this.brush3D.userData.interactive = false;
@@ -134,7 +131,7 @@ export class HeightmapPainter extends Application {
         return {
             fileName: `${window.canvas.scene.name.slugify()}-heightmap-${randomID()}`,
             useRGB: this.useRGB,
-        }
+        };
     }
 
     getBrushData() {
@@ -171,10 +168,10 @@ export class HeightmapPainter extends Application {
         if (this.brush3D) {
             const brushData = this.getBrushData();
             const brushSize = brushData.size;
-            const {width, height} = this.shaderConfig?.document ?? this.document;
+            const { width, height } = this.shaderConfig?.document ?? this.document;
             const avg = (width + height) / 2;
             const canvasWidthHeight = this.canvas.width;
-            const brushScale = ((brushSize * avg) / canvasWidthHeight) / game.Levels3DPreview.factor;
+            const brushScale = (brushSize * avg) / canvasWidthHeight / game.Levels3DPreview.factor;
             this.brush3D.scale.set(brushScale, brushScale, brushScale);
             this.brush3D.material.opacity = brushData.opacity;
             this.brush3D.material.color.setRGB(color[0] / 255, color[1] / 255, color[2] / 255);
@@ -188,7 +185,7 @@ export class HeightmapPainter extends Application {
 
     onMouseUp(e) {
         const isLeft = e.button === 0;
-        if(!isLeft) return;
+        if (!isLeft) return;
         this.updateBrushData();
         const rect = this.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -199,7 +196,7 @@ export class HeightmapPainter extends Application {
     }
 
     updateTilePreview() {
-        if(this.CanvasTexture) return;
+        if (this.CanvasTexture) return;
         const tile = canvas.tiles.get(this.document?.id) ?? canvas.tiles.get(this.shaderConfig?.document?.id);
         game.Levels3DPreview.tiles[tile.id]?.destroy(true);
         const newTile = new game.Levels3DPreview.CONFIG.entityClass.Tile3D(tile, game.Levels3DPreview, true, this.input ? null : this.canvas);
@@ -232,8 +229,8 @@ export class HeightmapPainter extends Application {
         const containerRect = this.canvasContainer.getBoundingClientRect();
         const deltaX = canvasRect.left - containerRect.left;
         const deltaY = canvasRect.top - containerRect.top;
-        this.brushElement.style.left = `${x + deltaX -brushSize/2}px`;
-        this.brushElement.style.top = `${y + deltaY - brushSize/2}px`;
+        this.brushElement.style.left = `${x + deltaX - brushSize / 2}px`;
+        this.brushElement.style.top = `${y + deltaY - brushSize / 2}px`;
 
         this.brushElement.style.width = `${brushSize}px`;
         this.brushElement.style.height = `${brushSize}px`;
@@ -245,7 +242,7 @@ export class HeightmapPainter extends Application {
         const rect = this.canvas.getBoundingClientRect();
         const x = xPercent ? xPercent * this.canvas.width : e.clientX - rect.left;
         const y = yPercent ? yPercent * this.canvas.height : e.clientY - rect.top;
-        
+
         const isLeftDown = e.buttons === 1;
         const isRightDown = e.buttons === 2;
         this.updateBrushPreview(x, y, isLeftDown || isRightDown);
@@ -271,10 +268,9 @@ export class HeightmapPainter extends Application {
             const html = this.element[0];
             html.querySelector("#brush-color").value = this.brushData.color;
             this.updateBrushData();
-
         }
 
-        if(!isLeftDown) return;
+        if (!isLeftDown) return;
 
         const brush = this.getBrushData();
         const brushSize = brush.size;
@@ -300,7 +296,7 @@ export class HeightmapPainter extends Application {
         this.ctx.fill();
 
         //this.ctx.fillRect(x - brushRadius, y - brushRadius, brushDiameter, brushDiameter);
-        if(this.CanvasTexture) this.CanvasTexture.needsUpdate = true;
+        if (this.CanvasTexture) this.CanvasTexture.needsUpdate = true;
     }
 
     async saveHeightmap(e) {
@@ -322,28 +318,28 @@ export class HeightmapPainter extends Application {
         const filenameNoExtension = fn.split(".").shift();
 
         const filename = `${filenameNoExtension}.jpg`;
-        const dir = path.fp.result.target;
+        const dir = decodeURIComponent(path.fp.result.target);
         const source = path.fp.activeSource;
 
         //base64 to File object
 
         const blob = await (await fetch(base64)).blob();
-        const file = new File([blob], filename, {type: "image/jpeg"});
+        const file = new File([blob], filename, { type: "image/jpeg" });
 
         //upload to server
-        const response = await FilePicker.upload(source, dir, file, {filename});
-        
+        const response = await FilePicker.upload(source, dir, file, { filename });
+
         const outputPath = response.path;
 
-        if (!this.input) {            
+        if (!this.input) {
             //update tile
-    
+
             await this.document.setFlag("levels-3d-preview", "displacementMap", outputPath);
-    
+
             //reset matrix
-    
+
             await this.document.setFlag("levels-3d-preview", "displacementMatrix", "0,0,1,1");
-    
+
             this._saved = true;
         } else {
             this.input.value = outputPath;
@@ -367,7 +363,7 @@ export class HeightmapPainter extends Application {
     toggleCompactMode() {
         this.element[0].querySelector(".terrain-painter-canvas-container").style.display = this._compact ? null : "none";
         this._compact = !this._compact;
-        this.setPosition({height: "auto"});
+        this.setPosition({ height: "auto" });
     }
 
     async close(...args) {
@@ -378,8 +374,8 @@ export class HeightmapPainter extends Application {
             document.querySelector("#levels3d").removeEventListener("mouseup", this.onMouseUp.bind(this));
             game.Levels3DPreview.CONFIG.UI.windows.HeightmapPainter = null;
             this.isPainting = false;
-            return super.close(...args)
-        };
+            return super.close(...args);
+        }
         const res = await Dialog.confirm({
             title: "Close without saving?",
             content: "Are you sure you want to close without saving? Any changes will be lost.",
@@ -393,7 +389,7 @@ export class HeightmapPainter extends Application {
             close: () => {
                 return false;
             },
-        })
+        });
         if (!res) return;
         game.Levels3DPreview._heightmapPainter = null;
         game.Levels3DPreview.scene.remove(this.brush3D);
@@ -413,7 +409,7 @@ export class HeightmapPainter extends Application {
         input.after(button);
         button.addEventListener("click", (e) => {
             e.preventDefault();
-            const app = new HeightmapPainter(null, input.value, {offsetX:0, offsetY:0, scaleX:1, scaleY:1}, input, useRGB);
+            const app = new HeightmapPainter(null, input.value, { offsetX: 0, offsetY: 0, scaleX: 1, scaleY: 1 }, input, useRGB);
             app.render(true);
         });
     }
