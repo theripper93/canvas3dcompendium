@@ -118,7 +118,7 @@ export class AssetBrowser extends Application {
         const elevation = tile.document.flags.levels.rangeBottom;
         const depth = tile.document.flags["levels-3d-preview"].depth;
         const rect = [tile.data.x, tile.data.y, tile.data.width, tile.data.height];
-        const nPointsMax = count || Math.max(1, Math.floor(rect[2] * rect[3] * AssetBrowser.density * 0.001));
+        const nPointsMax = count || Math.max(1, Math.floor(rect[2] * rect[3] * AssetBrowser.density * 0.0001));
 
         if (scatterEdges) {
             
@@ -217,15 +217,24 @@ export class AssetBrowser extends Application {
                     points.splice(index, 1);
                 }
             }
-            for (const point of points) {
-                const origin = point.point.clone();
-                const target = point.point.clone();
-                target.y -= 1000;
-                origin.y += 0.05;
-                const collision = game.Levels3DPreview.interactionManager.computeSightCollisionFrom3DPositions(origin, target, "collision", false, false, false, true);
-                if (collision?.length) point.point = collision[0].point;
-                const dragData = this.buildTileData(null, point);
-                game.Levels3DPreview.interactionManager._onDrop(new Event("click"), dragData);
+            const proceed = await Dialog.confirm({
+                title: "Scatter on Edges",
+                content: `<p>Scattering ${points.length} assets on edges of the selected tile. Proceed?</p>`,
+                yes: () => true,
+                no: () => false,
+                defaultYes: true,
+            });
+            if (proceed) {
+                for (const point of points) {
+                    const origin = point.point.clone();
+                    const target = point.point.clone();
+                    target.y -= 1000;
+                    origin.y += 0.05;
+                    const collision = game.Levels3DPreview.interactionManager.computeSightCollisionFrom3DPositions(origin, target, "collision", false, false, false, true);
+                    if (collision?.length) point.point = collision[0].point;
+                    const dragData = this.buildTileData(null, point);
+                    game.Levels3DPreview.interactionManager._onDrop(new Event("click"), dragData);
+                }
             }
 
         }
@@ -258,10 +267,21 @@ export class AssetBrowser extends Application {
                     if(isFlatSurface && isCorrectTile) points.push(collision[0]);
                 }
             }
-            for (const point of points) {
-                const dragData = this.buildTileData(null, point);
-                game.Levels3DPreview.interactionManager._onDrop(new Event("click"), dragData);
+
+            const proceed = await Dialog.confirm({
+                title: "Scatter on Surface",
+                content: `<p>Scattering ${points.length} assets on the surface of the selected tile. Proceed?</p>`,
+                yes: () => true,
+                no: () => false,
+                defaultYes: true,
+            });
+            if (proceed) {                
+                for (const point of points) {
+                    const dragData = this.buildTileData(null, point);
+                    game.Levels3DPreview.interactionManager._onDrop(new Event("click"), dragData);
+                }
             }
+
         }
 
     }
