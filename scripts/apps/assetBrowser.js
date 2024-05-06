@@ -5,6 +5,14 @@ let dataCache = null;
 
 let _this = null;
 
+const LIST_ITEM_TEMPLATE = `
+<li draggable="true" data-tooltip="{{displayName}} ({{output}})"
+data-search="{{search}}" data-output="{{output}}" data-displayname="{{displayName}}" data-src="{{preview}}">
+<img src="{{preview}}" alt="" loading="lazy">
+<i data-tooltip="{{displayName}}" class="material-name">{{displayName}}</i>
+</li>
+`;
+
 export class AssetBrowser extends Application {
     constructor() {
         super();
@@ -63,7 +71,7 @@ export class AssetBrowser extends Application {
         if (!event.shiftKey || event.which !== 1 || !_this.quickPlacementOptions.paint) return;
         if (!_this._hasSelected || !_this.currentPoint?.point) return;
         const currentPos = _this.currentPoint.point;
-        if (!_this.lastPlacementPosition) return _this._on3DCanvasClick(event, true); 
+        if (!_this.lastPlacementPosition) return _this._on3DCanvasClick(event, true);
         if (!currentPos || currentPos.distanceTo(_this.lastPlacementPosition) < 1 / AssetBrowser.density) return;
         _this._on3DCanvasClick(event, true);
     }
@@ -85,7 +93,7 @@ export class AssetBrowser extends Application {
         if (!isBox && !isPolygon) return;
         const depth = tileData.flags["levels-3d-preview"].depth;
         const elevation = tileData.flags.levels.rangeBottom + (depth * canvas.scene.dimensions.distance) / canvas.scene.dimensions.size;
-        const {x, y, width, height} = tileData;
+        const { x, y, width, height } = tileData;
         const approxArea = width * height;
         const pointCount = (approxArea / Math.pow(canvas.grid.size, 2)) * AssetBrowser.density * 0.3;
         const polygonToolPoints = isPolygon ? toWorldSpace(getPolygonFromTile(tileData).polygon, x, y) : [x, y, x + width, y, x + width, y + height, x, y + height, x, y].map((n) => parseInt(n));
@@ -94,10 +102,10 @@ export class AssetBrowser extends Application {
         const pos3D = (...args) => game.Levels3DPreview.CONFIG.entityClass.Ruler3D.posCanvasTo3d(...args);
         const collisionPoints = [];
         for (const point of randomPoints) {
-            const origin = pos3D({x: point.x, y: point.y, z: elevation + canvas.scene.dimensions.distance});
-            const target = pos3D({x: point.x, y: point.y, z: elevation -1000});
+            const origin = pos3D({ x: point.x, y: point.y, z: elevation + canvas.scene.dimensions.distance });
+            const target = pos3D({ x: point.x, y: point.y, z: elevation - 1000 });
             const collision = game.Levels3DPreview.interactionManager.computeSightCollisionFrom3DPositions(origin, target, "collision", false, false, false, true);
-            if (collision){
+            if (collision) {
                 const dragData = _this.buildTileData(null, collision[0]);
                 game.Levels3DPreview.interactionManager._onDrop(new Event("click"), dragData);
             }
@@ -121,11 +129,9 @@ export class AssetBrowser extends Application {
         const nPointsMax = count || Math.max(1, Math.floor(rect[2] * rect[3] * AssetBrowser.density * 0.0001));
 
         if (scatterEdges) {
-            
             const points = [];
             const segments = [];
             const tempSegments = [];
-
 
             mesh.traverse((child) => {
                 if (child.isMesh && child.visible) {
@@ -154,7 +160,7 @@ export class AssetBrowser extends Application {
                         normal.fromBufferAttribute(normalAttribute, i);
                         normal.transformDirection(child.matrixWorld);
                         //game.Levels3DPreview.scene.add(new THREE.ArrowHelper( normal, position, 0.1, new THREE.Color(normal.x,normal.y,normal.z) ));
-                        positions.push({position: originalPosition, worldPosition: position, normal, faces: faces.filter((face) => face.x === i || face.y === i || face.z === i)});
+                        positions.push({ position: originalPosition, worldPosition: position, normal, faces: faces.filter((face) => face.x === i || face.y === i || face.z === i) });
                     }
 
                     //group positions that share a face into segments
@@ -167,13 +173,11 @@ export class AssetBrowser extends Application {
                             const normalDistance = currentPosition.normal.distanceTo(positionToCheck.normal);
                             const yDistance = Math.abs(currentPosition.worldPosition.y - positionToCheck.worldPosition.y);
                             if (normalDistance < 0.1 && yDistance < 0.05) {
-                                currentSegments.push({start: currentPosition, end: positionToCheck});
+                                currentSegments.push({ start: currentPosition, end: positionToCheck });
                             }
                         }
                         tempSegments.push(...currentSegments);
                     }
-
-
                 }
             });
 
@@ -184,7 +188,6 @@ export class AssetBrowser extends Application {
                 const avgNormal = new THREE.Vector3((normal1.x + normal2.x) / 2, (normal1.y + normal2.y) / 2, (normal1.z + normal2.z) / 2);
                 avgNormal.normalize();
                 if (avgNormal.y > 0.2 && avgNormal.y < 0.8) segments.push(segment);
-
             }
 
             const density = AssetBrowser.density;
@@ -207,7 +210,7 @@ export class AssetBrowser extends Application {
                 }
                 if (invalid) continue;
                 for (const point of linePoints) {
-                    points.push({point, face: {normal: segment.start.normal}});
+                    points.push({ point, face: { normal: segment.start.normal } });
                 }
             }
             if (points.length > (count || nPointsMax * 0.1)) {
@@ -236,7 +239,6 @@ export class AssetBrowser extends Application {
                     game.Levels3DPreview.interactionManager._onDrop(new Event("click"), dragData);
                 }
             }
-
         }
 
         if (scatterSurface) {
@@ -246,15 +248,15 @@ export class AssetBrowser extends Application {
             const nPoints = nPointsMax;
             const points = [];
             const pos3D = (...args) => game.Levels3DPreview.CONFIG.entityClass.Ruler3D.posCanvasTo3d(...args);
-            for (let i = 0; i < nPoints; i++) { 
+            for (let i = 0; i < nPoints; i++) {
                 const x = Math.random() * rect[2] + rect[0];
                 const y = Math.random() * rect[3] + rect[1];
-                const origin = pos3D({x, y, z:elevation});
+                const origin = pos3D({ x, y, z: elevation });
                 origin.y += depth / 1000 + 0.1;
                 const noiseVector = new THREE.Vector3(origin.x + randomOffset.x, origin.y + randomOffset.y, origin.z + randomOffset.z);
                 noiseVector.multiplyScalar(randomScale);
                 const noise = noise3D.noise(noiseVector.x, noiseVector.y, noiseVector.z);
-                if(Math.random() > noise) continue;
+                if (Math.random() > noise) continue;
                 const target = origin.clone();
                 target.y -= 1000;
                 const collision = game.Levels3DPreview.interactionManager.computeSightCollisionFrom3DPositions(origin, target, "collision", false, false, false, true);
@@ -264,7 +266,7 @@ export class AssetBrowser extends Application {
                         if (obj.userData?.entity3D == tile3d) isCorrectTile = true;
                     });
                     const isFlatSurface = Math.abs(collision[0].face.normal.y) > 0.5;
-                    if(isFlatSurface && isCorrectTile) points.push(collision[0]);
+                    if (isFlatSurface && isCorrectTile) points.push(collision[0]);
                 }
             }
 
@@ -275,15 +277,13 @@ export class AssetBrowser extends Application {
                 no: () => false,
                 defaultYes: true,
             });
-            if (proceed) {                
+            if (proceed) {
                 for (const point of points) {
                     const dragData = this.buildTileData(null, point);
                     game.Levels3DPreview.interactionManager._onDrop(new Event("click"), dragData);
                 }
             }
-
         }
-
     }
 
     async autoScatterDialog() {
@@ -304,15 +304,14 @@ export class AssetBrowser extends Application {
             </div>
             <hr>
             `,
-            callback: (html) => { 
+            callback: (html) => {
                 edges = html.find("#edges").is(":checked");
                 surfaces = html.find("#surfaces").is(":checked");
             },
             rejectClose: true,
-
-        })
+        });
         if (res == "ok") {
-            return {edges, surfaces};
+            return { edges, surfaces };
         } else {
             return null;
         }
@@ -333,7 +332,7 @@ export class AssetBrowser extends Application {
         const randomRotate = options.rotation;
         const rotation = randomRotate ? Math.random() * 360 : angle;
         if (options.scale) scale *= Math.random() + 0.5;
-        if (options.normal) normal = currentIntersect?.face?.normal ?? {x: 0, y: 1, z: 0};
+        if (options.normal) normal = currentIntersect?.face?.normal ?? { x: 0, y: 1, z: 0 };
         if (options.colorvar) {
             const threecolor = new game.Levels3DPreview.THREE.Color(color);
             const hsl = threecolor.getHSL(new game.Levels3DPreview.THREE.Color());
@@ -361,7 +360,7 @@ export class AssetBrowser extends Application {
                 pos: options.center,
             },
         };
-        if(src) delete dragData.coord3d;
+        if (src) delete dragData.coord3d;
 
         return dragData;
     }
@@ -388,7 +387,7 @@ export class AssetBrowser extends Application {
         fileCache = files;
         for (let file of files) {
             const filename = file.split("/").pop().replaceAll("%20", "_");
-            const cleanName = filename.replaceAll("_", " ").replace(".glb", "").replace(".gltf", "")
+            const cleanName = filename.replaceAll("_", " ").replace(".glb", "").replace(".gltf", "");
             materials.push({
                 displayName: cleanName.replace("MZ4250 - ", ""),
                 preview: file.replace(".glb", ".webp").replace(".gltf", ".webp"),
@@ -430,14 +429,14 @@ export class AssetBrowser extends Application {
     activateListeners(html) {
         super.activateListeners(html);
         this.element.find(`.tab[data-tab="options"]`).show();
-        this.element.find(".tab-button").on("click", (e) => { 
+        this.element.find(".tab-button").on("click", (e) => {
             const tab = $(e.currentTarget).data("tab");
             this.element.find(".tab").hide();
             this.element.find(`.tab[data-tab="${tab}"]`).show();
             this.element.find(".tab-button").removeClass("active");
             $(e.currentTarget).addClass("active");
         });
-        this.element.find("#toggle-tabs").on("click", (e) => { 
+        this.element.find("#toggle-tabs").on("click", (e) => {
             this.element.find(".tab").toggleClass("hidden");
             $(e.currentTarget).find("i").toggleClass("fa-caret-up fa-caret-down");
         });
@@ -475,7 +474,7 @@ export class AssetBrowser extends Application {
         this.element.on("change", "#asset-packs", this.onSearch.bind(this));
         this.element.on("click", ".quick-placement-toggle", (e) => {
             e.currentTarget.classList.toggle("active");
-            if (!this._paintTourDone && e.currentTarget.dataset.action == "paint") {                
+            if (!this._paintTourDone && e.currentTarget.dataset.action == "paint") {
                 game.settings.set("canvas3dcompendium", "assetbrowserpainttour", true);
                 this._paintTourDone = true;
                 setTimeout(() => {
@@ -483,7 +482,7 @@ export class AssetBrowser extends Application {
                 }, 2000);
             }
         });
-        this.element.on("click", ".utility-button", (e) => { 
+        this.element.on("click", ".utility-button", (e) => {
             const action = e.currentTarget.dataset.action;
             runScript.bind(this)(action);
         });
@@ -497,10 +496,37 @@ export class AssetBrowser extends Application {
 
     onSearch() {
         const value = this.element.find("#search").val();
-        const packData = this.element.find("#asset-packs").val().split(",").filter((p) => p).map(p => p.trim().toLowerCase().replaceAll(" ", "%20"));
+        const packData = this.element
+            .find("#asset-packs")
+            .val()
+            .split(",")
+            .filter((p) => p)
+            .map((p) => p.trim().toLowerCase().replaceAll(" ", "%20"));
         const packName = packData[0].toLowerCase();
         const pack = packData.filter((p) => p !== packName);
         let count = 0;
+
+        const results = [];
+        for (const material of dataCache.materials) {
+            const displayName = material.displayName;
+            const search = material.search;
+            const searchLC = search.toLowerCase();
+            if (count >= this._maxCount) break;
+            const inSearch = searchLC.includes(value.toLowerCase()) || displayName.toLowerCase().includes(value.toLowerCase());
+            const packMatch = packName === "all" || (searchLC.includes(packName) && pack.some((p) => searchLC.includes(p)));
+            if (inSearch && packMatch) {
+                count++;
+                results.push(material);
+            }
+        }
+        const html = results.map((m) => this.generateListItem(m)).join("");
+        this.element.find("ol").html(html);
+        this.element[0].querySelectorAll("li").forEach((li) => {
+            li.addEventListener("dragstart", this._onDragStart, false);
+        });
+
+        //old method
+        return;
         this.element.find("li").each((i, el) => {
             const displayName = $(el).data("displayname");
             const search = $(el).data("output");
@@ -511,6 +537,10 @@ export class AssetBrowser extends Application {
             $(el).toggle(display);
             if (display) count++;
         });
+    }
+
+    generateListItem(data) {
+        return Handlebars.compile(LIST_ITEM_TEMPLATE)({ ...data });
     }
 
     startTour(force = false) {
@@ -524,20 +554,17 @@ export class AssetBrowser extends Application {
 
     _getHeaderButtons() {
         const buttons = super._getHeaderButtons();
-        buttons.unshift(
-            {
-                label: "",
-                class: "tour",
-                icon: "fas fa-question",
-                onclick: () => {
-                    const tour = game.tours.get(`levels-3d-preview.${this.id}`);
-                    tour ? tour.start() : ui.notifications.warn("No tour found for this panel.");
-                }
-            })
+        buttons.unshift({
+            label: "",
+            class: "tour",
+            icon: "fas fa-question",
+            onclick: () => {
+                const tour = game.tours.get(`levels-3d-preview.${this.id}`);
+                tour ? tour.start() : ui.notifications.warn("No tour found for this panel.");
+            },
+        });
         return buttons;
     }
-
-
 
     get quickPlacementOptions() {
         const options = {};
@@ -549,7 +576,7 @@ export class AssetBrowser extends Application {
         return options;
     }
 
-    async _render(...args) { 
+    async _render(...args) {
         const res = await super._render(...args);
         this.startTour();
         return res;
@@ -565,9 +592,9 @@ export class AssetBrowser extends Application {
 
     static registerPack(packId, packName, assetPacks = [], options = {}) {
         let packPath = `modules/${packId}`;
-        if(options.subfolder) packPath += `/${options.subfolder}`;
+        if (options.subfolder) packPath += `/${options.subfolder}`;
         if (!AssetBrowser.defaultSources.includes(packPath)) AssetBrowser.defaultSources.push(packPath);
-        if(!assetPacks.length) return;
+        if (!assetPacks.length) return;
         assetPacks.map((p) => {
             p.query = packId + "," + p.query;
             p.query = p.query.toLowerCase();
@@ -585,7 +612,7 @@ export class AssetBrowser extends Application {
 
 AssetBrowser.assetPacks = {};
 
-export async function getFiles(root, source = "user", extC = ["glb","gltf"], outerPass = true) {
+export async function getFiles(root, source = "user", extC = ["glb", "gltf"], outerPass = true) {
     const files = [];
     extC = extC instanceof Array ? extC : [extC];
     source = new FilePicker()._inferCurrentDirectory(root)[0];
@@ -596,19 +623,19 @@ export async function getFiles(root, source = "user", extC = ["glb","gltf"], out
     }
     for (let i = 0; i < contents.dirs.length; i++) {
         let folder = contents.dirs[i];
-        if (outerPass) SceneNavigation.displayProgressBar({ label: `Loading assets in folder: ${folder}`, pct: Math.round(((i+1) / contents.dirs.length) * 100) });
+        if (outerPass) SceneNavigation.displayProgressBar({ label: `Loading assets in folder: ${folder}`, pct: Math.round(((i + 1) / contents.dirs.length) * 100) });
         files.push(...(await getFiles(folder, source, extC, false)));
     }
 
     return files;
 }
 
-function wait (ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+function wait(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function runScript(id) {
-    switch (id) { 
+    switch (id) {
         case "merge":
             game.Levels3DPreview.UTILS.autoMergeTiles();
             break;
@@ -619,8 +646,8 @@ async function runScript(id) {
             const tiles = canvas.tiles.controlled;
             if (!tiles.length) return ui.notifications.error("Please select a tile to lock/unlock.");
             const locked = tiles[0].document.locked;
-            const updates = tiles.map(tile => {
-                return {_id: tile.id, locked: !tile.data.locked};
+            const updates = tiles.map((tile) => {
+                return { _id: tile.id, locked: !tile.data.locked };
             });
             await canvas.scene.updateEmbeddedDocuments("Tile", updates);
             ui.notifications.info(`Tile/s ${locked ? "unlocked" : "locked"}.`);
@@ -632,7 +659,7 @@ async function runScript(id) {
             game.Levels3DPreview.UTILS.extrudeWalls();
             break;
         case "smart-scatter":
-            if(!canvas.tiles.controlled.length || !this.element.find("li.selected").length) return ui.notifications.error("Please select a tile to scatter assets on and one or more assets to scatter.");
+            if (!canvas.tiles.controlled.length || !this.element.find("li.selected").length) return ui.notifications.error("Please select a tile to scatter assets on and one or more assets to scatter.");
             ui.notifications.info("Scattering assets...The canvas will freeze for a few seconds.");
             await wait(1000);
             for (let tile of canvas.tiles.controlled) {
@@ -655,21 +682,20 @@ async function runScript(id) {
                 </form>
                 <hr>
                 `,
-                callback: (html) => { 
+                callback: (html) => {
                     radius = parseInt(html.find('[name="radius"]').val());
                 },
                 rejectClose: true,
-    
-            })
-            if (res !== "ok") return
+            });
+            if (res !== "ok") return;
             ui.notifications.info("Click on the canvas to create vines. Right click to cancel.");
             const onClickHandler = (event) => {
                 game.Levels3DPreview.renderer.domElement.removeEventListener("mouseup", onClickHandler, false);
-                if (event.button === 0) game.Levels3DPreview.CONFIG.entityClass.ProceduralVines.createVinesTile(1,radius / 1000)
-            }
+                if (event.button === 0) game.Levels3DPreview.CONFIG.entityClass.ProceduralVines.createVinesTile(1, radius / 1000);
+            };
             game.Levels3DPreview.renderer.domElement.addEventListener("mouseup", onClickHandler, false);
     }
-    if(id.includes("overlay")) overlayPresets[id.replace("overlay-", "")]();
+    if (id.includes("overlay")) overlayPresets[id.replace("overlay-", "")]();
 }
 
 function getRandomPointsInsidePolygon(polygon, nPoints, isClosed = true) {
@@ -677,24 +703,24 @@ function getRandomPointsInsidePolygon(polygon, nPoints, isClosed = true) {
     for (let i = 0; i < polygon.length; i += 2) {
         const x = polygon[i];
         const y = polygon[i + 1];
-        pointPolygon.push({x, y});
+        pointPolygon.push({ x, y });
     }
-    if (isClosed) {        
-        const minX = Math.min(...pointPolygon.map(p => p.x));
-        const maxX = Math.max(...pointPolygon.map(p => p.x));
-        const minY = Math.min(...pointPolygon.map(p => p.y));
-        const maxY = Math.max(...pointPolygon.map(p => p.y));
-        polygon = new PIXI.Polygon(polygon)
+    if (isClosed) {
+        const minX = Math.min(...pointPolygon.map((p) => p.x));
+        const maxX = Math.max(...pointPolygon.map((p) => p.x));
+        const minY = Math.min(...pointPolygon.map((p) => p.y));
+        const maxY = Math.max(...pointPolygon.map((p) => p.y));
+        polygon = new PIXI.Polygon(polygon);
         const points = [];
         while (points.length < nPoints) {
-            const point = {x: Math.random() * (maxX - minX) + minX, y: Math.random() * (maxY - minY) + minY};
-            if (polygon.contains(point.x,point.y)) points.push(point);
+            const point = { x: Math.random() * (maxX - minX) + minX, y: Math.random() * (maxY - minY) + minY };
+            if (polygon.contains(point.x, point.y)) points.push(point);
         }
-    
+
         return points;
     } else {
         const THREE = game.Levels3DPreview.THREE;
-        const v2Array = pointPolygon.map(p => new THREE.Vector2(p.x, p.y));
+        const v2Array = pointPolygon.map((p) => new THREE.Vector2(p.x, p.y));
         const curve = new THREE.SplineCurve(v2Array);
         const points = [];
         for (let i = 0; i < nPoints; i++) {
@@ -707,164 +733,164 @@ function getRandomPointsInsidePolygon(polygon, nPoints, isClosed = true) {
 }
 
 const overlayPresets = {
-    "grassy": () => { 
-        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
-                    const updates = [];
-                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/canvas3dcompendium/assets/Materials/_Stylized2/Grass_04/Grass_04_Color.webp","color":"#ffffff","strength":1,"coveragePercent":1,"inclination":0.6,"repeat":9,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
-                    canvas.activeLayer.controlled.forEach(obj => {
-                        updates.push({
-                            _id: obj.id,
-                            flags: {
-                                "levels-3d-preview": {
-                                    "shaders": shaderData
-                                }
-                            }
-                        });
-                    })
-                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    grassy: () => {
+        if (!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+        const updates = [];
+        const shaderData = { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Grass_04/Grass_04_Color.webp", color: "#ffffff", strength: 1, coveragePercent: 1, inclination: 0.6, repeat: 9, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: false } };
+        canvas.activeLayer.controlled.forEach((obj) => {
+            updates.push({
+                _id: obj.id,
+                flags: {
+                    "levels-3d-preview": {
+                        shaders: shaderData,
+                    },
+                },
+            });
+        });
+        canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
     },
-    "icy": () => { 
-        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
-                    const updates = [];
-                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/canvas3dcompendium/assets/Materials/_Stylized2/Ice_02/Ice_02_Color.webp","color":"#ffffff","strength":1,"coveragePercent":1,"inclination":0.6,"repeat":8,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
-                    canvas.activeLayer.controlled.forEach(obj => {
-                        updates.push({
-                            _id: obj.id,
-                            flags: {
-                                "levels-3d-preview": {
-                                    "shaders": shaderData
-                                }
-                            }
-                        });
-                    })
-                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    icy: () => {
+        if (!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+        const updates = [];
+        const shaderData = { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Ice_02/Ice_02_Color.webp", color: "#ffffff", strength: 1, coveragePercent: 1, inclination: 0.6, repeat: 8, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: false } };
+        canvas.activeLayer.controlled.forEach((obj) => {
+            updates.push({
+                _id: obj.id,
+                flags: {
+                    "levels-3d-preview": {
+                        shaders: shaderData,
+                    },
+                },
+            });
+        });
+        canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
     },
-    "dirty": () => { 
-        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
-                    const updates = [];
-                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/canvas3dcompendium/assets/Materials/Ground045/Ground045_Color.webp","color":"#61451f","strength":1,"coveragePercent":1,"inclination":0.3,"repeat":8,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
-                    canvas.activeLayer.controlled.forEach(obj => {
-                        updates.push({
-                            _id: obj.id,
-                            flags: {
-                                "levels-3d-preview": {
-                                    "shaders": shaderData
-                                }
-                            }
-                        });
-                    })
-                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    dirty: () => {
+        if (!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+        const updates = [];
+        const shaderData = { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/Ground045/Ground045_Color.webp", color: "#61451f", strength: 1, coveragePercent: 1, inclination: 0.3, repeat: 8, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: false } };
+        canvas.activeLayer.controlled.forEach((obj) => {
+            updates.push({
+                _id: obj.id,
+                flags: {
+                    "levels-3d-preview": {
+                        shaders: shaderData,
+                    },
+                },
+            });
+        });
+        canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
     },
-    "sandy": () => { 
-        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
-                    const updates = [];
-                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/canvas3dcompendium/assets/Materials/_Stylized2/Sand_04/Sand_04_Color.webp","color":"#fbb05b","strength":1,"coveragePercent":1,"inclination":0.45,"repeat":8,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
-                    canvas.activeLayer.controlled.forEach(obj => {
-                        updates.push({
-                            _id: obj.id,
-                            flags: {
-                                "levels-3d-preview": {
-                                    "shaders": shaderData
-                                }
-                            }
-                        });
-                    })
-                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    sandy: () => {
+        if (!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+        const updates = [];
+        const shaderData = { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Sand_04/Sand_04_Color.webp", color: "#fbb05b", strength: 1, coveragePercent: 1, inclination: 0.45, repeat: 8, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: false } };
+        canvas.activeLayer.controlled.forEach((obj) => {
+            updates.push({
+                _id: obj.id,
+                flags: {
+                    "levels-3d-preview": {
+                        shaders: shaderData,
+                    },
+                },
+            });
+        });
+        canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
     },
-    "leafy": () => { 
-        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
-                    const updates = [];
-                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/canvas3dcompendium/assets/Materials/ScatteredLeaves007/ScatteredLeaves007_Color.webp","color":"#ff7b00","strength":1,"coveragePercent":1,"inclination":0.58,"repeat":15,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":true,"mult_blend":false}};
-                    canvas.activeLayer.controlled.forEach(obj => {
-                        updates.push({
-                            _id: obj.id,
-                            flags: {
-                                "levels-3d-preview": {
-                                    "shaders": shaderData
-                                }
-                            }
-                        });
-                    })
-                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    leafy: () => {
+        if (!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+        const updates = [];
+        const shaderData = { overlay: { enabled: true, textureDiffuse: "modules/canvas3dcompendium/assets/Materials/ScatteredLeaves007/ScatteredLeaves007_Color.webp", color: "#ff7b00", strength: 1, coveragePercent: 1, inclination: 0.58, repeat: 15, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: true, mult_blend: false } };
+        canvas.activeLayer.controlled.forEach((obj) => {
+            updates.push({
+                _id: obj.id,
+                flags: {
+                    "levels-3d-preview": {
+                        shaders: shaderData,
+                    },
+                },
+            });
+        });
+        canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
     },
-    "dusty": () => { 
-        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
-                    const updates = [];
-                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-grunge-dust-02.webp","color":"#d17a00","strength":0.75,"coveragePercent":1,"inclination":0.3,"repeat":15,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
-                    canvas.activeLayer.controlled.forEach(obj => {
-                        updates.push({
-                            _id: obj.id,
-                            flags: {
-                                "levels-3d-preview": {
-                                    "shaders": shaderData
-                                }
-                            }
-                        });
-                    })
-                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    dusty: () => {
+        if (!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+        const updates = [];
+        const shaderData = { overlay: { enabled: true, textureDiffuse: "modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-grunge-dust-02.webp", color: "#d17a00", strength: 0.75, coveragePercent: 1, inclination: 0.3, repeat: 15, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: false } };
+        canvas.activeLayer.controlled.forEach((obj) => {
+            updates.push({
+                _id: obj.id,
+                flags: {
+                    "levels-3d-preview": {
+                        shaders: shaderData,
+                    },
+                },
+            });
+        });
+        canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
     },
-    "cobwebs": () => {
-        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
-                    const updates = [];
-                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-biological-webs-04.webp","color":"#ffffff","strength":0.75,"coveragePercent":1,"inclination":0.3,"repeat":15,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
-                    canvas.activeLayer.controlled.forEach(obj => {
-                        updates.push({
-                            _id: obj.id,
-                            flags: {
-                                "levels-3d-preview": {
-                                    "shaders": shaderData
-                                }
-                            }
-                        });
-                    })
-                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    cobwebs: () => {
+        if (!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+        const updates = [];
+        const shaderData = { overlay: { enabled: true, textureDiffuse: "modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-biological-webs-04.webp", color: "#ffffff", strength: 0.75, coveragePercent: 1, inclination: 0.3, repeat: 15, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: false } };
+        canvas.activeLayer.controlled.forEach((obj) => {
+            updates.push({
+                _id: obj.id,
+                flags: {
+                    "levels-3d-preview": {
+                        shaders: shaderData,
+                    },
+                },
+            });
+        });
+        canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
     },
-    "bloody": () => {
-        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
-                    const updates = [];
-                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-blood-02.webp","color":"#8d3f3f","strength":1,"coveragePercent":1,"inclination":0.3,"repeat":5,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
-                    canvas.activeLayer.controlled.forEach(obj => {
-                        updates.push({
-                            _id: obj.id,
-                            flags: {
-                                "levels-3d-preview": {
-                                    "shaders": shaderData
-                                }
-                            }
-                        });
-                    })
-                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    bloody: () => {
+        if (!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+        const updates = [];
+        const shaderData = { overlay: { enabled: true, textureDiffuse: "modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-blood-02.webp", color: "#8d3f3f", strength: 1, coveragePercent: 1, inclination: 0.3, repeat: 5, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: false } };
+        canvas.activeLayer.controlled.forEach((obj) => {
+            updates.push({
+                _id: obj.id,
+                flags: {
+                    "levels-3d-preview": {
+                        shaders: shaderData,
+                    },
+                },
+            });
+        });
+        canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
     },
-    "cracked": () => {
-        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
-                    const updates = [];
-                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-cracks-02.webp","color":"#000000","strength":1,"coveragePercent":1,"inclination":0.3,"repeat":3,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
-                    canvas.activeLayer.controlled.forEach(obj => {
-                        updates.push({
-                            _id: obj.id,
-                            flags: {
-                                "levels-3d-preview": {
-                                    "shaders": shaderData
-                                }
-                            }
-                        });
-                    })
-                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    cracked: () => {
+        if (!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+        const updates = [];
+        const shaderData = { overlay: { enabled: true, textureDiffuse: "modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-cracks-02.webp", color: "#000000", strength: 1, coveragePercent: 1, inclination: 0.3, repeat: 3, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: false } };
+        canvas.activeLayer.controlled.forEach((obj) => {
+            updates.push({
+                _id: obj.id,
+                flags: {
+                    "levels-3d-preview": {
+                        shaders: shaderData,
+                    },
+                },
+            });
+        });
+        canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
     },
-    "vines": () => { 
-        if(!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
-                    const updates = [];
-                    const shaderData = {"overlay":{"enabled":true,"textureDiffuse":"modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-nature-vines-01.webp","color":"#ffffff","strength":1,"coveragePercent":1,"inclination":-0.63,"repeat":10,"rotation_angle":0,"offsetX":0,"offsetY":0,"black_alpha":false,"add_blend":false,"mult_blend":false}};
-                    canvas.activeLayer.controlled.forEach(obj => {
-                        updates.push({
-                            _id: obj.id,
-                            flags: {
-                                "levels-3d-preview": {
-                                    "shaders": shaderData
-                                }
-                            }
-                        });
-                    })
-                    canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
-    }
-}
+    vines: () => {
+        if (!canvas.activeLayer.controlled.length) return ui.notifications.error("No object selected, please select at least one object.");
+        const updates = [];
+        const shaderData = { overlay: { enabled: true, textureDiffuse: "modules/baileywiki-maps-premium-towns/maps/fx-tiles/overlay-fx/overlay-nature-vines-01.webp", color: "#ffffff", strength: 1, coveragePercent: 1, inclination: -0.63, repeat: 10, rotation_angle: 0, offsetX: 0, offsetY: 0, black_alpha: false, add_blend: false, mult_blend: false } };
+        canvas.activeLayer.controlled.forEach((obj) => {
+            updates.push({
+                _id: obj.id,
+                flags: {
+                    "levels-3d-preview": {
+                        shaders: shaderData,
+                    },
+                },
+            });
+        });
+        canvas.scene.updateEmbeddedDocuments(canvas.activeLayer.options.objectClass.embeddedName, updates);
+    },
+};

@@ -1,7 +1,7 @@
 import { QuickTerrain } from "./apps/quickTerrain.js";
 
 Hooks.on("renderDialog", (dialog, html, data) => {
-    if (dialog.title !== "Create New Scene") return;
+    if (dialog.title !== game.i18n.format("DOCUMENT.Create", {type: game.i18n.localize("DOCUMENT.Scene")})) return;
     
     const checkbox = $(`
     <div class="form-group">

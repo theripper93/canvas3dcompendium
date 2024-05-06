@@ -1,6 +1,6 @@
 <div style="max-height: 100%;overflow: hidden;position: relative;display: flex;flex-direction: column;">
     {{#if isAssetBrowser}}
-    
+
     <div class="tab-container">
         <div class="tab-buttons">
             <a id="toggle-tabs" style="position: absolute;left: 0.3rem;"><i class="fas fa-caret-up"></i></a>
@@ -18,7 +18,7 @@
                     <a data-tooltip="Color Variation" class="quick-placement-toggle" data-action="colorvar"><i
                             class="fa-solid fa-palette"></i></a>
                 </fieldset>
-            
+
                 <fieldset id="ab-placement">
                     <legend>Placement</legend>
                     <a data-tooltip="Perpendicular placement" class="quick-placement-toggle" data-action="normal"><i
@@ -39,11 +39,12 @@
                 </fieldset>
                 <fieldset id="ab-painting">
                     <legend>Painting</legend>
-                    <a data-tooltip="Asset Paint (Click and drag to place multiple assets)" class="quick-placement-toggle"
-                        data-action="paint"><i class="fa-solid fa-paintbrush"></i></a>
+                    <a data-tooltip="Asset Paint (Click and drag to place multiple assets)"
+                        class="quick-placement-toggle" data-action="paint"><i class="fa-solid fa-paintbrush"></i></a>
                     <div class="asset-browser-icon-group">
                         <i class="fa-solid fa-grip-dots"></i>
-                        <input data-tooltip="Density" type="number" id="density" value="{{density}}" step="0.1" min="0.1">
+                        <input data-tooltip="Density" type="number" id="density" value="{{density}}" step="0.1"
+                            min="0.1">
                     </div>
                 </fieldset>
                 <fieldset id="ab-appearance" style="grid-column: span 2;">
@@ -61,7 +62,7 @@
                         <input type="color" id="color" value="#ffffff">
                     </div>
                 </fieldset>
-                </div>
+            </div>
         </div>
 
         <div class="tab" data-tab="utility">
@@ -75,58 +76,75 @@
                 </fieldset>
                 <fieldset>
                     <legend>Tools</legend>
-                    <a data-tooltip="Lock/Unlock" class="utility-button" data-action="lock"><i class="fas fa-lock"></i></a>
-                    <a data-tooltip="Extrude" class="utility-button" data-action="extrude"><i class="fas fa-draw-polygon"></i></a>
-                    <a data-tooltip="Extrude Walls" class="utility-button" data-action="extrude-walls"><i class="fa-solid fa-block-brick"></i></a>
+                    <a data-tooltip="Lock/Unlock" class="utility-button" data-action="lock"><i
+                            class="fas fa-lock"></i></a>
+                    <a data-tooltip="Extrude" class="utility-button" data-action="extrude"><i
+                            class="fas fa-draw-polygon"></i></a>
+                    <a data-tooltip="Extrude Walls" class="utility-button" data-action="extrude-walls"><i
+                            class="fa-solid fa-block-brick"></i></a>
                 </fieldset>
                 <fieldset>
                     <legend>Procedural</legend>
-                    <a data-tooltip="Smart Scatter" class="utility-button" data-action="smart-scatter"><i class="fas fa-leaf"></i></a>
-                    <a data-tooltip="Vines" class="utility-button" data-action="vines"><i class="fa-solid fa-hand-holding-seedling"></i></a>
+                    <a data-tooltip="Smart Scatter" class="utility-button" data-action="smart-scatter"><i
+                            class="fas fa-leaf"></i></a>
+                    <a data-tooltip="Vines" class="utility-button" data-action="vines"><i
+                            class="fa-solid fa-hand-holding-seedling"></i></a>
                 </fieldset>
 
                 <fieldset style="grid-column: span 3;">
                     <legend>Magic Overlays</legend>
-                    <a data-tooltip="Grassy" class="utility-button" data-action="overlay-grassy"><i class="fas fa-seedling"></i></a>
-                    <a data-tooltip="Icy" class="utility-button" data-action="overlay-icy"><i class="fas fa-snowflake"></i></a>
-                    <a data-tooltip="Dirty" class="utility-button" data-action="overlay-dirty"><i class="fas fa-mountain"></i></a>
-                    <a data-tooltip="Sandy" class="utility-button" data-action="overlay-sandy"><i class="fas fa-sandwich"></i></a>
-                    <a data-tooltip="Leafy" class="utility-button" data-action="overlay-leafy"><i class="fas fa-leaf-oak"></i></a>
-                    <a data-tooltip="Dusty (Baileywiki)" class="utility-button" data-action="overlay-dusty"><i class="fas fa-broom"></i></a>
-                    <a data-tooltip="Cobwebs (Baileywiki)" class="utility-button" data-action="overlay-cobwebs"><i class="fas fa-spider"></i></a>
-                    <a data-tooltip="Bloody (Baileywiki)" class="utility-button" data-action="overlay-bloody"><i class="fas fa-tint"></i></a>
-                    <a data-tooltip="Cracked (Baileywiki)" class="utility-button" data-action="overlay-cracked"><i class="fas fa-house-crack"></i></a>
-                    <a data-tooltip="Vines (Baileywiki)" class="utility-button" data-action="overlay-vines"><i class="fas fa-plant-wilt"></i></a>
+                    <a data-tooltip="Grassy" class="utility-button" data-action="overlay-grassy"><i
+                            class="fas fa-seedling"></i></a>
+                    <a data-tooltip="Icy" class="utility-button" data-action="overlay-icy"><i
+                            class="fas fa-snowflake"></i></a>
+                    <a data-tooltip="Dirty" class="utility-button" data-action="overlay-dirty"><i
+                            class="fas fa-mountain"></i></a>
+                    <a data-tooltip="Sandy" class="utility-button" data-action="overlay-sandy"><i
+                            class="fas fa-sandwich"></i></a>
+                    <a data-tooltip="Leafy" class="utility-button" data-action="overlay-leafy"><i
+                            class="fas fa-leaf-oak"></i></a>
+                    <a data-tooltip="Dusty (Baileywiki)" class="utility-button" data-action="overlay-dusty"><i
+                            class="fas fa-broom"></i></a>
+                    <a data-tooltip="Cobwebs (Baileywiki)" class="utility-button" data-action="overlay-cobwebs"><i
+                            class="fas fa-spider"></i></a>
+                    <a data-tooltip="Bloody (Baileywiki)" class="utility-button" data-action="overlay-bloody"><i
+                            class="fas fa-tint"></i></a>
+                    <a data-tooltip="Cracked (Baileywiki)" class="utility-button" data-action="overlay-cracked"><i
+                            class="fas fa-house-crack"></i></a>
+                    <a data-tooltip="Vines (Baileywiki)" class="utility-button" data-action="overlay-vines"><i
+                            class="fas fa-plant-wilt"></i></a>
                 </fieldset>
-                
+
             </div>
         </div>
-        
-    
+
+
     </div>
 
-<div class="search-container" style="margin-top: 0.5rem; display: flex;align-items: center;">
-    <input style="margin: 0rem 0.1rem;" data-tooltip="Only the first 200 results shown - Start typing to Search..." type="text" id="search"
-        placeholder="Only the first 400 results shown - Start typing to Search...">
-            <select name="asset-packs" id="asset-packs" data-tooltip="Size" style="border: none;margin: 0rem 0.1rem;">
-                <option value="all">All</option>
-                {{#each assetPacks}}
-                    <optgroup label="{{this.name}}">
-                        {{#each this.packs}}
-                            <option value="{{this.query}}">{{this.name}}</option>
-                        {{/each}}
+    <div class="search-container" style="margin-top: 0.5rem; display: flex;align-items: center;">
+        <input style="margin: 0rem 0.1rem;" data-tooltip="Only the first 200 results shown - Start typing to Search..."
+            type="text" id="search" placeholder="Only the first 400 results shown - Start typing to Search...">
+        <select name="asset-packs" id="asset-packs" data-tooltip="Size" style="border: none;margin: 0rem 0.1rem;">
+            <option value="all">All</option>
+            {{#each assetPacks}}
+            <optgroup label="{{this.name}}">
+                {{#each this.packs}}
+                <option value="{{this.query}}">{{this.name}}</option>
                 {{/each}}
-            </select>
-</div>
+                {{/each}}
+        </select>
+    </div>
 
-    <a id="selected-notification" class="notification info" style="pointer-events: none; font-size: small;position: absolute;bottom: 0px;width: 100%;z-index: 100;">One or more Assets selected - Hold Shift and click to place.</a>
+    <a id="selected-notification" class="notification info"
+        style="pointer-events: none; font-size: small;position: absolute;bottom: 0px;width: 100%;z-index: 100;">One or
+        more Assets selected - Hold Shift and click to place.</a>
     {{else}}
     {{#if isEffectBrowser}}
     <div style="display: flex; gap: 0.2rem;">
-    <input type="text" id="search" placeholder="Search...">
-    <select name="scale" id="scale" data-tooltip="Size" style="color: var(--color-text-light-primary);">
-        {{selectOptions sizeSelect selected=scale localize=false}}
-    </select>
+        <input type="text" id="search" placeholder="Search...">
+        <select name="scale" id="scale" data-tooltip="Size" style="color: var(--color-text-light-primary);">
+            {{selectOptions sizeSelect selected=scale localize=false}}
+        </select>
     </div>
     {{else}}
     <input type="text" id="search" placeholder="Search...">
@@ -145,6 +163,7 @@
     {{/if}}
 
     <ol>
+        {{#unless isAssetBrowser}}
         {{#each materials}}
         <li {{#if isAssetBrowser}}draggable="true" data-tooltip="{{displayName}} ({{output}})" {{/if}}
             data-search="{{search}}" data-output="{{output}}" data-displayname="{{displayName}}" data-src="{{preview}}">
@@ -156,8 +175,11 @@
             {{#if isNew}}<span class="new">New!</span>{{/if}}
         </li>
         {{/each}}
+        {{/unless}}
+
     </ol>
     {{#if isTokenBrowser}}
-    <a style="text-align: center;border-top: 1px solid var(--color-text-light-heading);padding-top: 0.3rem;" href="https://jerbo.featurebase.app/">Request Token</a>
+    <a style="text-align: center;border-top: 1px solid var(--color-text-light-heading);padding-top: 0.3rem;"
+        href="https://jerbo.featurebase.app/">Request Token</a>
     {{/if}}
 </div>
