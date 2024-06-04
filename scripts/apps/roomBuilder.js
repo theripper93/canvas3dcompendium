@@ -84,7 +84,7 @@ export class RoomBuilder extends FormApplication {
             try {                
                 if (!dynaMeshType.includes(tile.document.flags["levels-3d-preview"].dynaMesh)) return false;
                 const depth = Math.max(tile.document.flags["levels-3d-preview"].depth, 50) - 15;
-                const rb = tile.data.flags["levels"].rangeBottom;
+                const rb = tile.document.elevation;
                 if (elevation < (rb - 5) || elevation > (rb + toUnits(depth))) return false;
                 const texture = tile.document.flags["levels-3d-preview"].imageTexture;
                 if (useSameTheme && texture !== this.wallTexture && texture !== this.floorTexture) return false;
@@ -161,7 +161,7 @@ export class RoomBuilder extends FormApplication {
             return false;
         }
         if (!isBox && !isPolygon) return;
-        const elevation = tileData.flags.levels.rangeBottom;
+        const elevation = tileData.elevation;
         const {x, y, width, height} = tileData;
         const polygonToolPoints = isPolygon ? toWorldSpace(getPolygonFromTile(tileData).polygon, x, y) : null;
         const isClosed = isPolygon ? polygonToolPoints[0] === polygonToolPoints[polygonToolPoints.length - 2] && polygonToolPoints[1] === polygonToolPoints[polygonToolPoints.length - 1] : false;
@@ -252,6 +252,7 @@ export class RoomBuilder extends FormApplication {
                 texture: {
                     src: "modules/levels-3d-preview/assets/blank.webp",
                 },
+                elevation: elevation,
                 flags: {
                     "levels-3d-preview": {
                         model3d: polygon.join(","),
@@ -261,9 +262,6 @@ export class RoomBuilder extends FormApplication {
                         autoGround: true,
                         autoCenter: true,
                         textureRepeat: this.floorRepeat,
-                    },
-                    "levels": {
-                        rangeBottom: elevation,
                     }
                 }
             }
@@ -288,6 +286,7 @@ export class RoomBuilder extends FormApplication {
                 y: minY - this.thickness * 2,
                 width: width + this.thickness * 4,
                 height: height + this.thickness * 4,
+                elevation: elevation,
                 texture: {
                     src: "modules/levels-3d-preview/assets/blank.webp",
                 },
@@ -300,9 +299,6 @@ export class RoomBuilder extends FormApplication {
                         autoGround: true,
                         autoCenter: true,
                         textureRepeat: this.wallRepeat,
-                    },
-                    "levels": {
-                        rangeBottom: elevation,
                     }
                 }
             }
@@ -338,6 +334,7 @@ export class RoomBuilder extends FormApplication {
             y: minY,
             width,
             height,
+            elevation: elevation,
             texture: {
                 src: "modules/levels-3d-preview/assets/blank.webp",
             },
@@ -350,9 +347,6 @@ export class RoomBuilder extends FormApplication {
                     autoGround: true,
                     autoCenter: true,
                     textureRepeat: this.wallRepeat,
-                },
-                "levels": {
-                    rangeBottom: elevation,
                 }
             }
         }

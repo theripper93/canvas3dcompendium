@@ -92,7 +92,7 @@ export class AssetBrowser extends Application {
         const isPolygon = tileData.flags["levels-3d-preview"].fromPolygonTool;
         if (!isBox && !isPolygon) return;
         const depth = tileData.flags["levels-3d-preview"].depth;
-        const elevation = tileData.flags.levels.rangeBottom + (depth * canvas.scene.dimensions.distance) / canvas.scene.dimensions.size;
+        const elevation = tileData.elevation + (depth * canvas.scene.dimensions.distance) / canvas.scene.dimensions.size;
         const { x, y, width, height } = tileData;
         const approxArea = width * height;
         const pointCount = (approxArea / Math.pow(canvas.grid.size, 2)) * AssetBrowser.density * 0.3;
@@ -123,7 +123,7 @@ export class AssetBrowser extends Application {
         const tile3d = game.Levels3DPreview.tiles[tile.id];
         const mesh = game.Levels3DPreview.tiles[tile.id].mesh.children[0];
 
-        const elevation = tile.document.flags.levels.rangeBottom;
+        const elevation = tile.document.elevation;
         const depth = tile.document.flags["levels-3d-preview"].depth;
         const rect = [tile.data.x, tile.data.y, tile.data.width, tile.data.height];
         const nPointsMax = count || Math.max(1, Math.floor(rect[2] * rect[3] * AssetBrowser.density * 0.0001));

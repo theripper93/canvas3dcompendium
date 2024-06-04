@@ -245,7 +245,7 @@ TokenBrowser.assetPacks = {};
 
 async function getNew() {
     try {
-        _new = await fetchJsonWithTimeout("modules/canvas3dtokencompendium/miniatures/_Colorized/new.json");
+        _new = await foundry.utils.fetchJsonWithTimeout("modules/canvas3dtokencompendium/miniatures/_Colorized/new.json");
     } catch (e) {
         _new = [];
     }

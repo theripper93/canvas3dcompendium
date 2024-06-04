@@ -144,10 +144,8 @@ export class QuickTerrain extends FormApplication {
             height: canvas.scene.dimensions.sceneHeight,
             x: canvas.scene.dimensions.sceneX,
             y: canvas.scene.dimensions.sceneY,
+            elevation: 0,
             flags: {
-                levels: {
-                    rangeBottom: 0,
-                },
                 "levels-3d-preview": {
                     imageTexture: "modules/levels-3d-preview/assets/blankTex.jpg",
                     displacementMap: heightmap,
@@ -207,10 +205,8 @@ export class QuickTerrain extends FormApplication {
             height: canvas.scene.dimensions.sceneHeight - 10,
             x: canvas.scene.dimensions.sceneX + 5,
             y: canvas.scene.dimensions.sceneY + 5,
+            elevation: 0,
             flags: {
-                levels: {
-                    rangeBottom: 0,
-                },
                 "levels-3d-preview": {
                     shaders: water,
                     imageTexture: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Water_09/Water_09_NormalGL.webp",
@@ -236,10 +232,8 @@ export class QuickTerrain extends FormApplication {
             height: canvas.scene.dimensions.sceneHeight - 10,
             x: canvas.scene.dimensions.sceneX + 5,
             y: canvas.scene.dimensions.sceneY + 5,
+            elevation: 0,
             flags: {
-                levels: {
-                    rangeBottom: 0,
-                },
                 "levels-3d-preview": {
                     imageTexture: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Lava_04/Lava_04_NormalGL.webp",
                     shaders: lava,
@@ -264,10 +258,8 @@ export class QuickTerrain extends FormApplication {
             height: canvas.scene.dimensions.sceneHeight - 10,
             x: canvas.scene.dimensions.sceneX + 5,
             y: canvas.scene.dimensions.sceneY + 5,
+            elevation: 0,
             flags: {
-                levels: {
-                    rangeBottom: 0,
-                },
                 "levels-3d-preview": {
                     imageTexture: "modules/canvas3dcompendium/assets/Materials/_Stylized2/Water_09/Water_09_NormalGL.webp",
                     shaders: acid,

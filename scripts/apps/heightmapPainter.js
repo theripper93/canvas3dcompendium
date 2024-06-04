@@ -129,7 +129,7 @@ export class HeightmapPainter extends Application {
 
     getData() {
         return {
-            fileName: `${window.canvas.scene.name.slugify()}-heightmap-${randomID()}`,
+            fileName: `${window.canvas.scene.name.slugify()}-heightmap-${foundry.utils.randomID()}`,
             useRGB: this.useRGB,
         };
     }
