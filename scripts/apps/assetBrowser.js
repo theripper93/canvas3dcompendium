@@ -496,7 +496,6 @@ export class AssetBrowser extends Application {
 
     onSearch() {
         const value = this.element.find("#search").val();
-        debugger;
         const packData = this.element
             .find("#asset-packs")
             .val()
