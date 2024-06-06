@@ -496,6 +496,7 @@ export class AssetBrowser extends Application {
 
     onSearch() {
         const value = this.element.find("#search").val();
+        debugger;
         const packData = this.element
             .find("#asset-packs")
             .val()
@@ -513,7 +514,7 @@ export class AssetBrowser extends Application {
             const searchLC = search.toLowerCase();
             if (count >= this._maxCount) break;
             const inSearch = searchLC.includes(value.toLowerCase()) || displayName.toLowerCase().includes(value.toLowerCase());
-            const packMatch = packName === "all" || (searchLC.includes(packName) && pack.some((p) => searchLC.includes(p)));
+            const packMatch = packName === "all" || (material.output.includes(packName) && pack.some((p) => searchLC.includes(p)));
             if (inSearch && packMatch) {
                 count++;
                 results.push(material);

@@ -35,7 +35,7 @@ Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => {
         [
             {
                 name: "Items",
-                query: "Tiles/RPG Items,CreativeTrio/Potions",
+                query: "RPG Items,CreativeTrio/Potions",
             },
             {
                 name: "Furniture",
@@ -63,7 +63,7 @@ Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => {
             },
             {
                 name: "Structures",
-                query: "tiles/buildings,Tiles/Ultimate Fantasy",
+                query: "buildings,Ultimate Fantasy",
             },
             {
                 name: "Bridges",
@@ -87,7 +87,7 @@ Hooks.on("3DCanvasMapmakingPackRegisterAssetPacks", (ab) => {
             },
             {
                 name: "Crops",
-                query: "tiles/Crops",
+                query: "Crops",
             },
             {
                 name: "Food",
