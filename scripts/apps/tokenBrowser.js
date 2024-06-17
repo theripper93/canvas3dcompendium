@@ -196,7 +196,7 @@ export class TokenBrowser extends Application {
     static create(filepicker, app) {
         const fpFG = filepicker.closest(".form-group").length ? filepicker.closest(".form-group") : filepicker;
         const button = $(`
-        <button type="button" style="order: 99;" data-tooltip="Token Browser - Ctrl + Click for Quick Match">
+        <button type="button" data-tooltip="Token Browser - Ctrl + Click for Quick Match">
         <i class="fa-regular fa-person" style="margin: 0;"></i>
         </button>
         `);

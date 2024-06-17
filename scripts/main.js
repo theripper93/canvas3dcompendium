@@ -111,10 +111,10 @@ Hooks.on("renderTokenConfig", async (app, html) => {
     function wait(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
-    while (!html.find(`input[name="flags.levels-3d-preview.model3d"]`).length) {
+    while (!html.find(`[name="flags.levels-3d-preview.model3d"]`).length) {
         await wait(100);
   }
-            const filepicker = html.find(`input[name="flags.levels-3d-preview.model3d"]`).closest(".form-group");
+            const filepicker = html.find(`[name="flags.levels-3d-preview.model3d"]`).closest(".form-group");
             TokenBrowser.create(filepicker, app);
 });
 
