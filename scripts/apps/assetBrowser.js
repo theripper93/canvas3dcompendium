@@ -617,6 +617,12 @@ export async function getFiles(root, source = "user", extC = ["glb", "gltf"], ou
     extC = extC instanceof Array ? extC : [extC];
     source = new FilePicker()._inferCurrentDirectory(root)[0];
     const contents = await FilePicker.browse(source, root);
+    const indexFile = contents.files.find((f) => f.endsWith("index.json"));
+    if (indexFile) {
+        const index = await fetchJsonWithTimeout(indexFile);
+        files.push(...index.map((f) => root + "/" + f));
+        return files;
+    }
     for (let file of contents.files) {
         const ext = file.split(".").pop();
         if (extC.includes(ext.toLowerCase())) files.push(file);
