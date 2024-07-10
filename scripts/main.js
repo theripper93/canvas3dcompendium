@@ -140,11 +140,11 @@ async function injectMaterialBrowser(app, html) {
       MaterialBrowser.create($(el).closest(".form-group"), app);
     });
   } else {
-          while (!html.find(`input[name="flags.levels-3d-preview.imageTexture"]`).length) {
+          while (!html.find(`[name="flags.levels-3d-preview.imageTexture"]`).length) {
               await wait(100);
           }
 
-          const filepicker = html.find(`input[name="flags.levels-3d-preview.imageTexture"]`).closest(".form-group");
+          const filepicker = html.find(`[name="flags.levels-3d-preview.imageTexture"]`).closest(".form-group");
           MaterialBrowser.create(filepicker, app);
   }
 
