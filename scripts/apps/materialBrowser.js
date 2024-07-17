@@ -93,6 +93,7 @@ export class MaterialBrowser extends Application {
             const material = $(e.currentTarget).data("output").replace("_NormalGL", this._targetTexture);
             if (this._input) {                
                 this._input.val(material);
+                this._input.closest("file-picker").val(material);
                 if (game.settings.get("canvas3dcompendium", "autoApply") && this._targetTexture != "_Color") this._app._onSubmit(e, { preventClose: true, preventRender: true });
                 if (game.settings.get("canvas3dcompendium", "autoClose")) this.close();
             } else {
