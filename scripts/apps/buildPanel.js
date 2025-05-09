@@ -51,7 +51,7 @@ export class BuildPanel extends Application {
                 html.addClass("minimized");
             }
         }, 10000);
-        $("#ui-right").prepend(html);
+        $("#sidebar-tabs").after(html);
         html.on("click", "#build-panel-minimize", () => { 
             html.toggleClass("minimized");
         });
