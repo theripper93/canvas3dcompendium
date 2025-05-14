@@ -19,10 +19,31 @@ async function initFuse(data) {
     fuseSearch = new Fuse(data.materials.concat(heroforgeList), options);
 }
 
-export class TokenBrowser extends Application {
+export class TokenBrowser extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
+    static DEFAULT_OPTIONS = {
+        id: "token-browser",
+        classes: ["three-canvas-compendium-app", "three-canvas-compendium-app-v2"],
+        tag: "div",
+        window: {
+            icon: "fa-solid fa-person",
+            title: "Asset Browser",
+        },
+        position: {
+            width: 400,
+            height: window.innerHeight * 0.8,
+        },
+        resizable: true,
+        dragDrop: [{ dragSelector: "li", dropSelector: "" }],
+    };
+
+    static PARTS = {
+        content: {
+            template: `modules/canvas3dcompendium/templates/material-explorer.hbs`,
+        },
+    };
+
     constructor(input, app) {
         super();
-        _this = this;
         this.input = input;
         this._app = app;
         this.document = app.document ?? app.object?.document ?? app.object;
@@ -37,65 +58,16 @@ export class TokenBrowser extends Application {
         return [];
     }
 
-    static get defaultOptions() {
-        return {
-            ...super.defaultOptions,
-            title: "Asset Browser",
-            id: "token-browser",
-            classes: ["three-canvas-compendium-app"],
-            template: `modules/canvas3dcompendium/templates/material-explorer.hbs`,
-            width: 400,
-            height: window.innerHeight * 0.8,
-            resizable: true,
-            dragDrop: [{ dragSelector: "li", dropSelector: "" }],
-        };
-    }
-
     get title() {
-        return "Token Browser: " + this._assetCount + " tokens available";
+        return `Token Browser: ${this._assetCount} tokens available`;
     }
 
     static async preloadData() {
-        await this.prototype.getData();
+        await this.prototype._prepareContext();
     }
 
-    static findByName(name, { async = false, returnFirst = false, fuzzy = true, wildcard = true } = {}) {
-        if (async && !dataCache) return this.preloadData().then((data) => this.findByName(name, { async: false, returnFirst }));
-        if (!dataCache) return ui.notifications.error("Token Browser data is not yet loaded. Please, use the game.canvas3d.CONFIG.UI.TokenBrowser.preloadData() function before using this function or run this search with {async: true}.");
-        const slugName = name.slugify({ strict: true });
-        if (fuzzy) {
-            const words = slugName.split("-");
-            const permutations = generatePermutations(words);
-            const matches = fuseSearch.search(slugName);
-            if (returnFirst) {
-                //find best possible result
-                const multiMatchesArrays = [];
-                for (let permutation of permutations) {
-                    const multiMatches = fuseSearch.search(permutation);
-                    multiMatchesArrays.push(multiMatches);
-                }
-                const multiMatches = multiMatchesArrays.flat();
-                multiMatches.sort((a, b) => a.score - b.score);
-                if (wildcard && multiMatches[0].score < 0.1) {
-                    const bestScore = multiMatches[0].score;
-                    const multiMatchesFiltered = multiMatches.filter((m) => m.score <= bestScore + 0.01);
-                    return multiMatchesFiltered[Math.floor(Math.random() * multiMatchesFiltered.length)]?.item?.output ?? "";
-                }
-                return multiMatches[0]?.item?.output ?? "";
-            }
-            return matches.map((m) => m.item);
-        }
-        const results = dataCache.materials.filter((m) => m.slug.includes(slugName) || slugName.includes(m.slug));
-        if (returnFirst) return results[0]?.output ?? "";
-        return results;
-    }
-
-    static get ready() {
-        return !!dataCache;
-    }
-
-    async getData() {
-        const data = super.getData();
+    async _prepareContext() {
+        const data = {};
         if (!_new) await getNew();
         data.isTokenBrowser = true;
         if (dataCache) {
@@ -158,30 +130,48 @@ export class TokenBrowser extends Application {
         return files;
     }
 
-    activateListeners(html) {
-        super.activateListeners(html);
-        this.element.find(".material-confirm").hide();
-        this.element.on("keyup", "#search", (e) => {
-            const value = e.target.value;
+    _onRender(html) {
+        super._onRender(html);
+
+        this.element.querySelectorAll(".material-confirm").forEach(el => el.style.display = "none");
+
+        this.element.querySelector("#search").addEventListener("keyup", (e) => {
+            const value = e.target.value.toLowerCase();
             let count = 0;
-            this.element.find("li").each((i, el) => {
-                const displayName = String($(el).data("displayname"));
-                const search = String($(el).data("search"));
-                const display = search.toLowerCase().includes(value.toLowerCase()) || displayName.toLowerCase().includes(value.toLowerCase());
-                $(el).toggle(display);
+
+            this.element.querySelectorAll("li").forEach(el => {
+                const displayName = String(el.dataset.displayname || "").toLowerCase();
+                const search = String(el.dataset.search || "").toLowerCase();
+                const display = search.includes(value) || displayName.includes(value);
+                el.style.display = display ? "" : "none";
                 if (display) count++;
             });
         });
-        this.element.find("input").trigger("keyup");
-        this.element.on("click", "li", (e) => {
-            const output = $(e.currentTarget).data("output");
-            this.input.val(output);
-            this.input.closest("file-picker").val(output);
-            if (this._app.isPrototype) return;
-            if (game.settings.get("canvas3dcompendium", "autoApply")) this.document.setFlag("levels-3d-preview", "model3d", output); //this._app._onSubmit(e, { preventClose: true, preventRender: true });
-            if (game.settings.get("canvas3dcompendium", "autoClose")) this.close();
+        const searchInput = this.element.querySelector("input#search");
+        if (searchInput) searchInput.dispatchEvent(new Event("keyup"));
+        this.element.querySelectorAll("li").forEach(el => {
+            el.addEventListener("click", (e) => {
+                const output = e.currentTarget.dataset.output;
+                this.input.value = output;
+                const filePicker = this.input.closest("file-picker");
+                if (filePicker) filePicker.value = output;
+
+                if (this._app.isPrototype) return;
+
+                if (game.settings.get("canvas3dcompendium", "autoApply")) {
+                    this.document.setFlag("levels-3d-preview", "model3d", output);
+                }
+                if (game.settings.get("canvas3dcompendium", "autoClose")) {
+                    this.close();
+                }
+            });
         });
-        this.element.on("dragstart", "li", this._onDragStart);
+
+        this.element.querySelectorAll("li").forEach(el => {
+            el.addEventListener("dragstart", this._onDragStart.bind(this));
+        });
+
+        this._updateFrame({window: {title: this.title}});
     }
 
     _onDragStart(event) {

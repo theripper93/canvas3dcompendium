@@ -69,7 +69,7 @@
     padding: 8px;
 }
 
-.three-canvas-compendium-app .window-content{
+.three-canvas-compendium-app:not(.three-canvas-compendium-app-v2) .window-content{
     color: var(--color-text-light-heading);
     background: url(/../ui/denim075.png) repeat;
 }
