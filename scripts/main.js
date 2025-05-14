@@ -108,6 +108,7 @@ Hooks.on("renderRoomBuilder", injectMaterialBrowser);
 
 Hooks.on("renderTokenConfig", async (app, html) => {
     if (!game.modules.get("levels-3d-preview")?.active) return;
+    html = $(html);
     function wait(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
@@ -120,6 +121,7 @@ Hooks.on("renderTokenConfig", async (app, html) => {
 
 async function injectMaterialBrowser(app, html) {
   if(!game.modules.get("levels-3d-preview")?.active) return;
+  html = $(html);
   function wait(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }

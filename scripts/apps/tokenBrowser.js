@@ -25,6 +25,7 @@ export class TokenBrowser extends Application {
         _this = this;
         this.input = input;
         this._app = app;
+        this.document = app.document ?? app.object?.document ?? app.object;
     }
 
     get sources() {
@@ -177,7 +178,7 @@ export class TokenBrowser extends Application {
             this.input.val(output);
             this.input.closest("file-picker").val(output);
             if (this._app.isPrototype) return;
-            if (game.settings.get("canvas3dcompendium", "autoApply")) this._app.object.setFlag("levels-3d-preview", "model3d", output); //this._app._onSubmit(e, { preventClose: true, preventRender: true });
+            if (game.settings.get("canvas3dcompendium", "autoApply")) this.document.setFlag("levels-3d-preview", "model3d", output); //this._app._onSubmit(e, { preventClose: true, preventRender: true });
             if (game.settings.get("canvas3dcompendium", "autoClose")) this.close();
         });
         this.element.on("dragstart", "li", this._onDragStart);
@@ -211,11 +212,11 @@ export class TokenBrowser extends Application {
             const isCtrlClick = e.ctrlKey;
             if (isLeftClick && !isCtrlClick) new TokenBrowser(input, app).render(true);
             if (isRightClick || isCtrlClick) {
-                const name = app.object.name;
+                const name = app.document.name;
                 const closestMatch = await this.findByName(name, { returnFirst: true, async: true });
                 if (closestMatch) {
                     input.val(closestMatch);
-                    if (game.settings.get("canvas3dcompendium", "autoApply")) app.object.setFlag("levels-3d-preview", "model3d", closestMatch); //app._onSubmit(e, { preventClose: true, preventRender: true });
+                    if (game.settings.get("canvas3dcompendium", "autoApply")) app.document.setFlag("levels-3d-preview", "model3d", closestMatch); //app._onSubmit(e, { preventClose: true, preventRender: true });
                 }
             }
         });

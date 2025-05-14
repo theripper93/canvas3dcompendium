@@ -412,7 +412,9 @@ async function getJB2A() {
     jb2a_loaded = true;
     const jb2aPatreon = "modules/jb2a_patreon";
     const jb2aFree = "modules/JB2A_DnD5e";
-    const [source, dir] = new FilePicker()._inferCurrentDirectory(jb2aPatreon);
+    const fp = new foundry.applications.apps.FilePicker({current: jb2aPatreon});
+    const source = fp.activeSource;
+    const dir = fp.target;
     let files;
     try { 
         files = await getFiles(dir, source, "webm");

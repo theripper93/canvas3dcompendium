@@ -615,7 +615,8 @@ AssetBrowser.assetPacks = {};
 export async function getFiles(root, source = "user", extC = ["glb", "gltf"], outerPass = true) {
     const files = [];
     extC = extC instanceof Array ? extC : [extC];
-    source = new FilePicker()._inferCurrentDirectory(root)[0];
+    const fp = new foundry.applications.apps.FilePicker({current: root});
+    source = fp.activeSource;
     const contents = await FilePicker.browse(source, root);
     const indexFile = contents.files.find((f) => f.endsWith("index.json"));
     if (indexFile) {
