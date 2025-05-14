@@ -107,11 +107,14 @@ Hooks.on("renderShaderConfig", injectMaterialBrowser);
 Hooks.on("renderRoomBuilder", injectMaterialBrowser);
 
 Hooks.on("renderTokenConfig", async (app, html) => {
+
     if (!game.modules.get("levels-3d-preview")?.active) return;
     html = $(html);
     function wait(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
+        await wait(100);
+
     while (!html.find(`[name="flags.levels-3d-preview.model3d"]`).length) {
         await wait(100);
   }
@@ -142,6 +145,8 @@ async function injectMaterialBrowser(app, html) {
       MaterialBrowser.create($(el).closest(".form-group"), app);
     });
   } else {
+        await wait(100);
+
           while (!html.find(`[name="flags.levels-3d-preview.imageTexture"]`).length) {
               await wait(100);
           }
