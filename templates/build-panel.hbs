@@ -1,22 +1,15 @@
 <div id="build-panel">
-    <div class="minimize-container">
-        <div id="build-panel-minimize">
-            <i class="fa-duotone fa-caret-right"></i>
-        </div>
-    </div>
     <ul>
         {{#each buttons}}
-        <li>
-            <i data-action={{id}} data-tooltip="{{name}}" class="{{icon}} build-panel-button"></i>
-        </li>
+        <button class="ui-control plain {{icon}} build-panel-button" data-action={{id}} data-tooltip="{{name}}">
+        </button>
         {{/each}}
         {{#if showSeparator}}
         <li style="border-top: 1px solid; width: 70%;margin: 0.2rem 0rem;"></li>
         {{/if}}
         {{#each clipNavigation}}
-        <li>
-            <i data-action={{id}} id="{{id}}" data-tooltip="{{name}}" class="{{icon}} build-panel-button"></i>
-        </li>
+        <button class="ui-control plain {{icon}} build-panel-button" data-action={{id}} data-tooltip="{{name}}">
+        </button>
         {{/each}}
     </ul>
 </div>

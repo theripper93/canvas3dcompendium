@@ -45,13 +45,14 @@ export class BuildPanel extends Application {
     activateListeners(html) {
         super.activateListeners(html);
         html.find("#clip-navigation-fog").addClass("clip-navigation-enabled");
+        this.insertMinimizeButton();
         html.find("#game-camera-toggle").toggleClass("clip-navigation-enabled", game.Levels3DPreview.GameCamera.enabled);
         setTimeout(() => { 
             if (this._autoHide) {
                 html.addClass("minimized");
             }
         }, 10000);
-        $("#sidebar-tabs").after(html);
+        $("#sidebar-tabs menu").after(html);
         html.on("click", "#build-panel-minimize", () => { 
             html.toggleClass("minimized");
         });
@@ -77,6 +78,25 @@ export class BuildPanel extends Application {
             })
             li.append(trophyIcon);
         }
+    }
+
+    insertMinimizeButton(remove = false){
+        if(remove) return document.querySelectorAll("#build-panel-minimize").forEach(b => b.remove());
+
+        const button = document.createElement("button")
+        button.id = "build-panel-minimize";
+        button.className = "ui-control plain icon fa-solid fa-cube";
+        const li = document.createElement("li");
+        li.appendChild(button)
+        document.querySelector(`button[data-tab="settings"]`).closest("li").after(li)
+        button.addEventListener("click", ()=>{
+            this.element.toggleClass("minimized")
+        })
+    }
+
+    async close(...args){
+        this.insertMinimizeButton(true)
+        return super.close(...args)
     }
 
     static setHook() {
