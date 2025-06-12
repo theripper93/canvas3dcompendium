@@ -32,7 +32,7 @@
 }
 
 #build-panel button{
-    font-family: 'Font Awesome 5 Duotone';
+    font-family: var(--font-awesome);;
 }
 
 #build-panel i{
