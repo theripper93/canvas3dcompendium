@@ -28,9 +28,6 @@ export class BuildPanel extends Application {
     }
 
     getData() {
-        game.Levels3DPreview.CONFIG.UI.CLIP_NAVIGATION.BUTTONS.forEach((b) => { 
-            b.icon = b.icon.replace("fas", "fad");
-        });
         const b = game.user.isGM ? BUILD_PANEL_BUTTONS.filter((b) => b.visible()) : [];
         const c = game.Levels3DPreview.CONFIG.UI.CLIP_NAVIGATION.BUTTONS.filter(b => b.visible());
         document.querySelector(":root").style.setProperty("--build-panel-height", `${(b.length + c.length) * 40 + 50}px`);
