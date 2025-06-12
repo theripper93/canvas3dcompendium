@@ -3,16 +3,16 @@
     <fieldset class="clip" data-index="{{@index}}">
         <div style="display: grid; grid-template-columns: 5fr 1fr 1fr 1fr;align-items: center;">
             <input type="text" name="name" value="{{name}}">
-            <button data-action="delete" data-tooltip="Delete Clip"><i class="fa-duotone fa-trash"></i></button>
-            <button data-action="edit" data-tooltip="Edit Clip"><i class="fa-duotone fa-edit"></i></button>
-            <button data-action="play" data-tooltip="Play Clip"><i class="fa-duotone fa-circle-play"></i></button>
+            <button data-action="delete" data-tooltip="Delete Clip"><i class="fas fa-trash"></i></button>
+            <button data-action="edit" data-tooltip="Edit Clip"><i class="fas fa-edit"></i></button>
+            <button data-action="play" data-tooltip="Play Clip"><i class="fas fa-circle-play"></i></button>
         </div>
         {{#if editing}}
         <div class="form-group">
             <label for="immersive">Immersive Mode</label>
             <input type="checkbox" id="immersive" name="immersive" {{#if immersive}}checked{{/if}}>
         </div>
-        <button data-action="macro"><i class="fa-duotone fa-code"></i> Save to Macro</button>
+        <button data-action="macro"><i class="fas fa-code"></i> Save to Macro</button>
         <ul>
             {{#each keyframes}}
             <li data-index="{{@index}}">
@@ -20,8 +20,8 @@
                     <legend>Keyframe {{@index}}</legend>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr;align-items: center;">
-                        <button data-action="delete-keyframe" data-tooltip="Delete Keyframe"><i class="fa-duotone fa-trash"></i></button>
-                        <button data-action="capture" data-tooltip="Capture Camera Position"><i class="fa-duotone fa-camera"></i></button>
+                        <button data-action="delete-keyframe" data-tooltip="Delete Keyframe"><i class="fas fa-trash"></i></button>
+                        <button data-action="capture" data-tooltip="Capture Camera Position"><i class="fas fa-camera"></i></button>
                     </div>
                                         <div class="form-group">
                         <label for="time">Caption</label>
@@ -51,9 +51,9 @@
             </li>
             {{/each}}
         </ul>
-<button data-action="add-keyframe"><i class="fa-duotone fa-plus"></i> Add Keyframe</button>
+<button data-action="add-keyframe"><i class="fas fa-plus"></i> Add Keyframe</button>
         {{/if}}
     </fieldset>
     {{/each}}
-    <button style="margin-top: 0.5rem;" data-action="add-clip"><i class="fa-duotone fa-video-plus"></i> Add Clip</button>
+    <button style="margin-top: 0.5rem;" data-action="add-clip"><i class="fas fa-video-plus"></i> Add Clip</button>
 </form>

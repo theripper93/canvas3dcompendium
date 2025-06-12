@@ -64,7 +64,7 @@ export class BuildPanel extends Application {
         });
         if (game.Levels3DPreview.sharing.apps.MapBrowser?.contest?.active) {
             html.find(`i[data-action="community-maps"]`).addClass("contest-active");
-            const trophyIcon = $(`<i class="fa-duotone fa-trophy-star"></i>`);
+            const trophyIcon = $(`<i class="fas fa-trophy-star"></i>`);
             const li = html.find(`i[data-action="community-maps"]`).closest("li");
             li.css("position", "relative");
             trophyIcon.css({
@@ -119,7 +119,7 @@ const BUILD_PANEL_BUTTONS = [
     {
         id: "environment",
         name: "Environment",
-        icon: "fa-duotone fa-cloud-bolt-sun",
+        icon: "fas fa-cloud-bolt-sun",
         visible: () => true,
         callback: () => {
             new QuickEnvironment().render(true);
@@ -128,7 +128,7 @@ const BUILD_PANEL_BUTTONS = [
     {
         id: "terrain",
         name: "Terrain",
-        icon: "fa-duotone fa-mountain",
+        icon: "fas fa-mountain",
         visible: () => true,
         callback: () => {
             new QuickTerrain().render(true);
@@ -137,7 +137,7 @@ const BUILD_PANEL_BUTTONS = [
     {
         id: "props",
         name: "Props",
-        icon: "fa-duotone fa-tree",
+        icon: "fas fa-tree",
         visible: () => true,
         callback: () => {
             new AssetBrowser().render(true);
@@ -146,7 +146,7 @@ const BUILD_PANEL_BUTTONS = [
     {
         id: "materials",
         name: "Materials",
-        icon: "fa-duotone fa-circle-half-stroke",
+        icon: "fas fa-circle-half-stroke",
         visible: () => true,
         callback: () => {
             new MaterialBrowser().render(true);
@@ -155,7 +155,7 @@ const BUILD_PANEL_BUTTONS = [
     {
         id: "roombuilder",
         name: "Dungeons & Interiors",
-        icon: "fa-duotone fa-block-brick",
+        icon: "fas fa-block-brick",
         visible: () => true,
         callback: () => {
             new RoomBuilder().render(true);
@@ -164,7 +164,7 @@ const BUILD_PANEL_BUTTONS = [
     {
         id: "effects",
         name: "Effects",
-        icon: "fa-duotone fa-fire",
+        icon: "fas fa-fire",
         visible: () => true,
         callback: () => {
             new EffectBrowser().render(true);
@@ -173,7 +173,7 @@ const BUILD_PANEL_BUTTONS = [
     {
         id: "cutscenes",
         name: "Cutscenes",
-        icon: "fa-duotone fa-clapperboard-play",
+        icon: "fas fa-clapperboard-play",
         visible: () => true,
         callback: () => {
             new CutscenePanel().render(true);
@@ -182,7 +182,7 @@ const BUILD_PANEL_BUTTONS = [
     {
         id: "community-maps",
         name: "Community Maps",
-        icon: "fa-duotone fa-map",
+        icon: "fas fa-map",
         visible: () => true,
         callback: () => {
             new game.Levels3DPreview.sharing.apps.MapBrowser().render(true);
@@ -191,7 +191,7 @@ const BUILD_PANEL_BUTTONS = [
     {
         id: "tutorials",
         name: "More Tours",
-        icon: "fad fa-person-hiking",
+        icon: "fas fa-person-hiking",
         visible: () => {
             return !Array.from(game.tours)
                 .filter((t) => t.moduleId == "levels-3d-preview")

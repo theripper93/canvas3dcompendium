@@ -1,12 +1,12 @@
 <form class="terrain-painter-grid">
     <div class="terrain-painter-controls">
-        <i class="fa-duotone fa-arrow-up-small-big"></i>
+        <i class="fas fa-arrow-up-small-big"></i>
         <input type="range" id="brush-size" step="0.01" min="0.1" max="100" value="50" data-tooltip-direction="UP" data-tooltip="Brush Size">
-        <i class="fa-duotone fa-circle-half"></i>
+        <i class="fas fa-circle-half"></i>
         <input type="range" id="brush-opacity" step="0.01" min="0.01" max="1" value="0.35" data-tooltip-direction="UP" data-tooltip="Brush Opacity">
-        <i class="fa-duotone fa-feather"></i>
+        <i class="fas fa-feather"></i>
         <input type="range" id="brush-hardness" step="0.01" min="0" max="1" value="0.1" data-tooltip-direction="UP" data-tooltip="Brush Hardness">
-        <i class="fa-duotone fa-droplet"></i>
+        <i class="fas fa-droplet"></i>
         <input type="range" id="brush-color" step="1" min="0" max="255" value="255" data-tooltip-direction="UP" data-tooltip="Brush Color">
     </div>
     <div class="input-info">
@@ -16,14 +16,14 @@
         <input type="number" class="brush-color"></input>
         {{#if useRGB}}
         <button id="cycle-color">
-            <i class="fa-duotone fa-palette"></i>
+            <i class="fas fa-palette"></i>
         </button>
         {{/if}}            
     </div>
     <div class="form-group">
         <label for="">File Name</label>
         <input type="text" id="heightmap-file-name" value="{{fileName}}">
-        <button style="line-height: calc(var(--form-field-height) - 4px); flex: 0" id="save-heightmap"><i class="fa-duotone fa-floppy-disk-circle-arrow-right"></i></button>
+        <button style="line-height: calc(var(--form-field-height) - 4px); flex: 0" id="save-heightmap"><i class="fas fa-floppy-disk-circle-arrow-right"></i></button>
 
     </div>
     <div class="terrain-painter-canvas-container">

@@ -1,31 +1,31 @@
 <form action="submit">
     <fieldset>
         <legend>Build</legend>
-        <button class="toggle active" data-action="union"><i class="fa-duotone fa-object-union"></i> Add</button>
+        <button class="toggle active" data-action="union"><i class="fas fa-object-union"></i> Add</button>
         <button class="toggle" data-action="subtract"><i class="fa-solid fa-object-subtract"></i> Subtract</button>
         <button class="toggle" data-action="knife"><i class="fa-solid fa-cut"></i> Knife</button>
         <button class="toggle" data-action="stair"><i class="fa-solid fa-stairs"></i> Stair</button>
         <div class="shapes" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
             <button class="shape toggle active" data-tooltip="Rectangle" data-action="rectangle"><i
-                    class="fa-duotone fa-square"></i></button>
+                    class="fas fa-square"></i></button>
             <button class="shape toggle" data-tooltip="Ellipse" data-action="ellipse"><i
-                    class="fa-duotone fa-circle"></i></button>
+                    class="fas fa-circle"></i></button>
             <button class="shape toggle" data-tooltip="Polygon" data-action="polygon"><i
-                    class="fa-duotone fa-draw-polygon"></i></button>
-                    <button class="shape toggle" data-tooltip="Spline" data-action="spline"><i class="fa-duotone fa-bezier-curve"></i></button>
+                    class="fas fa-draw-polygon"></i></button>
+                    <button class="shape toggle" data-tooltip="Spline" data-action="spline"><i class="fas fa-bezier-curve"></i></button>
         </div>
         <div class="roughness" style="display: grid; grid-template-columns: 1fr 1fr;">
-            <button class="roughness toggle active" data-tooltip="Smooth" data-action="smooth"><i class="fa-duotone fa-grip-lines"></i></button>
-            <button class="roughness toggle" data-tooltip="Rough" data-action="rough"><i class="fa-duotone fa-wave-square"></i></button>
+            <button class="roughness toggle active" data-tooltip="Smooth" data-action="smooth"><i class="fas fa-grip-lines"></i></button>
+            <button class="roughness toggle" data-tooltip="Rough" data-action="rough"><i class="fas fa-wave-square"></i></button>
         </div>
         <div class="entity" style="display: grid; grid-template-columns: 1fr 1fr;">
             <button class="entity toggle active" data-tooltip="Floors" id="floor" data-action="floor"><i
-                    class="fa-duotone fa-block"></i></button>
+                    class="fas fa-block"></i></button>
             <button class="entity toggle active" data-tooltip="Walls" id="wall" data-action="wall"><i
-                    class="fa-duotone fa-block-brick"></i></button>
+                    class="fas fa-block-brick"></i></button>
         </div>
         <div>
-            <button class="entity toggle active" data-tooltip="When active, only affect layouts with the same theme when building" id="merge-theme" data-action="merge-theme"><i class="fa-duotone fa-object-group"></i> Merge by Theme</button>
+            <button class="entity toggle active" data-tooltip="When active, only affect layouts with the same theme when building" id="merge-theme" data-action="merge-theme"><i class="fas fa-object-group"></i> Merge by Theme</button>
         </div>
     </fieldset>
 
@@ -55,8 +55,8 @@
         </div>
         <div class="form-group">
             <input type="text" id="customthemename" placeholder="Theme Name">
-            <button style="flex: 0 0 24px; line-height: 24px; margin: -1px 0 -1px 4px;" data-tooltip="Save Custom Theme" data-action="savetheme"><i class="fa-duotone fa-floppy-disk"></i></button>
-            <button style="flex: 0 0 24px; line-height: 24px; margin: -1px 0 -1px 4px;" data-tooltip="Delete Custom Theme" data-action="deletetheme"><i class="fa-duotone fa-trash"></i></button>
+            <button style="flex: 0 0 24px; line-height: 24px; margin: -1px 0 -1px 4px;" data-tooltip="Save Custom Theme" data-action="savetheme"><i class="fas fa-floppy-disk"></i></button>
+            <button style="flex: 0 0 24px; line-height: 24px; margin: -1px 0 -1px 4px;" data-tooltip="Delete Custom Theme" data-action="deletetheme"><i class="fas fa-trash"></i></button>
         </div>
     </fieldset>
 
