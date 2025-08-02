@@ -99,7 +99,7 @@ export class QuickEnvironment extends Application {
 
     activateListeners(html) {
         super.activateListeners(html);
-        html.on("change", "input", (event) => {
+        html.on("change", "range-picker", (event) => {
             const time = event.currentTarget.value;
             canvas.scene.setFlag("levels-3d-preview", "sunPosition", time);
             html.find(".range-value").text(time);
