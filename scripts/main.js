@@ -124,16 +124,15 @@ Hooks.on("renderTokenConfig", async (app, html) => {
 
 Hooks.on("renderPrototypeTokenConfig", async (app, html) => {
     if (!game.modules.get("levels-3d-preview")?.active) return;
-    html = $(html);
     function wait(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
         await wait(100);
 
-    while (!html.find(`[name="flags.levels-3d-preview.model3d"]`).length) {
+    while (!html.querySelector(`[name="flags.levels-3d-preview.model3d"]`)) {
         await wait(100);
   }
-            const filepicker = html.find(`[name="flags.levels-3d-preview.model3d"]`).closest(".form-group");
+            const filepicker = html.querySelector(`[name="flags.levels-3d-preview.model3d"]`).closest(".form-group");
             TokenBrowser.create(filepicker, app);
 });
 

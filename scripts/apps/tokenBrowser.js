@@ -221,13 +221,14 @@ export class TokenBrowser extends foundry.applications.api.HandlebarsApplication
     }
 
     static create(filepicker, app) {
+        filepicker = $(filepicker);
         const fpFG = filepicker.closest(".form-group").length ? filepicker.closest(".form-group") : filepicker;
         const button = $(`
         <button type="button" data-tooltip="Token Browser - Ctrl + Click for Quick Match">
         <i class="fa-regular fa-person" style="margin: 0;"></i>
         </button>
         `);
-        const input = fpFG.find("input").first();
+        const input = fpFG.find("file-picker").first();
         const fpButton = fpFG.find("button").first();
         fpButton.before(button);
         button.on("mouseup", async (e) => {
@@ -235,7 +236,7 @@ export class TokenBrowser extends foundry.applications.api.HandlebarsApplication
             const isLeftClick = e.button === 0;
             const isRightClick = e.button === 2;
             const isCtrlClick = e.ctrlKey;
-            if (isLeftClick && !isCtrlClick) new TokenBrowser(input, app).render(true);
+            if (isLeftClick && !isCtrlClick) new TokenBrowser(input[0], app).render(true);
             if (isRightClick || isCtrlClick) {
                 const name = app.document.name;
                 const closestMatch = await this.findByName(name, { returnFirst: true, async: true });
