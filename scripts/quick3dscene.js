@@ -1,21 +1,22 @@
 import { QuickTerrain } from "./apps/quickTerrain.js";
 
-Hooks.on("renderDialog", (dialog, html, data) => {
+Hooks.on("renderDialogV2", (dialog, html, data) => {
     if (dialog.title !== game.i18n.format("DOCUMENT.Create", {type: game.i18n.localize("DOCUMENT.Scene")})) return;
     
-    const checkbox = $(`
-    <div class="form-group">
+    const checkbox = document.createElement('div');
+    checkbox.className = 'form-group';
+    checkbox.innerHTML = `
             <label>Quick 3D Scene</label>
             <div class="form-fields">
                 <input type="checkbox" name="scene3d">
             </div>
-    </div>
-    `);
+    `;
 
-    dialog.element.find(".form-group").last().after(checkbox);
+    const lastFormGroup = dialog.element.querySelector(".form-group:last-child");
+    lastFormGroup.insertAdjacentElement('afterend', checkbox);
 
-    dialog.element.find(".dialog-button.ok").on("click", () => {
-        const isChecked = dialog.element.find("input[name=scene3d]").is(":checked");
+    dialog.element.querySelector("button[data-action='ok']").addEventListener("click", () => {
+        const isChecked = dialog.element.querySelector("input[name=scene3d]").checked;
         if (!isChecked) return;
         
         Hooks.once("preCreateScene", (scene, data) => {
