@@ -1,0 +1,4 @@
+This folder includes models from the "Old Mine Asset Pack", used under CC0 Licensing and converted to glb to use with 3D Canvas
+
+License: (Creative Commons Zero, CC0)
+http://creativecommons.org/publicdomain/zero/1.0/

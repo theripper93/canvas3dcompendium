@@ -56,6 +56,51 @@ def shrink_images():
             pass
 
 
+def upstream(sock, kind, depth=4):
+    while depth and sock.is_linked:
+        node = sock.links[0].from_node
+        if node.type == kind:
+            return node, sock.links[0].from_socket
+        ins = [i for i in node.inputs if i.is_linked]
+        if not ins:
+            return None, None
+        sock = ins[0]
+        depth -= 1
+    return None, None
+
+
+def link_orm_occlusion():
+    from io_scene_gltf2.blender.com.material_helpers import create_settings_group, get_gltf_node_name, get_gltf_node_old_name
+    names = (get_gltf_node_name(), get_gltf_node_old_name())
+    group = None
+    count = 0
+    for mat in bpy.data.materials:
+        nt = mat.node_tree
+        if not nt:
+            continue
+        if any(n.type == "GROUP" and n.node_tree and n.node_tree.name in names for n in nt.nodes):
+            continue
+        bsdf = next((n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"), None)
+        if not bsdf:
+            continue
+        sep, _ = upstream(bsdf.inputs["Roughness"], "SEPARATE_COLOR")
+        if not sep:
+            sep, _ = upstream(bsdf.inputs["Metallic"], "SEPARATE_COLOR")
+        if not sep:
+            continue
+        tex, _ = upstream(sep.inputs[0], "TEX_IMAGE")
+        if not tex or not tex.image:
+            continue
+        if group is None:
+            group = bpy.data.node_groups.get(get_gltf_node_name()) or create_settings_group(get_gltf_node_name())
+        node = nt.nodes.new("ShaderNodeGroup")
+        node.node_tree = group
+        node.location = (bsdf.location.x, bsdf.location.y - 600)
+        nt.links.new(sep.outputs["Red"], node.inputs["Occlusion"])
+        count += 1
+    return count
+
+
 def export_glb(out):
     os.makedirs(os.path.dirname(out), exist_ok=True)
     bpy.ops.export_scene.gltf(
@@ -145,6 +190,8 @@ def main():
             import_any(job["src"])
             relink_images(job.get("texdir"))
             shrink_images()
+            if job.get("aoFromOrm"):
+                print("MM_AO", link_orm_occlusion(), flush=True)
             export_glb(job["out"])
             if job.get("thumb"):
                 render_thumb(job["thumb"], job.get("thumbEngine", "WORKBENCH"))
