@@ -1,0 +1,92 @@
+{
+    "re:/DoorFrame_": {
+        "c": "buildings",
+        "k": true
+    },
+    "re:UltimateSpaceScifi/Tree_": {
+        "c": "trees"
+    },
+    "re:UltimateSpaceScifi/Planet_": {
+        "c": "decor",
+        "k": false
+    },
+    "re:KayKitPack/Dungeon/Remastered/(wall_inset_candles|scaffold_pillar_wall_torch|scaffold_pillars_connected_torch)": {
+        "c": "buildings",
+        "k": true
+    },
+    "re:Fantasy Props MegaKit/Parts_": {
+        "c": "decor",
+        "k": false
+    },
+    "re:Modular Scifi/Details/": {
+        "c": "decor",
+        "k": false
+    },
+    "re:Modular Scifi/Tiles/Props_(Base|Capsule|Vessel|Statue|Laser)": {
+        "c": "decor",
+        "k": false
+    },
+    "re:Modular Scifi/Tiles/Props_(Pod|Computer|ComputerSmall|Shelf|Shelf_Tall)": {
+        "c": "furniture",
+        "k": false
+    },
+    "re:Furniture/(Bookcase_Books|Shelf_2|Closet)": {
+        "c": "furniture"
+    },
+    "re:Fantasy Props MegaKit/Stall_Cart_Empty": {
+        "c": "buildings",
+        "k": false
+    },
+    "re:Fantasy Props MegaKit/Vase_Rubble_": {
+        "c": "decor"
+    },
+    "re:Kenney/Space/barrels_rail": {
+        "c": "storage",
+        "k": false
+    },
+    "re:Kenney/Graveyard/trunk": {
+        "c": "trees"
+    },
+    "re:Kenney/Nature/pot_(large|small)": {
+        "c": "decor"
+    },
+    "re:Ultimate Fantasy/Resource_Gold_": {
+        "c": "rocks",
+        "k": false
+    },
+    "re:Medieval Dungeon/Sword_WallMount|Modular Dungeon/Sword_WallMount": {
+        "c": "decor"
+    },
+    "re:(Medieval|Modular) Dungeon/Banner_wall": {
+        "c": "decor"
+    },
+    "re:KayKitPack/Dungeon/(pot[A-C]|pots\\.)": {
+        "c": "decor"
+    },
+    "re:WoodLight": {
+        "c": "buildings",
+        "k": true
+    },
+    "re:Buildings/\\dStory_Sign": {
+        "c": "buildings",
+        "k": false
+    },
+    "re:Medieval Village MegaKit/Roof_": {
+        "c": "buildings",
+        "k": true
+    },
+    "re:Modular Ruins/Pot": {
+        "c": "decor"
+    },
+    "re:KayKitPack/Dungeon/Remastered/wall_": {
+        "c": "buildings",
+        "k": true
+    },
+    "re:Kenney/Nature/crop": {
+        "c": "trees"
+    },
+    "re:Ultimate Fantasy/Farm_": {
+        "c": "buildings",
+        "k": false
+    }
+}
